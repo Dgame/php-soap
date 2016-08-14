@@ -40,7 +40,7 @@ final class NodeAppendVisitor
             }
 
             if ($value instanceof Element) {
-                $value->accept(new NodeAppendVisitor($node));
+                $value->accept(new self($node));
             } else {
                 $name = $node->hasPropertyAlias($property->name) ? $node->getPropertyAlias($property->name) : ucfirst($property->name);
                 if (!is_string($value)) {
