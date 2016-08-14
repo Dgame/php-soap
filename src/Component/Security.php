@@ -15,7 +15,7 @@ class Security extends Node
      */
     public function __construct()
     {
-        parent::__construct('Security');
+        parent::__construct();
 
         $this->appendAttributes(
             [

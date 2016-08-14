@@ -28,7 +28,7 @@ class UsernameToken extends Node
      */
     public function __construct(string $username, string $password)
     {
-        parent::__construct('UsernameToken');
+        parent::__construct();
 
         $this->username = $username;
         $this->password = $password;

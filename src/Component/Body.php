@@ -10,11 +10,4 @@ use Dgame\Soap\Node;
  */
 class Body extends Node
 {
-    /**
-     * Body constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct('Body');
-    }
 }

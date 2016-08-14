@@ -3,7 +3,7 @@
 namespace Dgame\Soap;
 
 /**
- * Class PropertyAliasTrait
+ * Trait PropertyAliasTrait
  * @package Dgame\Soap
  */
 trait PropertyAliasTrait

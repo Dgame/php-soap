@@ -20,10 +20,10 @@ class Node extends Element
     /**
      * Node constructor.
      *
-     * @param string      $name
+     * @param string|null $name
      * @param string|null $namespace
      */
-    public function __construct(string $name, string $namespace = null)
+    public function __construct(string $name = null, string $namespace = null)
     {
         parent::__construct($name, null, $namespace);
     }

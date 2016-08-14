@@ -15,7 +15,7 @@ class Envelope extends Root
      */
     public function __construct()
     {
-        parent::__construct('Envelope');
+        parent::__construct();
 
         $this->appendAttributes(
             [

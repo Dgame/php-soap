@@ -10,11 +10,4 @@ use Dgame\Soap\Node;
  */
 class Header extends Node
 {
-    /**
-     * Header constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct('Header');
-    }
 }

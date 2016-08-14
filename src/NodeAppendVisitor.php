@@ -35,10 +35,18 @@ final class NodeAppendVisitor
         $properties = $ref->getProperties(ReflectionProperty::IS_PUBLIC);
         foreach ($properties as $property) {
             $value = $property->getValue($node);
+            if ($value === null) {
+                continue;
+            }
+
             if ($value instanceof Element) {
                 $value->accept(new NodeAppendVisitor($node));
             } else {
                 $name = $node->hasPropertyAlias($property->name) ? $node->getPropertyAlias($property->name) : ucfirst($property->name);
+                if (!is_string($value)) {
+                    $value = var_export($value, true);
+                }
+
                 $node->appendElement(new Element($name, $value));
             }
         }

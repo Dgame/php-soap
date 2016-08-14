@@ -24,18 +24,18 @@ class Element
      */
     private $attributes = [];
 
-    use NamespaceTrait;
+    use NamespaceTrait, ClassNameTrait;
 
     /**
      * Element constructor.
      *
-     * @param string      $name
+     * @param string|null $name
      * @param string|null $value
      * @param string|null $namespace
      */
-    public function __construct(string $name, string $value = null, string $namespace = null)
+    public function __construct(string $name = null, string $value = null, string $namespace = null)
     {
-        $this->name      = $name;
+        $this->name      = $name ?? $this->getClassName();
         $this->value     = $value;
         $this->namespace = $namespace;
     }

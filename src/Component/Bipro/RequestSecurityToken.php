@@ -30,7 +30,7 @@ class RequestSecurityToken extends Node
      */
     public function __construct(Version $version)
     {
-        parent::__construct('RequestSecurityToken');
+        parent::__construct();
 
         $this->biproVersion = $version;
         $this->appendAttributes(
