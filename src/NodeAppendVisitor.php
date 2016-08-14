@@ -39,19 +39,29 @@ final class NodeAppendVisitor
                 continue;
             }
 
-            if ($value instanceof Element) {
-                $value->accept(new self($node));
-            } else {
-                $name = $node->hasPropertyAlias($property->name) ? $node->getPropertyAlias($property->name) : ucfirst($property->name);
-                if (!is_string($value)) {
-                    $value = var_export($value, true);
-                }
-
-                $node->appendElement(new Element($name, $value));
-            }
+            $this->assign($node, $property, $value);
         }
 
         $this->node->appendElement($node);
+    }
+
+    /**
+     * @param Node               $node
+     * @param ReflectionProperty $property
+     * @param                    $value
+     */
+    private function assign(Node $node, ReflectionProperty $property, $value)
+    {
+        if ($value instanceof Element) {
+            $value->accept(new self($node));
+        } else {
+            $name = $node->hasPropertyAlias($property->name) ? $node->getPropertyAlias($property->name) : ucfirst($property->name);
+            if (!is_string($value)) {
+                $value = var_export($value, true);
+            }
+
+            $node->appendElement(new Element($name, $value));
+        }
     }
 
     /**
