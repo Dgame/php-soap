@@ -1,10 +1,12 @@
 <?php
 
-namespace Dgame\Soap;
+namespace Dgame\Soap\Component;
+
+use Dgame\Soap\Node;
 
 /**
  * Class Header
- * @package Dgame\Soap
+ * @package Dgame\Soap\Component
  */
 class Header extends Node
 {

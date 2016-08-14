@@ -1,12 +1,12 @@
 <?php
 
-use Dgame\Soap\Bipro\BiProVersion;
-use Dgame\Soap\Bipro\RequestSecurityToken;
-use Dgame\Soap\Bipro\UsernameToken;
-use Dgame\Soap\Body;
-use Dgame\Soap\Envelope;
-use Dgame\Soap\Header;
-use Dgame\Soap\Security;
+use Dgame\Soap\Component\Bipro\Version;
+use Dgame\Soap\Component\Bipro\RequestSecurityToken;
+use Dgame\Soap\Component\Bipro\UsernameToken;
+use Dgame\Soap\Component\Body;
+use Dgame\Soap\Component\Envelope;
+use Dgame\Soap\Component\Header;
+use Dgame\Soap\Component\Security;
 
 require_once 'vendor/autoload.php';
 
@@ -19,7 +19,7 @@ $security->appendNode($token);
 $header = new Header();
 $header->appendNode($security);
 
-$rst  = new RequestSecurityToken(new BiProVersion('2.1.6.1.1'));
+$rst  = new RequestSecurityToken(new Version('2.1.6.1.1'));
 $body = new Body();
 $body->appendNode($rst);
 

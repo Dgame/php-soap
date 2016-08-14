@@ -1,10 +1,12 @@
 <?php
 
-namespace Dgame\Soap;
+namespace Dgame\Soap\Component;
+
+use Dgame\Soap\Node;
 
 /**
  * Class Body
- * @package Dgame\Soap
+ * @package Dgame\Soap\Component
  */
 class Body extends Node
 {

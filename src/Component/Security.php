@@ -1,10 +1,12 @@
-<?php #
+<?php
 
-namespace Dgame\Soap;
+namespace Dgame\Soap\Component;
+
+use Dgame\Soap\Node;
 
 /**
  * Class Security
- * @package Dgame\Soap
+ * @package Dgame\Soap\Component
  */
 class Security extends Node
 {

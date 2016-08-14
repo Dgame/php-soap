@@ -1,12 +1,12 @@
 <?php
 
-namespace Dgame\Soap\Bipro;
+namespace Dgame\Soap\Component\Bipro;
 
 use Dgame\Soap\Node;
 
 /**
  * Class RequestSecurityToken
- * @package Dgame\Soap\Bipro
+ * @package Dgame\Soap\Component\Bipro
  */
 class RequestSecurityToken extends Node
 {
@@ -19,16 +19,16 @@ class RequestSecurityToken extends Node
      */
     public $requestType = 'http://schemas.xmlsoap.org/ws/2005/02/trust/Issue';
     /**
-     * @var null|BiProVersion
+     * @var null|Version
      */
     public $biproVersion = null;
 
     /**
      * RequestSecurityToken constructor.
      *
-     * @param BiProVersion $version
+     * @param Version $version
      */
-    public function __construct(BiProVersion $version)
+    public function __construct(Version $version)
     {
         parent::__construct('RequestSecurityToken');
 

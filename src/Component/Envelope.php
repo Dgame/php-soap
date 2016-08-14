@@ -1,10 +1,12 @@
 <?php
 
-namespace Dgame\Soap;
+namespace Dgame\Soap\Component;
+
+use Dgame\Soap\Root;
 
 /**
  * Class Envelope
- * @package Dgame\Soap
+ * @package Dgame\Soap\Component
  */
 class Envelope extends Root
 {

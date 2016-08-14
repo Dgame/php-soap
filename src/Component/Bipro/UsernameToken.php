@@ -1,13 +1,13 @@
 <?php
 
-namespace Dgame\Soap\Bipro;
+namespace Dgame\Soap\Component\Bipro;
 
 use Dgame\Soap\Node;
 use DOMElement;
 
 /**
  * Class UsernameToken
- * @package Dgame\Soap\Bipro
+ * @package Dgame\Soap\Component\Bipro
  */
 class UsernameToken extends Node
 {

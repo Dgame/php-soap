@@ -1,14 +1,14 @@
 <?php
 
-namespace Dgame\Soap\Bipro;
+namespace Dgame\Soap\Component\Bipro;
 
 use Dgame\Soap\Element;
 
 /**
- * Class BiProVersion
- * @package Dgame\Soap\Bipro
+ * Class Version
+ * @package Dgame\Soap\Component\Bipro
  */
-class BiProVersion extends Element
+class Version extends Element
 {
     /**
      * BiProVersion constructor.
