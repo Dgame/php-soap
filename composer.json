@@ -1,0 +1,32 @@
+{
+    "name": "dgame/php-soap",
+    "description": "php soap",
+    "license": "MIT",
+    "type": "library",
+    "homepage": "https://github.com/php-soap",
+    "keywords": [
+        "Soap",
+        "XML",
+        "Bipro"
+    ],
+    "authors": [
+        {
+            "name": "Randy Schütt",
+            "email": "rswhite4@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.*.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/"
+        ],
+        "psr-4": {
+            "Dgame\\Soap\\": "src/"
+        }
+    }
+}
