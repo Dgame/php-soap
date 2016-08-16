@@ -95,7 +95,7 @@ class Node extends Element
             $element->setNamespace($this->getNamespace());
         }
 
-        $this->elements[$element->getName()] = $element;
+        $this->elements[$element->getIdentifier()] = $element;
     }
 
     /**
