@@ -14,7 +14,7 @@ trait NamespaceTrait
     private $namespace = '';
 
     /**
-     * @param string|null $namespace
+     * @param string $namespace
      */
     final public function setNamespace(string $namespace)
     {
