@@ -14,7 +14,10 @@ use Dgame\Soap\Component\Security;
 
 require_once 'vendor/autoload.php';
 
+print '<pre>';
+
 $envelope = new Envelope();
+$envelope->setNamespace('soapenv');
 
 $security = new Security();
 $token    = new UsernameToken('Foo', 'Bar');
@@ -30,7 +33,6 @@ $body->appendNode($rst);
 $envelope->appendNode($header);
 $envelope->appendNode($body);
 
-print '<pre>';
 print htmlentities($envelope->assemble()->saveXML());
 print str_repeat('-', 50) . PHP_EOL;
 

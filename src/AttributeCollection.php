@@ -24,7 +24,17 @@ final class AttributeCollection
      */
     public function __construct(string $namespace = null)
     {
-        $this->namespace = $namespace;
+        $this->setNamespace((string) $namespace);
+    }
+
+    /**
+     * @param array $change
+     */
+    public function onNamespaceChange(array $change)
+    {
+        foreach ($this->attributes as $attribute) {
+            $attribute->onNamespaceChange($change);
+        }
     }
 
     /**
@@ -48,7 +58,7 @@ final class AttributeCollection
      *
      * @return Attribute[]
      */
-    public function getAttributeBy(callable $callback)
+    public function getAttributeBy(callable $callback) // TODO: entfernen?
     {
         return array_filter($this->attributes, $callback);
     }
@@ -58,7 +68,7 @@ final class AttributeCollection
      */
     public function refer(string $value)
     {
-        $this->attributes[] = new Attribute($this->namespace, $value);
+        $this->attributes[] = new Attribute($this->getNamespace(), $value);
     }
 
     /**
@@ -66,8 +76,8 @@ final class AttributeCollection
      */
     public function appendAttribute(Attribute $attribute)
     {
-        if ($this->hasNamespace()) {
-            $attribute->setNamespace($this->namespace);
+        if (!$attribute->hasNamespace()) {
+            $attribute->setNamespace($this->getNamespace());
         }
 
         $this->attributes[$attribute->getIdentifier()] = $attribute;

@@ -2,6 +2,7 @@
 
 namespace Dgame\Soap;
 
+use Dgame\Soap\Visitor\NodeAppendVisitor;
 use DOMDocument;
 use DOMElement;
 
@@ -12,19 +13,19 @@ use DOMElement;
 class Element
 {
     /**
-     * @var null|string
+     * @var string
      */
-    private $name = null;
+    private $name = '';
     /**
-     * @var null|string
+     * @var string
      */
-    private $value = null;
+    private $value = '';
     /**
      * @var AttributeCollection[]
      */
     private $attributes = [];
 
-    use NamespaceTrait, ClassNameTrait;
+    use NamespaceTrait;
 
     /**
      * Element constructor.
@@ -35,9 +36,28 @@ class Element
      */
     public function __construct(string $name = null, string $value = null, string $namespace = null)
     {
-        $this->name      = $name ?? $this->getClassName();
-        $this->value     = $value;
-        $this->namespace = $namespace;
+        $this->name  = $name ?? $this->getClassName();
+        $this->value = (string) $value;
+
+        $this->setNamespace((string) $namespace);
+    }
+
+    /**
+     * @param array $change
+     */
+    public function onNamespaceChange(array $change)
+    {
+        foreach ($this->attributes as $collection) {
+            $collection->onNamespaceChange($change);
+        }
+    }
+
+    /**
+     * @return string
+     */
+    final public function getClassName() : string
+    {
+        return substr(strrchr(static::class, '\\'), 1);
     }
 
     /**
@@ -102,9 +122,9 @@ class Element
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    final public function getValue()
+    final public function getValue() : string
     {
         return $this->value;
     }
@@ -115,10 +135,10 @@ class Element
     final public function getIdentifier() : string
     {
         if ($this->hasNamespace()) {
-            return sprintf('%s:%s', $this->getNamespace(), $this->getName());
+            return sprintf('%s:%s', $this->getNamespace(), $this->name);
         }
 
-        return $this->getName();
+        return $this->name;
     }
 
     /**

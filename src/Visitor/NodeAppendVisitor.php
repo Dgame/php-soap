@@ -1,13 +1,15 @@
 <?php
 
-namespace Dgame\Soap;
+namespace Dgame\Soap\Visitor;
 
+use Dgame\Soap\Element;
+use Dgame\Soap\Node;
 use ReflectionClass;
 use ReflectionProperty;
 
 /**
  * Class NodeAppendVisitor
- * @package Dgame\Soap
+ * @package Dgame\Soap\Visitor
  */
 final class NodeAppendVisitor
 {

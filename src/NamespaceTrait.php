@@ -9,16 +9,32 @@ namespace Dgame\Soap;
 trait NamespaceTrait
 {
     /**
-     * @var null|string
+     * @var string
      */
-    private $namespace = null;
+    private $namespace = '';
 
     /**
-     * @param string $namespace
+     * @param string|null $namespace
      */
     final public function setNamespace(string $namespace)
     {
+        $this->onNamespaceChange(['old' => $this->namespace, 'new' => $namespace]);
         $this->namespace = $namespace;
+    }
+
+    /**
+     * @param array $change
+     */
+    public function onNamespaceChange(array $change)
+    {
+    }
+
+    /**
+     * @return string
+     */
+    final public function getNamespace() : string
+    {
+        return $this->namespace;
     }
 
     /**
@@ -30,10 +46,12 @@ trait NamespaceTrait
     }
 
     /**
-     * @return null|string
+     * @param string $namespace
+     *
+     * @return bool
      */
-    final public function getNamespace()
+    final public function hasEqualNamespace(string $namespace) : bool
     {
-        return $this->namespace;
+        return $this->namespace === $namespace;
     }
 }

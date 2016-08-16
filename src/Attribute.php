@@ -9,13 +9,13 @@ namespace Dgame\Soap;
 final class Attribute
 {
     /**
-     * @var null|string
+     * @var string
      */
-    private $name = null;
+    private $name = '';
     /**
-     * @var null|string
+     * @var string
      */
-    private $value = null;
+    private $value = '';
 
     use NamespaceTrait;
 
@@ -32,6 +32,16 @@ final class Attribute
     }
 
     /**
+     * @param array $change
+     */
+    public function onNamespaceChange(array $change)
+    {
+        if ($this->name === $change['old'] && !empty($change['new'])) {
+            $this->name = $change['new'];
+        }
+    }
+
+    /**
      * @return string
      */
     public function getName() : string
@@ -45,7 +55,7 @@ final class Attribute
     public function getIdentifier() : string
     {
         if ($this->hasNamespace()) {
-            return sprintf('%s:%s', $this->namespace, $this->name);
+            return sprintf('%s:%s', $this->getNamespace(), $this->name);
         }
 
         return $this->name;
