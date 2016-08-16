@@ -2,6 +2,7 @@
 
 namespace Dgame\Soap;
 
+use Dgame\Soap\Visitor\AssemblerVisitor;
 use DOMDocument;
 
 /**
@@ -21,11 +22,8 @@ class Root extends Node
         $document               = new DOMDocument($version, $encoding);
         $document->formatOutput = true;
 
-        $root = $this->createBy($document);
-        $document->appendChild($root);
-
-        $this->assembleAttributesIn($root);
-        $this->assembleChildrenIn($root);
+        $assembler = new AssemblerVisitor($document);
+        $this->accept($assembler);
 
         return $document;
     }

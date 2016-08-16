@@ -66,10 +66,10 @@ $security->appendNode($token);
 $header = new Header();
 $header->appendNode($security);
 
-$request             = new Request(new Version('2.1.4.1.1'));
-$request->id         = 1;
-$request->consumerId = 1;
-$shipment            = new GetShipment($request);
+$request = new Request(new Version('2.1.4.1.1'));
+$request->setId(1);
+$request->setConsumerId(2);
+$shipment = new GetShipment($request);
 
 $body = new Body();
 $body->appendNode($shipment);

@@ -13,7 +13,7 @@ class GetShipment extends Node
     /**
      * @var Request|null
      */
-    public $request = null;
+    private $request = null;
 
     /**
      * GetShipment constructor.
@@ -32,5 +32,13 @@ class GetShipment extends Node
                 ]
             ]
         );
+    }
+
+    /**
+     * @return Request
+     */
+    final public function getRequest() : Request
+    {
+        return $this->request;
     }
 }

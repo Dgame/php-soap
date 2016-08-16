@@ -11,7 +11,7 @@ use ReflectionProperty;
  * Class NodeAppendVisitor
  * @package Dgame\Soap\Visitor
  */
-final class NodeAppendVisitor
+final class NodeAppendVisitor implements VisitorInterface
 {
     /**
      * @var Node|null
@@ -33,15 +33,15 @@ final class NodeAppendVisitor
      */
     public function visitNode(Node $node)
     {
-        $ref        = new ReflectionClass($node);
-        $properties = $ref->getProperties(ReflectionProperty::IS_PUBLIC);
-        foreach ($properties as $property) {
-            $value = $property->getValue($node);
-            if ($value === null) {
-                continue;
+        $ref = new ReflectionClass($node);
+        foreach ($ref->getProperties() as $property) {
+            $method = 'get' . ucfirst($property->name);
+            if (method_exists($node, $method)) {
+                $value = call_user_func([$node, $method]);
+                if ($value !== null) {
+                    $this->assign($node, $property, $value);
+                }
             }
-
-            $this->assign($node, $property, $value);
         }
 
         $this->node->appendElement($node);

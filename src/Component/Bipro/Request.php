@@ -1,6 +1,7 @@
 <?php
 
 namespace Dgame\Soap\Component\Bipro;
+
 use Dgame\Soap\Node;
 
 /**
@@ -12,19 +13,19 @@ class Request extends Node
     /**
      * @var Version|null
      */
-    public $biproVersion = null;
+    private $biproVersion = null;
     /**
      * @var null|string
      */
-    public $consumerId = null;
+    private $consumerId = null;
     /**
      * @var null|string
      */
-    public $id = null;
+    private $id = null;
     /**
      * @var bool
      */
-    public $bestaetigeLieferungen = false;
+    private $bestaetigeLieferungen = false;
 
     /**
      * Request constructor.
@@ -39,5 +40,61 @@ class Request extends Node
         $this->setPropertyAlias('id', 'ID');
 
         $this->biproVersion = $version;
+    }
+
+    /**
+     * @return Version
+     */
+    final public function getBiproVersion() : Version
+    {
+        return $this->biproVersion;
+    }
+
+    /**
+     * @return null|string
+     */
+    final public function getConsumerId()
+    {
+        return $this->consumerId;
+    }
+
+    /**
+     * @param string $consumerId
+     */
+    final public function setConsumerId(string $consumerId)
+    {
+        $this->consumerId = $consumerId;
+    }
+
+    /**
+     * @return null|string
+     */
+    final public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param string $id
+     */
+    final public function setId(string $id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return boolean
+     */
+    final public function bestaetigeLieferungen() : bool
+    {
+        return $this->bestaetigeLieferungen;
+    }
+
+    /**
+     * @param boolean $bestaetigeLieferungen
+     */
+    final public function setBestaetigeLieferungen(bool $bestaetigeLieferungen)
+    {
+        $this->bestaetigeLieferungen = $bestaetigeLieferungen;
     }
 }

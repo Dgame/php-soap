@@ -13,7 +13,7 @@ class ListShipments extends Node
     /**
      * @var Request|null
      */
-    public $request = null;
+    private $request = null;
 
     /**
      * ListShipments constructor.
@@ -32,5 +32,13 @@ class ListShipments extends Node
                 ]
             ]
         );
+    }
+
+    /**
+     * @return Request
+     */
+    final public function getRequest() : Request
+    {
+        return $this->request;
     }
 }

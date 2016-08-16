@@ -13,18 +13,18 @@ class SecurityContextToken extends Node
     /**
      * @var null|string
      */
-    public $identifier = null;
+    private $id = null;
 
     /**
      * SecurityContextToken constructor.
      *
-     * @param string $identifier
+     * @param string $id
      */
-    public function __construct(string $identifier)
+    public function __construct(string $id)
     {
         parent::__construct();
 
-        $this->identifier = $identifier;
+        $this->id = $id;
         $this->appendAttributes(
             [
                 'xmlns' => [
@@ -32,5 +32,13 @@ class SecurityContextToken extends Node
                 ]
             ]
         );
+    }
+
+    /**
+     * @return string
+     */
+    final public function getId() : string
+    {
+        return $this->id;
     }
 }

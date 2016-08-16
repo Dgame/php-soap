@@ -2,15 +2,14 @@
 
 namespace Dgame\Soap;
 
-use Dgame\Soap\Visitor\NodeAppendVisitor;
-use DOMDocument;
-use DOMElement;
+use Dgame\Soap\Visitor\VisitableInterface;
+use Dgame\Soap\Visitor\VisitorInterface;
 
 /**
  * Class Element
  * @package Dgame\Soap
  */
-class Element
+class Element implements VisitableInterface
 {
     /**
      * @var string
@@ -98,6 +97,14 @@ class Element
     }
 
     /**
+     * @return AttributeCollection[]
+     */
+    final public function getAttributes() : array
+    {
+        return $this->attributes;
+    }
+
+    /**
      * @param string $value
      */
     final public function setValue(string $value)
@@ -142,62 +149,9 @@ class Element
     }
 
     /**
-     * @param DOMDocument $document
-     *
-     * @return DOMElement
+     * @param VisitorInterface $visitor
      */
-    final public function createBy(DOMDocument $document) : DOMElement
-    {
-        if ($this->hasValue()) {
-            return $document->createElement($this->getIdentifier(), $this->value);
-        }
-
-        return $document->createElement($this->getIdentifier());
-    }
-
-    /**
-     * @param DOMElement $element
-     */
-    protected function beforeAssemble(DOMElement $element)
-    {
-    }
-
-    /**
-     * @param DOMElement $element
-     * @param DOMElement $child
-     */
-    protected function afterAssemble(DOMElement $element, DOMElement $child)
-    {
-        $this->assembleAttributesIn($child);
-    }
-
-    /**
-     * @param DOMElement $element
-     */
-    final protected function assembleAttributesIn(DOMElement $element)
-    {
-        foreach ($this->attributes as $attributes) {
-            $attributes->assembleIn($element);
-        }
-    }
-
-    /**
-     * @param DOMElement $element
-     */
-    public function assembleIn(DOMElement $element)
-    {
-        $this->beforeAssemble($element);
-
-        $child = $this->createBy($element->ownerDocument);
-        $element->appendChild($child);
-
-        $this->afterAssemble($element, $child);
-    }
-
-    /**
-     * @param NodeAppendVisitor $visitor
-     */
-    public function accept(NodeAppendVisitor $visitor)
+    public function accept(VisitorInterface $visitor)
     {
         $visitor->visitElement($this);
     }

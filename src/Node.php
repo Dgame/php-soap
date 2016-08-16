@@ -3,7 +3,7 @@
 namespace Dgame\Soap;
 
 use Dgame\Soap\Visitor\NodeAppendVisitor;
-use DOMElement;
+use Dgame\Soap\Visitor\VisitorInterface;
 
 /**
  * Class Node
@@ -18,7 +18,7 @@ class Node extends Element
     /**
      * @var Element[]
      */
-    private $children = [];
+    private $elements = [];
 
     /**
      * Node constructor.
@@ -38,9 +38,9 @@ class Node extends Element
     {
         parent::onNamespaceChange($change);
 
-        foreach ($this->children as $child) {
-            if (!$child->hasNamespace() || $child->hasEqualNamespace($change['old'])) {
-                $child->setNamespace($change['new']);
+        foreach ($this->elements as $element) {
+            if (!$element->hasNamespace() || $element->hasEqualNamespace($change['old'])) {
+                $element->setNamespace($change['new']);
             }
         }
     }
@@ -95,7 +95,7 @@ class Node extends Element
             $element->setNamespace($this->getNamespace());
         }
 
-        $this->children[$element->getName()] = $element;
+        $this->elements[$element->getName()] = $element;
     }
 
     /**
@@ -103,9 +103,9 @@ class Node extends Element
      *
      * @return bool
      */
-    final public function hasChild(string $name) : bool
+    final public function hasElement(string $name) : bool
     {
-        return array_key_exists($name, $this->children);
+        return array_key_exists($name, $this->elements);
     }
 
     /**
@@ -113,40 +113,27 @@ class Node extends Element
      *
      * @return Element|null
      */
-    final public function getChild(string $name)
+    final public function getElement(string $name)
     {
-        if ($this->hasChild($name)) {
-            return $this->children[$name];
+        if ($this->hasElement($name)) {
+            return $this->elements[$name];
         }
 
         return null;
     }
 
     /**
-     * @param DOMElement $element
-     * @param DOMElement $child
+     * @return Element[]
      */
-    protected function afterAssemble(DOMElement $element, DOMElement $child)
+    final public function getElements() : array
     {
-        parent::afterAssemble($element, $child);
-
-        $this->assembleChildrenIn($child);
+        return $this->elements;
     }
 
     /**
-     * @param DOMElement $element
+     * @param VisitorInterface $visitor
      */
-    final protected function assembleChildrenIn(DOMElement $element)
-    {
-        foreach ($this->children as $child) {
-            $child->assembleIn($element);
-        }
-    }
-
-    /**
-     * @param NodeAppendVisitor $visitor
-     */
-    public function accept(NodeAppendVisitor $visitor)
+    public function accept(VisitorInterface $visitor)
     {
         $visitor->visitNode($this);
     }

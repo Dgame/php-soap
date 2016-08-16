@@ -13,15 +13,15 @@ class RequestSecurityToken extends Node
     /**
      * @var string
      */
-    public $tokenType = 'http://schemas.xmlsoap.org/ws/2005/02/sc/sct';
+    private $tokenType = 'http://schemas.xmlsoap.org/ws/2005/02/sc/sct';
     /**
      * @var string
      */
-    public $requestType = 'http://schemas.xmlsoap.org/ws/2005/02/trust/Issue';
+    private $requestType = 'http://schemas.xmlsoap.org/ws/2005/02/trust/Issue';
     /**
      * @var null|Version
      */
-    public $biproVersion = null;
+    private $biproVersion = null;
 
     /**
      * RequestSecurityToken constructor.
@@ -45,5 +45,45 @@ class RequestSecurityToken extends Node
                 ]
             ]
         );
+    }
+
+    /**
+     * @return string
+     */
+    final public function getTokenType() : string
+    {
+        return $this->tokenType;
+    }
+
+    /**
+     * @param string $tokenType
+     */
+    final public function setTokenType(string $tokenType)
+    {
+        $this->tokenType = $tokenType;
+    }
+
+    /**
+     * @return string
+     */
+    final public function getRequestType() : string
+    {
+        return $this->requestType;
+    }
+
+    /**
+     * @param string $requestType
+     */
+    final public function setRequestType(string $requestType)
+    {
+        $this->requestType = $requestType;
+    }
+
+    /**
+     * @return Version
+     */
+    final public function getBiproVersion() : Version
+    {
+        return $this->biproVersion;
     }
 }

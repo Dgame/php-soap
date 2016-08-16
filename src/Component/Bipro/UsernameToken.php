@@ -3,7 +3,6 @@
 namespace Dgame\Soap\Component\Bipro;
 
 use Dgame\Soap\Node;
-use DOMElement;
 
 /**
  * Class UsernameToken
@@ -14,11 +13,11 @@ class UsernameToken extends Node
     /**
      * @var null|string
      */
-    public $username = null;
+    private $username = null;
     /**
-     * @var null|string
+     * @var Password|null
      */
-    public $password = null;
+    private $password = null;
 
     /**
      * UsernameToken constructor.
@@ -31,20 +30,22 @@ class UsernameToken extends Node
         parent::__construct();
 
         $this->username = $username;
-        $this->password = $password;
+        $this->password = new Password($password);
     }
 
     /**
-     * @param DOMElement $element
+     * @return string
      */
-    public function beforeAssemble(DOMElement $element)
+    final public function getUsername() : string
     {
-        if ($this->hasChild('Password')) {
-            $this->getChild('Password')->appendAttributes(
-                [
-                    ['Type' => 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText']
-                ]
-            );
-        }
+        return $this->username;
+    }
+
+    /**
+     * @return Password
+     */
+    final public function getPassword() : Password
+    {
+        return $this->password;
     }
 }
