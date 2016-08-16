@@ -36,8 +36,8 @@ class Request extends Node
     {
         parent::__construct();
 
-        $this->setPropertyAlias('consumerId', 'ConsumerID');
-        $this->setPropertyAlias('id', 'ID');
+        $this->setElementAlias('consumerId', 'ConsumerID');
+        $this->setElementAlias('id', 'ID');
 
         $this->biproVersion = $version;
     }

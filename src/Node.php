@@ -46,22 +46,22 @@ class Node extends Element
     }
 
     /**
-     * @param string $property
+     * @param string $name
      * @param string $alias
      */
-    final public function setPropertyAlias(string $property, string $alias)
+    final public function setElementAlias(string $name, string $alias)
     {
-        $this->aliase[$property] = $alias;
+        $this->aliase[$name] = $alias;
     }
 
     /**
-     * @param string $property
+     * @param string $name
      *
      * @return bool
      */
-    final public function hasPropertyAlias(string $property) : bool
+    final public function hasElementAlias(string $name) : bool
     {
-        return array_key_exists($property, $this->aliase);
+        return array_key_exists($name, $this->aliase);
     }
 
     /**
@@ -69,9 +69,9 @@ class Node extends Element
      *
      * @return string|null
      */
-    final public function getPropertyAlias(string $name)
+    final public function getElementAlias(string $name)
     {
-        if ($this->hasPropertyAlias($name)) {
+        if ($this->hasElementAlias($name)) {
             return $this->aliase[$name];
         }
 

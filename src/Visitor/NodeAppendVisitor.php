@@ -57,7 +57,7 @@ final class NodeAppendVisitor implements VisitorInterface
         if ($value instanceof Element) {
             $value->accept(new self($node));
         } else {
-            $name = $node->hasPropertyAlias($property->name) ? $node->getPropertyAlias($property->name) : ucfirst($property->name);
+            $name = $node->hasElementAlias($property->name) ? $node->getElementAlias($property->name) : ucfirst($property->name);
             if (!is_string($value)) {
                 $value = var_export($value, true);
             }
