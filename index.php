@@ -33,7 +33,13 @@ $body->appendNode($rst);
 $envelope->appendNode($header);
 $envelope->appendNode($body);
 
-print htmlentities($envelope->assemble()->saveXML());
+$doc                     = new DOMDocument('1.0', 'utf-8');
+$doc->formatOutput       = true;
+$doc->preserveWhiteSpace = true;
+
+$envelope->assemble($doc);
+
+print htmlentities($doc->saveXML());
 print str_repeat('-', 50) . PHP_EOL;
 
 $envelope = new Envelope();
@@ -54,7 +60,13 @@ $body->appendNode($shipment);
 $envelope->appendNode($header);
 $envelope->appendNode($body);
 
-print htmlentities($envelope->assemble()->saveXML());
+$doc                     = new DOMDocument('1.0', 'utf-8');
+$doc->formatOutput       = true;
+$doc->preserveWhiteSpace = true;
+
+$envelope->assemble($doc);
+
+print htmlentities($doc->saveXML());
 print str_repeat('-', 50) . PHP_EOL;
 
 $envelope = new Envelope();
@@ -77,4 +89,10 @@ $body->appendNode($shipment);
 $envelope->appendNode($header);
 $envelope->appendNode($body);
 
-print htmlentities($envelope->assemble()->saveXML());
+$doc                     = new DOMDocument('1.0', 'utf-8');
+$doc->formatOutput       = true;
+$doc->preserveWhiteSpace = true;
+
+$envelope->assemble($doc);
+
+print htmlentities($doc->saveXML());
