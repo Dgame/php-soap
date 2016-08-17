@@ -2,7 +2,7 @@
 
 namespace Dgame\Soap;
 
-use Dgame\Soap\Visitor\AssemblerVisitor;
+use Dgame\Soap\Visitor\DocumentAssembler;
 use DOMDocument;
 
 /**
@@ -16,7 +16,7 @@ class Root extends Node
      */
     public function assemble(DOMDocument $document)
     {
-        $assembler = new AssemblerVisitor($document);
+        $assembler = new DocumentAssembler($document);
         $this->accept($assembler);
     }
 }

@@ -20,21 +20,20 @@ class TestDocumentAssembler extends TestCase
     public function testLoginRequestOutput()
     {
         $envelope = new Envelope();
-        $envelope->setNamespace('soap');
 
         $security = new Security();
         $token    = new UsernameToken('Foo', 'Bar');
-        $security->appendNode($token);
+        $security->appendChild($token);
 
         $header = new Header();
-        $header->appendNode($security);
+        $header->appendChild($security);
 
         $rst  = new RequestSecurityToken(new Version('2.1.6.1.1'));
         $body = new Body();
-        $body->appendNode($rst);
+        $body->appendChild($rst);
 
-        $envelope->appendNode($header);
-        $envelope->appendNode($body);
+        $envelope->appendChild($header);
+        $envelope->appendChild($body);
 
         $d1                     = new DOMDocument('1.0', 'utf-8');
         $d1->formatOutput       = false;
@@ -56,19 +55,19 @@ class TestDocumentAssembler extends TestCase
 
         $security = new Security();
         $token    = new SecurityContextToken('tljhkfljädfgjkldsfgjk');
-        $security->appendNode($token);
+        $security->appendChild($token);
 
         $header = new Header();
-        $header->appendNode($security);
+        $header->appendChild($security);
 
         $request  = new Request(new Version('2.1.4.1.1'));
         $shipment = new ListShipments($request);
 
         $body = new Body();
-        $body->appendNode($shipment);
+        $body->appendChild($shipment);
 
-        $envelope->appendNode($header);
-        $envelope->appendNode($body);
+        $envelope->appendChild($header);
+        $envelope->appendChild($body);
 
         $d1                     = new DOMDocument('1.0', 'utf-8');
         $d1->formatOutput       = false;
@@ -90,10 +89,10 @@ class TestDocumentAssembler extends TestCase
 
         $security = new Security();
         $token    = new SecurityContextToken('tljhkfljädfgjkldsfgjk');
-        $security->appendNode($token);
+        $security->appendChild($token);
 
         $header = new Header();
-        $header->appendNode($security);
+        $header->appendChild($security);
 
         $request = new Request(new Version('2.1.4.1.1'));
         $request->setId(1);
@@ -101,10 +100,10 @@ class TestDocumentAssembler extends TestCase
         $shipment = new GetShipment($request);
 
         $body = new Body();
-        $body->appendNode($shipment);
+        $body->appendChild($shipment);
 
-        $envelope->appendNode($header);
-        $envelope->appendNode($body);
+        $envelope->appendChild($header);
+        $envelope->appendChild($body);
 
         $d1                     = new DOMDocument('1.0', 'utf-8');
         $d1->formatOutput       = false;

@@ -11,31 +11,41 @@ use Dgame\Soap\Component\Body;
 use Dgame\Soap\Component\Envelope;
 use Dgame\Soap\Component\Header;
 use Dgame\Soap\Component\Security;
+use Dgame\Soap\Visitor\DocumentAssembler;
 
 require_once 'vendor/autoload.php';
+
+/**
+ * @return DOMDocument
+ */
+function createDocument() : DOMDocument
+{
+    $doc                     = new DOMDocument('1.0', 'utf-8');
+    $doc->formatOutput       = true;
+    $doc->preserveWhiteSpace = true;
+
+    return $doc;
+}
 
 print '<pre>';
 
 $envelope = new Envelope();
-$envelope->setNamespace('soapenv');
 
 $security = new Security();
 $token    = new UsernameToken('Foo', 'Bar');
-$security->appendNode($token);
+$security->appendChild($token);
 
 $header = new Header();
-$header->appendNode($security);
+$header->appendChild($security);
 
 $rst  = new RequestSecurityToken(new Version('2.1.6.1.1'));
 $body = new Body();
-$body->appendNode($rst);
+$body->appendChild($rst);
 
-$envelope->appendNode($header);
-$envelope->appendNode($body);
+$envelope->appendChild($header);
+$envelope->appendChild($body);
 
-$doc                     = new DOMDocument('1.0', 'utf-8');
-$doc->formatOutput       = true;
-$doc->preserveWhiteSpace = true;
+$doc = createDocument();
 
 $envelope->assemble($doc);
 
@@ -46,23 +56,21 @@ $envelope = new Envelope();
 
 $security = new Security();
 $token    = new SecurityContextToken('bipro:7860072500822840554');
-$security->appendNode($token);
+$security->appendChild($token);
 
 $header = new Header();
-$header->appendNode($security);
+$header->appendChild($security);
 
 $request  = new Request(new Version('2.1.4.1.1'));
 $shipment = new ListShipments($request);
 
 $body = new Body();
-$body->appendNode($shipment);
+$body->appendChild($shipment);
 
-$envelope->appendNode($header);
-$envelope->appendNode($body);
+$envelope->appendChild($header);
+$envelope->appendChild($body);
 
-$doc                     = new DOMDocument('1.0', 'utf-8');
-$doc->formatOutput       = true;
-$doc->preserveWhiteSpace = true;
+$doc = createDocument();
 
 $envelope->assemble($doc);
 
@@ -73,10 +81,10 @@ $envelope = new Envelope();
 
 $security = new Security();
 $token    = new SecurityContextToken('bipro:7860072500822840554');
-$security->appendNode($token);
+$security->appendChild($token);
 
 $header = new Header();
-$header->appendNode($security);
+$header->appendChild($security);
 
 $request = new Request(new Version('2.1.4.1.1'));
 $request->setId(1);
@@ -84,14 +92,12 @@ $request->setConsumerId(2);
 $shipment = new GetShipment($request);
 
 $body = new Body();
-$body->appendNode($shipment);
+$body->appendChild($shipment);
 
-$envelope->appendNode($header);
-$envelope->appendNode($body);
+$envelope->appendChild($header);
+$envelope->appendChild($body);
 
-$doc                     = new DOMDocument('1.0', 'utf-8');
-$doc->formatOutput       = true;
-$doc->preserveWhiteSpace = true;
+$doc = createDocument();
 
 $envelope->assemble($doc);
 

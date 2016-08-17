@@ -2,139 +2,121 @@
 
 namespace Dgame\Soap;
 
-use Dgame\Soap\Visitor\NodeAppendVisitor;
-use Dgame\Soap\Visitor\VisitorInterface;
+use Dgame\Soap\Visitor\AttributeVisitorInterface;
+use Dgame\Soap\Visitor\NodeVisitorInterface;
 
 /**
  * Class Node
  * @package Dgame\Soap
  */
-class Node extends Element
+class Node extends PrefixedTag implements AttributeVisitorInterface
 {
     /**
      * @var array
      */
-    private $aliase = [];
-    /**
-     * @var Element[]
-     */
-    private $elements = [];
+    private $children = [];
 
     /**
-     * Node constructor.
+     * Element constructor.
      *
      * @param string|null $name
-     * @param string|null $namespace
+     * @param string|null $prefix
      */
-    public function __construct(string $name = null, string $namespace = null)
+    public function __construct(string $name = null, string $prefix = null)
     {
-        parent::__construct($name, null, $namespace);
+        $name = $name ?? basename(str_replace('\\', '/', static::class));
+        parent::__construct($name, $prefix);
     }
 
     /**
-     * @param array $change
+     * @param Node $parent
      */
-    public function onNamespaceChange(array $change)
+    public function inheritPrefix(Node $parent)
     {
-        parent::onNamespaceChange($change);
+        if ($parent->hasPrefix() && !$this->hasPrefix()) {
+            $this->prefix = $parent->getPrefix();
 
-        foreach ($this->elements as $element) {
-            if (!$element->hasNamespace() || $element->hasEqualNamespace($change['old'])) {
-                $element->setNamespace($change['new']);
+            foreach ($this->children as $child) {
+                $child->inheritPrefix($this);
             }
         }
     }
 
     /**
-     * @param string $name
-     * @param string $alias
+     * @param Node $child
      */
-    final public function setElementAlias(string $name, string $alias)
+    final public function appendChild(Node $child)
     {
-        $this->aliase[$name] = $alias;
+        $child->inheritPrefix($this);
+
+        $this->children[] = $child;
     }
 
     /**
-     * @param string $name
-     *
-     * @return bool
+     * @return Node[]
      */
-    final public function hasElementAlias(string $name) : bool
+    final public function getChildren() : array
     {
-        return array_key_exists($name, $this->aliase);
+        return $this->children;
     }
 
     /**
-     * @param string $name
-     *
-     * @return string|null
+     * @param AttributeInterface $attribute
      */
-    final public function getElementAlias(string $name)
+    public function appendAttribute(AttributeInterface $attribute)
     {
-        if ($this->hasElementAlias($name)) {
-            return $this->aliase[$name];
+        $attribute->accept($this);
+    }
+
+    /**
+     * @param Attribute $attribute
+     */
+    public function visitAttribute(Attribute $attribute)
+    {
+        parent::appendAttribute($attribute);
+    }
+
+    /**
+     * @param XmlnsAttribute $attribute
+     */
+    public function visitXmlnsAttribute(XmlnsAttribute $attribute)
+    {
+        if (!$this->hasPrefix()) {
+            $this->prefix = $attribute->getPrefix();
         }
 
-        return null;
+        parent::appendAttribute($attribute);
     }
 
     /**
-     * @param Node $node
+     * @param DefaultXmlnsAttribute $attribute
      */
-    final public function appendNode(Node $node)
+    public function visitDefaultXmlnsAttribute(DefaultXmlnsAttribute $attribute)
     {
-        $node->accept(new NodeAppendVisitor($this));
+        parent::appendAttribute($attribute);
     }
 
     /**
-     * @param Element $element
+     * @param SoapAttribute $attribute
      */
-    final public function appendElement(Element $element)
+    public function visitSoapAttribute(SoapAttribute $attribute)
     {
-        if (!$element->hasNamespace()) {
-            $element->setNamespace($this->getNamespace());
-        }
-
-        $this->elements[$element->getIdentifier()] = $element;
+        parent::appendAttribute($attribute);
     }
 
     /**
-     * @param string $name
-     *
-     * @return bool
+     * @param NodeVisitorInterface $visitor
      */
-    final public function hasElement(string $name) : bool
-    {
-        return array_key_exists($name, $this->elements);
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Element|null
-     */
-    final public function getElement(string $name)
-    {
-        if ($this->hasElement($name)) {
-            return $this->elements[$name];
-        }
-
-        return null;
-    }
-
-    /**
-     * @return Element[]
-     */
-    final public function getElements() : array
-    {
-        return $this->elements;
-    }
-
-    /**
-     * @param VisitorInterface $visitor
-     */
-    public function accept(VisitorInterface $visitor)
+    public function accept(NodeVisitorInterface $visitor)
     {
         $visitor->visitNode($this);
+    }
+
+    /**
+     * @return array
+     */
+    public function getPropertyExport() : array
+    {
+        return [];
     }
 }

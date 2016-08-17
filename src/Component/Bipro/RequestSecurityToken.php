@@ -2,7 +2,9 @@
 
 namespace Dgame\Soap\Component\Bipro;
 
+use Dgame\Soap\DefaultXmlnsAttribute;
 use Dgame\Soap\Node;
+use Dgame\Soap\XmlnsAttribute;
 
 /**
  * Class RequestSecurityToken
@@ -33,26 +35,31 @@ class RequestSecurityToken extends Node
         parent::__construct();
 
         $this->biproVersion = $version;
-        $this->appendAttributes(
-            [
-                'xmlns' => [
-                    'http://schemas.xmlsoap.org/ws/2004/08/addressing',
-                    'ns2' => 'http://schemas.xmlsoap.org/ws/2005/02/trust',
-                    'ns3' => 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd',
-                    'ns4' => 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd',
-                    'ns5' => 'http://www.w3.org/2000/09/xmldsig#',
-                    'ns6' => 'http://schemas.xmlsoap.org/ws/2004/09/policy'
-                ]
-            ]
+
+        $this->appendAttribute(new DefaultXmlnsAttribute('http://schemas.xmlsoap.org/ws/2004/08/addressing'));
+        $this->appendAttribute(
+            new XmlnsAttribute('ns2', 'http://schemas.xmlsoap.org/ws/2005/02/trust')
+        );
+        $this->appendAttribute(
+            new XmlnsAttribute('ns3', 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd')
+        );
+        $this->appendAttribute(
+            new XmlnsAttribute('ns4', 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd')
+        );
+        $this->appendAttribute(
+            new XmlnsAttribute('ns5', 'http://www.w3.org/2000/09/xmldsig#')
+        );
+        $this->appendAttribute(
+            new XmlnsAttribute('ns6', 'http://schemas.xmlsoap.org/ws/2004/09/policy')
         );
     }
 
     /**
-     * @return string
+     * @return Version
      */
-    final public function getTokenType() : string
+    public function getBiproVersion() : Version
     {
-        return $this->tokenType;
+        return $this->biproVersion;
     }
 
     /**
@@ -66,9 +73,9 @@ class RequestSecurityToken extends Node
     /**
      * @return string
      */
-    final public function getRequestType() : string
+    final public function getTokenType() : string
     {
-        return $this->requestType;
+        return $this->tokenType;
     }
 
     /**
@@ -80,10 +87,18 @@ class RequestSecurityToken extends Node
     }
 
     /**
-     * @return Version
+     * @return string
      */
-    final public function getBiproVersion() : Version
+    final public function getRequestType(): string
     {
-        return $this->biproVersion;
+        return $this->requestType;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPropertyExport() : array
+    {
+        return ['tokenType', 'requestType', 'biproVersion'];
     }
 }

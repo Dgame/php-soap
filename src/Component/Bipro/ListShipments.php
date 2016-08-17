@@ -3,6 +3,7 @@
 namespace Dgame\Soap\Component\Bipro;
 
 use Dgame\Soap\Node;
+use Dgame\Soap\XmlnsAttribute;
 
 /**
  * Class ListShipments
@@ -25,20 +26,23 @@ class ListShipments extends Node
         parent::__construct();
 
         $this->request = $request;
-        $this->appendAttributes(
-            [
-                'xmlns' => [
-                    'transfer' => 'http://www.bipro.net/namespace/transfer'
-                ]
-            ]
-        );
+
+        $this->appendAttribute(new XmlnsAttribute('transfer', 'http://www.bipro.net/namespace/transfer'));
     }
 
     /**
      * @return Request
      */
-    final public function getRequest() : Request
+    public function getRequest() : Request
     {
         return $this->request;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPropertyExport() : array
+    {
+        return ['request'];
     }
 }

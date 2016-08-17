@@ -1,8 +1,8 @@
 <?php
 
 namespace Dgame\Soap\Component\Bipro;
-
 use Dgame\Soap\Element;
+use Dgame\Soap\XmlnsAttribute;
 
 /**
  * Class Version
@@ -19,12 +19,6 @@ class Version extends Element
     {
         parent::__construct('BiPROVersion', $version);
 
-        $this->appendAttributes(
-            [
-                'xmlns' => [
-                    'allgemein' => 'http://www.bipro.net/namespace/allgemein'
-                ]
-            ]
-        );
+        $this->appendAttribute(new XmlnsAttribute('allgemein', 'http://www.bipro.net/namespace/allgemein'));
     }
 }

@@ -3,6 +3,7 @@
 namespace Dgame\Soap\Component\Bipro;
 
 use Dgame\Soap\Node;
+use Dgame\Soap\XmlnsAttribute;
 
 /**
  * Class SecurityContextToken
@@ -25,13 +26,8 @@ class SecurityContextToken extends Node
         parent::__construct();
 
         $this->id = $id;
-        $this->appendAttributes(
-            [
-                'xmlns' => [
-                    'wsc' => 'http://schemas.xmlsoap.org/ws/2005/02/sc'
-                ]
-            ]
-        );
+
+        $this->appendAttribute(new XmlnsAttribute('wsc', 'http://schemas.xmlsoap.org/ws/2005/02/sc'));
     }
 
     /**
@@ -40,5 +36,13 @@ class SecurityContextToken extends Node
     final public function getId() : string
     {
         return $this->id;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPropertyExport() : array
+    {
+        return ['id'];
     }
 }

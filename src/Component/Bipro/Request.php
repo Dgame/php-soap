@@ -36,9 +36,6 @@ class Request extends Node
     {
         parent::__construct();
 
-        $this->setElementAlias('consumerId', 'ConsumerID');
-        $this->setElementAlias('id', 'ID');
-
         $this->biproVersion = $version;
     }
 
@@ -48,14 +45,6 @@ class Request extends Node
     final public function getBiproVersion() : Version
     {
         return $this->biproVersion;
-    }
-
-    /**
-     * @return null|string
-     */
-    final public function getConsumerId()
-    {
-        return $this->consumerId;
     }
 
     /**
@@ -69,9 +58,9 @@ class Request extends Node
     /**
      * @return null|string
      */
-    final public function getId()
+    final public function getConsumerId()
     {
-        return $this->id;
+        return $this->consumerId;
     }
 
     /**
@@ -83,11 +72,11 @@ class Request extends Node
     }
 
     /**
-     * @return boolean
+     * @return null|string
      */
-    final public function bestaetigeLieferungen() : bool
+    final public function getId()
     {
-        return $this->bestaetigeLieferungen;
+        return $this->id;
     }
 
     /**
@@ -96,5 +85,25 @@ class Request extends Node
     final public function setBestaetigeLieferungen(bool $bestaetigeLieferungen)
     {
         $this->bestaetigeLieferungen = $bestaetigeLieferungen;
+    }
+
+    /**
+     * @return boolean
+     */
+    final public function bestaetigeLieferungen(): bool
+    {
+        return $this->bestaetigeLieferungen;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPropertyExport() : array
+    {
+        return [
+            'biproVersion',
+            'consumerId' => 'ConsumerID',
+            'id'         => 'ID'
+        ];
     }
 }

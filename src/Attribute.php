@@ -2,22 +2,22 @@
 
 namespace Dgame\Soap;
 
+use Dgame\Soap\Visitor\AttributeVisitorInterface;
+
 /**
  * Class Attribute
  * @package Dgame\Soap
  */
-final class Attribute
+class Attribute implements AttributeInterface
 {
     /**
-     * @var string
+     * @var null|string
      */
-    private $name = '';
+    private $name  = null;
     /**
-     * @var string
+     * @var null|string
      */
-    private $value = '';
-
-    use NamespaceTrait;
+    private $value = null;
 
     /**
      * Attribute constructor.
@@ -27,24 +27,14 @@ final class Attribute
      */
     public function __construct(string $name, string $value)
     {
-        $this->name  = $name;
+        $this->name = $name;
         $this->value = $value;
     }
 
     /**
-     * @param array $change
-     */
-    public function onNamespaceChange(array $change)
-    {
-        if ($this->name === $change['old'] && !empty($change['new'])) {
-            $this->name = $change['new'];
-        }
-    }
-
-    /**
      * @return string
      */
-    public function getName() : string
+    final public function getName() : string
     {
         return $this->name;
     }
@@ -52,20 +42,16 @@ final class Attribute
     /**
      * @return string
      */
-    public function getIdentifier() : string
-    {
-        if ($this->hasNamespace()) {
-            return sprintf('%s:%s', $this->getNamespace(), $this->name);
-        }
-
-        return $this->name;
-    }
-
-    /**
-     * @return string
-     */
-    public function getValue() : string
+    final public function getValue() : string
     {
         return $this->value;
+    }
+
+    /**
+     * @param AttributeVisitorInterface $visitor
+     */
+    public function accept(AttributeVisitorInterface $visitor)
+    {
+        $visitor->visitAttribute($this);
     }
 }

@@ -2,122 +2,31 @@
 
 namespace Dgame\Soap;
 
-use Dgame\Soap\Visitor\VisitableInterface;
-use Dgame\Soap\Visitor\VisitorInterface;
+use Dgame\Soap\Visitor\NodeVisitorInterface;
 
 /**
  * Class Element
  * @package Dgame\Soap
  */
-class Element implements VisitableInterface
+class Element extends Node
 {
     /**
-     * @var string
+     * @var null|string
      */
-    private $name = '';
-    /**
-     * @var string
-     */
-    private $value = '';
-    /**
-     * @var AttributeCollection[]
-     */
-    private $attributes = [];
-
-    use NamespaceTrait;
+    private $value = null;
 
     /**
      * Element constructor.
      *
      * @param string|null $name
      * @param string|null $value
-     * @param string|null $namespace
+     * @param string|null $prefix
      */
-    public function __construct(string $name = null, string $value = null, string $namespace = null)
+    public function __construct(string $name = null, string $value = null, string $prefix = null)
     {
-        $this->name  = $name ?? $this->getClassName();
-        $this->value = (string) $value;
+        parent::__construct($name, $prefix);
 
-        $this->setNamespace((string) $namespace);
-    }
-
-    /**
-     * @param array $change
-     */
-    public function onNamespaceChange(array $change)
-    {
-        foreach ($this->attributes as $collection) {
-            $collection->onNamespaceChange($change);
-        }
-    }
-
-    /**
-     * @return string
-     */
-    final public function getClassName() : string
-    {
-        return substr(strrchr(static::class, '\\'), 1);
-    }
-
-    /**
-     * @param AttributeCollection $collection
-     */
-    final public function appendAttributeCollection(AttributeCollection $collection)
-    {
-        if (!$this->hasNamespace() && $collection->hasNamespace()) {
-            $attrs = $collection->getAttributeBy(function(Attribute $attribute) {
-                return $attribute->hasNamespace();
-            });
-
-            if (!empty($attrs)) {
-                $this->setNamespace(reset($attrs)->getName());
-            }
-        }
-
-        $this->attributes[] = $collection;
-    }
-
-    /**
-     * @param array $attributes
-     */
-    final public function appendAttributes(array $attributes)
-    {
-        foreach ($attributes as $key => $attrs) {
-            $collection = new AttributeCollection(is_string($key) ? $key : null);
-            foreach ($attrs as $name => $value) {
-                if (is_string($name)) {
-                    $collection->appendAttribute(new Attribute($name, $value));
-                } else {
-                    $collection->refer($value);
-                }
-            }
-
-            $this->appendAttributeCollection($collection);
-        }
-    }
-
-    /**
-     * @return AttributeCollection[]
-     */
-    final public function getAttributes() : array
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * @param string $value
-     */
-    final public function setValue(string $value)
-    {
         $this->value = $value;
-    }
-
-    /**
-     * @return string
-     */
-    final public function getName() : string
-    {
-        return $this->name;
     }
 
     /**
@@ -137,21 +46,17 @@ class Element implements VisitableInterface
     }
 
     /**
-     * @return string
+     * @param string $value
      */
-    final public function getIdentifier() : string
+    final public function setValue(string $value)
     {
-        if ($this->hasNamespace()) {
-            return sprintf('%s:%s', $this->getNamespace(), $this->name);
-        }
-
-        return $this->name;
+        $this->value = $value;
     }
 
     /**
-     * @param VisitorInterface $visitor
+     * @param NodeVisitorInterface $visitor
      */
-    public function accept(VisitorInterface $visitor)
+    public function accept(NodeVisitorInterface $visitor)
     {
         $visitor->visitElement($this);
     }

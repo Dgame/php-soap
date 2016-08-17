@@ -2,6 +2,7 @@
 
 namespace Dgame\Soap\Component\Bipro;
 
+use Dgame\Soap\Attribute;
 use Dgame\Soap\Element;
 
 /**
@@ -19,10 +20,8 @@ class Password extends Element
     {
         parent::__construct('Password', $password);
 
-        $this->appendAttributes(
-            [
-                ['Type' => 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText']
-            ]
+        $this->appendAttribute(
+            new Attribute('Type', 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText')
         );
     }
 }

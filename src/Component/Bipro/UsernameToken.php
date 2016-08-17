@@ -48,4 +48,12 @@ class UsernameToken extends Node
     {
         return $this->password;
     }
+
+    /**
+     * @return array
+     */
+    public function getPropertyExport() : array
+    {
+        return ['username', 'password'];
+    }
 }

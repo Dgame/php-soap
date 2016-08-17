@@ -3,6 +3,7 @@
 namespace Dgame\Soap\Component;
 
 use Dgame\Soap\Root;
+use Dgame\Soap\XmlnsAttribute;
 
 /**
  * Class Envelope
@@ -17,12 +18,6 @@ class Envelope extends Root
     {
         parent::__construct();
 
-        $this->appendAttributes(
-            [
-                'xmlns' => [
-                    'soap' => 'http://schemas.xmlsoap.org/soap/envelope/'
-                ]
-            ]
-        );
+        $this->appendAttribute(new XmlnsAttribute('soap', 'http://schemas.xmlsoap.org/soap/envelope/'));
     }
 }
