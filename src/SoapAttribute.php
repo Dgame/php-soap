@@ -8,7 +8,7 @@ use Dgame\Soap\Visitor\AttributeVisitorInterface;
  * Class SoapAttribute
  * @package Dgame\Soap
  */
-class SoapAttribute extends PrefixedAttribute
+class SoapAttribute extends XmlAttribute
 {
     /**
      * SoapAttribute constructor.

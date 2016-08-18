@@ -8,7 +8,7 @@ use Dgame\Soap\Visitor\AttributeVisitorInterface;
  * Class XmlnsAttribute
  * @package Dgame\Soap
  */
-class XmlnsAttribute extends PrefixedAttribute
+class XmlnsAttribute extends XmlAttribute
 {
     /**
      * XmlnsAttribute constructor.

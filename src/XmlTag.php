@@ -6,7 +6,7 @@ namespace Dgame\Soap;
  * Class PrefixedTag
  * @package Dgame\Soap
  */
-class PrefixedTag extends Tag
+class XmlTag extends Tag
 {
     /**
      * @var null|string

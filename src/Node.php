@@ -9,7 +9,7 @@ use Dgame\Soap\Visitor\NodeVisitorInterface;
  * Class Node
  * @package Dgame\Soap
  */
-class Node extends PrefixedTag implements AttributeVisitorInterface
+class Node extends XmlTag implements AttributeVisitorInterface
 {
     /**
      * @var array

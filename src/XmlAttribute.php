@@ -6,7 +6,7 @@ namespace Dgame\Soap;
  * Class PrefixedAttribute
  * @package Dgame\Soap
  */
-abstract class PrefixedAttribute implements AttributeInterface
+abstract class XmlAttribute implements AttributeInterface
 {
     /**
      * @var null|string

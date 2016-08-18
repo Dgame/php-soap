@@ -40,10 +40,9 @@ final class DocumentAssembler implements NodeVisitorInterface
     public function visitNode(Node $node)
     {
         $child = $this->document->createElement($node->getNamespace());
+
         $this->append($node, $child);
-
         $this->node = $child;
-
         $this->assembleProperties($node);
 
         foreach ($node->getChildren() as $childNode) {
@@ -63,6 +62,7 @@ final class DocumentAssembler implements NodeVisitorInterface
         }
 
         $this->append($element, $child);
+        $this->assembleProperties($element);
     }
 
     /**
