@@ -2,26 +2,26 @@
 
 namespace Dgame\Soap\Component\Bipro;
 
-use Dgame\Soap\Node;
+use Dgame\Soap\XmlNode;
 
 /**
  * Class Request
  * @package Dgame\Soap\Component\Bipro
  */
-class Request extends Node
+class Request extends XmlNode
 {
     /**
-     * @var Version|null
+     * @var Version
      */
-    private $biproVersion = null;
+    private $biproVersion;
     /**
-     * @var null|string
+     * @var string
      */
-    private $consumerId = null;
+    private $consumerId = '';
     /**
-     * @var null|string
+     * @var string
      */
-    private $id = null;
+    private $id = '';
     /**
      * @var bool
      */
@@ -98,7 +98,7 @@ class Request extends Node
     /**
      * @return array
      */
-    public function getPropertyExport() : array
+    public function export() : array
     {
         return [
             'biproVersion',

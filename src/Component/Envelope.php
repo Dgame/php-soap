@@ -18,6 +18,6 @@ class Envelope extends Root
     {
         parent::__construct();
 
-        $this->appendAttribute(new XmlnsAttribute('soap', 'http://schemas.xmlsoap.org/soap/envelope/'));
+        $this->setAttribute(new XmlnsAttribute('soap', 'http://schemas.xmlsoap.org/soap/envelope/'));
     }
 }

@@ -2,51 +2,45 @@
 
 namespace Dgame\Soap;
 
+use Dgame\Soap\Visitor\AttributeVisitor;
+
 /**
- * Class PrefixedAttribute
+ * Class XmlAttribute
  * @package Dgame\Soap
  */
-abstract class XmlAttribute implements AttributeInterface
+class XmlAttribute extends Attribute
 {
     /**
-     * @var null|string
+     * @var string
      */
-    private $value = null;
-    /**
-     * @var null|string
-     */
-    private $prefix = null;
-    /**
-     * @var null|string
-     */
-    private $namespace = null;
+    private $prefix;
 
     /**
-     * PrefixedAttribute constructor.
+     * XmlAttribute constructor.
      *
-     * @param string      $prefix
-     * @param string      $value
-     * @param string|null $namespace
+     * @param string $name
+     * @param string $value
+     * @param string $prefix
      */
-    public function __construct(string $prefix, string $value, string $namespace = null)
+    public function __construct(string $name, string $value, string $prefix)
     {
-        $this->prefix    = $prefix;
-        $this->value     = $value;
-        $this->namespace = $namespace;
+        parent::__construct($name, $value);
+
+        $this->prefix = $prefix;
     }
 
     /**
      * @return bool
      */
-    public function hasPrefix() : bool
+    final public function hasPrefix() : bool
     {
         return !empty($this->prefix);
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    final public function getPrefix()
+    final public function getPrefix() : string
     {
         return $this->prefix;
     }
@@ -54,36 +48,20 @@ abstract class XmlAttribute implements AttributeInterface
     /**
      * @return string
      */
-    final public function getValue() : string
+    final public function getNamespace() : string
     {
-        return $this->value;
-    }
-
-    /**
-     * @return bool
-     */
-    final public function hasNamespace() : bool
-    {
-        return !empty($this->namespace);
-    }
-
-    /**
-     * @return null|string
-     */
-    final public function getNamespace()
-    {
-        return $this->namespace;
-    }
-
-    /**
-     * @return string
-     */
-    final public function getName() : string
-    {
-        if ($this->hasNamespace() && $this->hasPrefix()) {
-            return sprintf('%s:%s', $this->namespace, $this->prefix);
+        if ($this->hasPrefix()) {
+            return sprintf('%s:%s', $this->getName(), $this->prefix);
         }
 
-        return $this->hasPrefix() ? $this->prefix : $this->namespace;
+        return $this->getName();
+    }
+
+    /**
+     * @param AttributeVisitor $visitor
+     */
+    public function accept(AttributeVisitor $visitor)
+    {
+        $visitor->visitXmlAttribute($this);
     }
 }

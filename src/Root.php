@@ -9,7 +9,7 @@ use DOMDocument;
  * Class Root
  * @package Dgame\Soap
  */
-class Root extends Node
+class Root extends XmlNode
 {
     /**
      * @param DOMDocument $document

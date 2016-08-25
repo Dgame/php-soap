@@ -2,7 +2,7 @@
 
 namespace Dgame\Soap;
 
-use Dgame\Soap\Visitor\AttributeVisitorInterface;
+use Dgame\Soap\Visitor\AttributeVisitor;
 
 /**
  * Class XmlnsAttribute
@@ -13,19 +13,18 @@ class XmlnsAttribute extends XmlAttribute
     /**
      * XmlnsAttribute constructor.
      *
-     * @param string      $value
-     * @param string|null $prefix
-     * @param string      $namespace
+     * @param string $prefix
+     * @param string $value
      */
     public function __construct(string $prefix, string $value)
     {
-        parent::__construct($prefix, $value, 'xmlns');
+        parent::__construct('xmlns', $value, $prefix);
     }
 
     /**
-     * @param AttributeVisitorInterface $visitor
+     * @param AttributeVisitor $visitor
      */
-    public function accept(AttributeVisitorInterface $visitor)
+    public function accept(AttributeVisitor $visitor)
     {
         $visitor->visitXmlnsAttribute($this);
     }

@@ -3,14 +3,14 @@
 namespace Dgame\Soap\Component\Bipro;
 
 use Dgame\Soap\DefaultXmlnsAttribute;
-use Dgame\Soap\Node;
+use Dgame\Soap\XmlNode;
 use Dgame\Soap\XmlnsAttribute;
 
 /**
  * Class RequestSecurityToken
  * @package Dgame\Soap\Component\Bipro
  */
-class RequestSecurityToken extends Node
+class RequestSecurityToken extends XmlNode
 {
     /**
      * @var string
@@ -21,9 +21,9 @@ class RequestSecurityToken extends Node
      */
     private $requestType = 'http://schemas.xmlsoap.org/ws/2005/02/trust/Issue';
     /**
-     * @var null|Version
+     * @var Version
      */
-    private $biproVersion = null;
+    private $biproVersion;
 
     /**
      * RequestSecurityToken constructor.
@@ -36,20 +36,20 @@ class RequestSecurityToken extends Node
 
         $this->biproVersion = $version;
 
-        $this->appendAttribute(new DefaultXmlnsAttribute('http://schemas.xmlsoap.org/ws/2004/08/addressing'));
-        $this->appendAttribute(
+        $this->setAttribute(new DefaultXmlnsAttribute('http://schemas.xmlsoap.org/ws/2004/08/addressing'));
+        $this->setAttribute(
             new XmlnsAttribute('ns2', 'http://schemas.xmlsoap.org/ws/2005/02/trust')
         );
-        $this->appendAttribute(
+        $this->setAttribute(
             new XmlnsAttribute('ns3', 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd')
         );
-        $this->appendAttribute(
+        $this->setAttribute(
             new XmlnsAttribute('ns4', 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd')
         );
-        $this->appendAttribute(
+        $this->setAttribute(
             new XmlnsAttribute('ns5', 'http://www.w3.org/2000/09/xmldsig#')
         );
-        $this->appendAttribute(
+        $this->setAttribute(
             new XmlnsAttribute('ns6', 'http://schemas.xmlsoap.org/ws/2004/09/policy')
         );
     }
@@ -97,7 +97,7 @@ class RequestSecurityToken extends Node
     /**
      * @return array
      */
-    public function getPropertyExport() : array
+    public function export() : array
     {
         return ['tokenType', 'requestType', 'biproVersion'];
     }

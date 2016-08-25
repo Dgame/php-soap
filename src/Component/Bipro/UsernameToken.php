@@ -2,22 +2,22 @@
 
 namespace Dgame\Soap\Component\Bipro;
 
-use Dgame\Soap\Node;
+use Dgame\Soap\XmlNode;
 
 /**
  * Class UsernameToken
  * @package Dgame\Soap\Component\Bipro
  */
-class UsernameToken extends Node
+class UsernameToken extends XmlNode
 {
     /**
-     * @var null|string
+     * @var string
      */
-    private $username = null;
+    private $username;
     /**
-     * @var Password|null
+     * @var Password
      */
-    private $password = null;
+    private $password;
 
     /**
      * UsernameToken constructor.
@@ -52,7 +52,7 @@ class UsernameToken extends Node
     /**
      * @return array
      */
-    public function getPropertyExport() : array
+    public function export() : array
     {
         return ['username', 'password'];
     }

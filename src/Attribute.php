@@ -2,22 +2,23 @@
 
 namespace Dgame\Soap;
 
-use Dgame\Soap\Visitor\AttributeVisitorInterface;
+use Dgame\Soap\Visitor\AttributeAssembler;
+use Dgame\Soap\Visitor\AttributeVisitor;
 
 /**
  * Class Attribute
  * @package Dgame\Soap
  */
-class Attribute implements AttributeInterface
+class Attribute
 {
     /**
-     * @var null|string
+     * @var string
      */
-    private $name  = null;
+    private $name;
     /**
-     * @var null|string
+     * @var string
      */
-    private $value = null;
+    private $value;
 
     /**
      * Attribute constructor.
@@ -27,7 +28,7 @@ class Attribute implements AttributeInterface
      */
     public function __construct(string $name, string $value)
     {
-        $this->name = $name;
+        $this->name  = $name;
         $this->value = $value;
     }
 
@@ -48,9 +49,22 @@ class Attribute implements AttributeInterface
     }
 
     /**
-     * @param AttributeVisitorInterface $visitor
+     * @return string
      */
-    public function accept(AttributeVisitorInterface $visitor)
+    final public function getClassName() : string
+    {
+        static $class = null;
+        if ($class === null) {
+            $class = basename(str_replace('\\', '/', static::class));
+        }
+
+        return $class;
+    }
+
+    /**
+     * @param AttributeVisitor $visitor
+     */
+    public function accept(AttributeVisitor $visitor)
     {
         $visitor->visitAttribute($this);
     }

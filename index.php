@@ -11,7 +11,6 @@ use Dgame\Soap\Component\Body;
 use Dgame\Soap\Component\Envelope;
 use Dgame\Soap\Component\Header;
 use Dgame\Soap\Component\Security;
-use Dgame\Soap\Visitor\DocumentAssembler;
 
 require_once 'vendor/autoload.php';
 

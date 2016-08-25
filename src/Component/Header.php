@@ -2,12 +2,12 @@
 
 namespace Dgame\Soap\Component;
 
-use Dgame\Soap\Node;
+use Dgame\Soap\XmlNode;
 
 /**
  * Class Header
  * @package Dgame\Soap\Component
  */
-class Header extends Node
+class Header extends XmlNode
 {
 }

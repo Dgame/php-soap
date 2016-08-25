@@ -3,7 +3,8 @@
 namespace Dgame\Soap\Visitor;
 
 use Dgame\Soap\Element;
-use Dgame\Soap\Node;
+use Dgame\Soap\XmlElement;
+use Dgame\Soap\XmlNode;
 use DOMDocument;
 use DOMElement;
 use DOMNode;
@@ -12,16 +13,16 @@ use DOMNode;
  * Class DocumentAssembler
  * @package Dgame\Soap\Visitor
  */
-final class DocumentAssembler implements NodeVisitorInterface
+final class DocumentAssembler implements ElementVisitor
 {
     /**
-     * @var DOMDocument|null
+     * @var DOMDocument
      */
-    private $document = null;
+    private $document;
     /**
-     * @var DOMNode|null
+     * @var DOMNode
      */
-    private $node = null;
+    private $node;
 
     /**
      * DocumentAssembler constructor.
@@ -35,14 +36,15 @@ final class DocumentAssembler implements NodeVisitorInterface
     }
 
     /**
-     * @param Node $node
+     * @param XmlNode $node
      */
-    public function visitNode(Node $node)
+    public function visitXmlNode(XmlNode $node)
     {
         $child = $this->document->createElement($node->getNamespace());
+        $this->assembleAttributes($node, $child);
 
-        $this->append($node, $child);
         $this->node = $child;
+
         $this->assembleProperties($node);
 
         foreach ($node->getChildren() as $childNode) {
@@ -51,9 +53,9 @@ final class DocumentAssembler implements NodeVisitorInterface
     }
 
     /**
-     * @param Element $element
+     * @param XmlElement $element
      */
-    public function visitElement(Element $element)
+    public function visitXmlElement(XmlElement $element)
     {
         if ($element->hasValue()) {
             $child = $this->document->createElement($element->getNamespace(), $element->getValue());
@@ -61,29 +63,43 @@ final class DocumentAssembler implements NodeVisitorInterface
             $child = $this->document->createElement($element->getNamespace());
         }
 
-        $this->append($element, $child);
-        $this->assembleProperties($element);
+        $this->assembleAttributes($element, $child);
     }
 
     /**
-     * @param Node       $node
+     * @param Element $element
+     */
+    public function visitElement(Element $element)
+    {
+        if ($element->hasValue()) {
+            $child = $this->document->createElement($element->getName(), $element->getValue());
+        } else {
+            $child = $this->document->createElement($element->getName());
+        }
+
+        $this->assembleAttributes($element, $child);
+    }
+
+    /**
+     * @param Element    $child
      * @param DOMElement $element
      */
-    private function append(Node $node, DOMElement $element)
+    private function assembleAttributes(Element $child, DOMElement $element)
     {
-        foreach ($node->getAttributes() as $attribute) {
-            $element->setAttribute($attribute->getName(), $attribute->getValue());
+        $visitr = new AttributeAssembler($element);
+        foreach ($child->getAttributes() as $attribute) {
+            $attribute->accept($visitr);
         }
 
         $this->node->appendChild($element);
     }
 
     /**
-     * @param Node $node
+     * @param XmlNode $node
      */
-    private function assembleProperties(Node $node)
+    private function assembleProperties(XmlNode $node)
     {
-        foreach ($node->getPropertyExport() as $property => $alias) {
+        foreach ($node->export() as $property => $alias) {
             if (is_int($property)) {
                 $property = $alias;
             }
@@ -91,17 +107,16 @@ final class DocumentAssembler implements NodeVisitorInterface
             $method = 'get' . ucfirst($property);
             if (method_exists($node, $method)) {
                 $value = call_user_func([$node, $method]);
-                if ($value === null) {
+                if (empty($value)) {
                     continue;
                 }
 
-                if (!$value instanceof Node) {
+                if (!$value instanceof Element) {
                     $name = ucfirst($alias);
                     if (!is_string($value)) {
                         $value = var_export($value, true);
                     }
-
-                    $value = new Element($name, $value);
+                    $value = new XmlElement($name, $value);
                 }
 
                 $value->inheritPrefix($node);

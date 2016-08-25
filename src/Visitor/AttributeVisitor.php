@@ -5,18 +5,24 @@ namespace Dgame\Soap\Visitor;
 use Dgame\Soap\Attribute;
 use Dgame\Soap\DefaultXmlnsAttribute;
 use Dgame\Soap\SoapAttribute;
+use Dgame\Soap\XmlAttribute;
 use Dgame\Soap\XmlnsAttribute;
 
 /**
- * Interface AttributeVisitorInterface
+ * Interface AttributeVisitor
  * @package Dgame\Soap\Visitor
  */
-interface AttributeVisitorInterface
+interface AttributeVisitor
 {
     /**
      * @param Attribute $attribute
      */
     public function visitAttribute(Attribute $attribute);
+
+    /**
+     * @param XmlAttribute $attribute
+     */
+    public function visitXmlAttribute(XmlAttribute $attribute);
 
     /**
      * @param XmlnsAttribute $attribute
