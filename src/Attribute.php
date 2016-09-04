@@ -2,7 +2,6 @@
 
 namespace Dgame\Soap;
 
-use Dgame\Soap\Visitor\AttributeAssembler;
 use Dgame\Soap\Visitor\AttributeVisitor;
 
 /**
@@ -46,19 +45,6 @@ class Attribute
     final public function getValue() : string
     {
         return $this->value;
-    }
-
-    /**
-     * @return string
-     */
-    final public function getClassName() : string
-    {
-        static $class = null;
-        if ($class === null) {
-            $class = basename(str_replace('\\', '/', static::class));
-        }
-
-        return $class;
     }
 
     /**

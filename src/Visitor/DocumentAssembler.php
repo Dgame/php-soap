@@ -86,9 +86,9 @@ final class DocumentAssembler implements ElementVisitor
      */
     private function assembleAttributes(Element $child, DOMElement $element)
     {
-        $visitr = new AttributeAssembler($element);
+        $visitor = new AttributeAssembler($element);
         foreach ($child->getAttributes() as $attribute) {
-            $attribute->accept($visitr);
+            $attribute->accept($visitor);
         }
 
         $this->node->appendChild($element);

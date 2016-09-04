@@ -7,7 +7,6 @@ namespace Dgame\Soap;
  * @package Dgame\Soap
  */
 use Dgame\Soap\Visitor\AttributeVisitor;
-use Dgame\Soap\Visitor\DocumentAssembler;
 use Dgame\Soap\Visitor\ElementVisitor;
 
 /**
@@ -29,6 +28,8 @@ class Element implements AttributeVisitor
      */
     private $attributes = [];
 
+    use ClassNameTrait;
+
     /**
      * Element constructor.
      *
@@ -37,7 +38,7 @@ class Element implements AttributeVisitor
      */
     public function __construct(string $name = null, string $value = null)
     {
-        $this->name  = $name ?? basename(str_replace('\\', '/', static::class));
+        $this->name  = $name ?? $this->getClassName();
         $this->value = $value;
     }
 
@@ -97,19 +98,6 @@ class Element implements AttributeVisitor
     final public function hasAttributes() : bool
     {
         return !empty($this->attributes);
-    }
-
-    /**
-     * @return string
-     */
-    final public function getClassName() : string
-    {
-        static $class = null;
-        if ($class === null) {
-            $class = basename(str_replace('\\', '/', static::class));
-        }
-
-        return $class;
     }
 
     /**
