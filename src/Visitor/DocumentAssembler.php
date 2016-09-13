@@ -7,6 +7,7 @@ use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 use DOMDocument;
 use DOMNode;
+use ReflectionClass;
 
 /**
  * Class DocumentAssembler
@@ -104,9 +105,10 @@ final class DocumentAssembler implements ElementVisitor
                 $property = $alias;
             }
 
-            $method = 'get' . ucfirst($property);
-            if (method_exists($node, $method)) {
-                $value = call_user_func([$node, $method]);
+            $reflection = new ReflectionClass($node);
+            $method     = 'get' . ucfirst($property);
+            if ($reflection->hasMethod($method)) {
+                $value = $reflection->getMethod($method)->invoke($node);
                 if (empty($value)) {
                     continue;
                 }
