@@ -1,5 +1,6 @@
 <?php
 
+use Dgame\Soap\Component\Bipro\AckShipment;
 use Dgame\Soap\Component\Bipro\GetShipment;
 use Dgame\Soap\Component\Bipro\ListShipments;
 use Dgame\Soap\Component\Bipro\Request;
@@ -89,6 +90,33 @@ $request = new Request(new Version('2.1.4.1.1'));
 $request->setId(1);
 $request->setConsumerId(2);
 $shipment = new GetShipment($request);
+
+$body = new Body();
+$body->appendChild($shipment);
+
+$envelope->appendChild($header);
+$envelope->appendChild($body);
+
+$doc = createDocument();
+
+$envelope->assemble($doc);
+
+print htmlentities($doc->saveXML());
+print str_repeat('-', 50) . PHP_EOL;
+
+$envelope = new Envelope();
+
+$security = new Security();
+$token    = new SecurityContextToken('bipro:7860072500822840554');
+$security->appendChild($token);
+
+$header = new Header();
+$header->appendChild($security);
+
+$request = new Request(new Version('2.1.4.1.1'));
+$request->setId(1);
+$request->setConsumerId(2);
+$shipment = new AckShipment($request);
 
 $body = new Body();
 $body->appendChild($shipment);

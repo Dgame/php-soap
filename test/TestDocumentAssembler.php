@@ -54,7 +54,7 @@ class TestDocumentAssembler extends TestCase
         $envelope = new Envelope();
 
         $security = new Security();
-        $token    = new SecurityContextToken('tljhkfljädfgjkldsfgjk');
+        $token    = new SecurityContextToken('bipro:7860072500822840554');
         $security->appendChild($token);
 
         $header = new Header();
@@ -88,7 +88,7 @@ class TestDocumentAssembler extends TestCase
         $envelope = new Envelope();
 
         $security = new Security();
-        $token    = new SecurityContextToken('tljhkfljädfgjkldsfgjk');
+        $token    = new SecurityContextToken('bipro:7860072500822840554');
         $security->appendChild($token);
 
         $header = new Header();

@@ -6,7 +6,6 @@ use Dgame\Soap\Element;
 use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 use DOMDocument;
-use DOMElement;
 use DOMNode;
 
 /**
@@ -27,12 +26,12 @@ final class DocumentAssembler implements ElementVisitor
     /**
      * DocumentAssembler constructor.
      *
-     * @param DOMDocument $document
+     * @param DOMNode $node
      */
-    public function __construct(DOMDocument $document)
+    public function __construct(DOMNode $node)
     {
-        $this->document = $document;
-        $this->node     = $document;
+        $this->document = $node->ownerDocument ?? $node;
+        $this->node     = $node;
     }
 
     /**
@@ -40,15 +39,16 @@ final class DocumentAssembler implements ElementVisitor
      */
     public function visitXmlNode(XmlNode $node)
     {
-        $child = $this->document->createElement($node->getNamespace());
-        $this->assembleAttributes($node, $child);
+        $child     = $this->document->createElement($node->getNamespace());
+        $assembler = new self($child);
 
-        $this->node = $child;
+        $this->assembleAttributes($node->getAttributes(), new AttributeAssembler($child));
+        $this->assembleProperties($node, $assembler);
 
-        $this->assembleProperties($node);
+        $this->node->appendChild($child);
 
         foreach ($node->getChildren() as $childNode) {
-            $childNode->accept($this);
+            $childNode->accept($assembler);
         }
     }
 
@@ -63,7 +63,8 @@ final class DocumentAssembler implements ElementVisitor
             $child = $this->document->createElement($element->getNamespace());
         }
 
-        $this->assembleAttributes($element, $child);
+        $this->node->appendChild($child);
+        $this->assembleAttributes($element->getAttributes(), new AttributeAssembler($child));
     }
 
     /**
@@ -77,27 +78,26 @@ final class DocumentAssembler implements ElementVisitor
             $child = $this->document->createElement($element->getName());
         }
 
-        $this->assembleAttributes($element, $child);
+        $this->node->appendChild($child);
+        $this->assembleAttributes($element->getAttributes(), new AttributeAssembler($child));
     }
 
     /**
-     * @param Element    $child
-     * @param DOMElement $element
+     * @param array              $attributes
+     * @param AttributeAssembler $assembler
      */
-    private function assembleAttributes(Element $child, DOMElement $element)
+    private function assembleAttributes(array $attributes, AttributeAssembler $assembler)
     {
-        $visitor = new AttributeAssembler($element);
-        foreach ($child->getAttributes() as $attribute) {
-            $attribute->accept($visitor);
+        foreach ($attributes as $attribute) {
+            $attribute->accept($assembler);
         }
-
-        $this->node->appendChild($element);
     }
 
     /**
-     * @param XmlNode $node
+     * @param XmlNode           $node
+     * @param DocumentAssembler $assembler
      */
-    private function assembleProperties(XmlNode $node)
+    private function assembleProperties(XmlNode $node, DocumentAssembler $assembler)
     {
         foreach ($node->export() as $property => $alias) {
             if (is_int($property)) {
@@ -120,7 +120,7 @@ final class DocumentAssembler implements ElementVisitor
                 }
 
                 $value->inheritPrefix($node);
-                $value->accept($this);
+                $value->accept($assembler);
             }
         }
     }

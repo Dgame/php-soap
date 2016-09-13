@@ -8,10 +8,12 @@
         </wsse:Security>
     </soap:Header>
     <soap:Body>
-        <transfer:ListShipments xmlns:transfer="http://www.bipro.net/namespace/transfer">
+        <transfer:AckShipment xmlns:transfer="http://www.bipro.net/namespace/transfer">
             <transfer:Request>
                 <allgemein:BiPROVersion xmlns:allgemein="http://www.bipro.net/namespace/allgemein">2.1.4.1.1</allgemein:BiPROVersion>
+                <transfer:ConsumerID>2</transfer:ConsumerID>
+                <transfer:ID>1</transfer:ID>
             </transfer:Request>
-        </transfer:ListShipments>
+        </transfer:AckShipment>
     </soap:Body>
 </soap:Envelope>

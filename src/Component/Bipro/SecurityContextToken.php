@@ -43,6 +43,6 @@ class SecurityContextToken extends XmlNode
      */
     public function export() : array
     {
-        return ['id'];
+        return ['id' => 'Identifier'];
     }
 }
