@@ -28,6 +28,7 @@ class AckShipment extends XmlNode
         $this->request = $request;
 
         $this->setAttribute(new XmlnsAttribute('transfer', 'http://www.bipro.net/namespace/transfer'));
+        $this->setAttribute(new XmlnsAttribute('komposit', '"http://www.bipro.net/namespace/komposit'));
     }
 
     /**

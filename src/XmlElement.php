@@ -73,6 +73,8 @@ class XmlElement extends Element
     public function visitXmlnsAttribute(XmlnsAttribute $attribute)
     {
         if (!$this->hasPrefix() && $attribute->hasPrefix()) {
+            $attribute->increaseUsage();
+
             $this->prefix = $attribute->getPrefix();
         }
     }

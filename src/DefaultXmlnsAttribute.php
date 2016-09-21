@@ -21,6 +21,14 @@ class DefaultXmlnsAttribute extends XmlnsAttribute
     }
 
     /**
+     * @return bool
+     */
+    public function isUsed(): bool
+    {
+        return true;
+    }
+
+    /**
      * @param AttributeVisitor $visitor
      */
     public function accept(AttributeVisitor $visitor)

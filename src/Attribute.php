@@ -32,6 +32,14 @@ class Attribute
     }
 
     /**
+     * @return bool
+     */
+    public function isUsed(): bool
+    {
+        return true;
+    }
+
+    /**
      * @return string
      */
     final public function getName() : string

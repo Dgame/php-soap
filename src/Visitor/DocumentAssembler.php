@@ -2,6 +2,7 @@
 
 namespace Dgame\Soap\Visitor;
 
+use Dgame\Soap\Attribute;
 use Dgame\Soap\Element;
 use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
@@ -84,13 +85,15 @@ final class DocumentAssembler implements ElementVisitor
     }
 
     /**
-     * @param array              $attributes
+     * @param Attribute[]        $attributes
      * @param AttributeAssembler $assembler
      */
     private function assembleAttributes(array $attributes, AttributeAssembler $assembler)
     {
         foreach ($attributes as $attribute) {
-            $attribute->accept($assembler);
+            if ($attribute->isUsed()) {
+                $attribute->accept($assembler);
+            }
         }
     }
 
