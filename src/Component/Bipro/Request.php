@@ -42,7 +42,7 @@ class Request extends XmlNode
     /**
      * @return Version
      */
-    final public function getBiproVersion() : Version
+    final public function getBiproVersion(): Version
     {
         return $this->biproVersion;
     }
@@ -98,7 +98,7 @@ class Request extends XmlNode
     /**
      * @return array
      */
-    public function export() : array
+    public function export(): array
     {
         return [
             'biproVersion',

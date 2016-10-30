@@ -11,7 +11,7 @@ trait ClassNameTrait
     /**
      * @return string
      */
-    final public function getClassName() : string
+    final public function getClassName(): string
     {
         return basename(str_replace('\\', '/', static::class));
     }

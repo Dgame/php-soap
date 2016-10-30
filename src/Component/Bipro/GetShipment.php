@@ -33,7 +33,7 @@ class GetShipment extends XmlNode
     /**
      * @return Request
      */
-    public function getRequest() : Request
+    public function getRequest(): Request
     {
         return $this->request;
     }
@@ -41,7 +41,7 @@ class GetShipment extends XmlNode
     /**
      * @return array
      */
-    public function export() : array
+    public function export(): array
     {
         return ['request'];
     }

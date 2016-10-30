@@ -36,7 +36,7 @@ class UsernameToken extends XmlNode
     /**
      * @return string
      */
-    final public function getUsername() : string
+    final public function getUsername(): string
     {
         return $this->username;
     }
@@ -44,7 +44,7 @@ class UsernameToken extends XmlNode
     /**
      * @return Password
      */
-    final public function getPassword() : Password
+    final public function getPassword(): Password
     {
         return $this->password;
     }
@@ -52,7 +52,7 @@ class UsernameToken extends XmlNode
     /**
      * @return array
      */
-    public function export() : array
+    public function export(): array
     {
         return ['username', 'password'];
     }

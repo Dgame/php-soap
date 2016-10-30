@@ -32,7 +32,7 @@ class XmlElement extends Element
     /**
      * @return string
      */
-    final public function getNamespace() : string
+    final public function getNamespace(): string
     {
         if ($this->hasPrefix()) {
             return sprintf('%s:%s', $this->prefix, $this->getName());
@@ -54,7 +54,7 @@ class XmlElement extends Element
     /**
      * @return bool
      */
-    final public function hasPrefix() : bool
+    final public function hasPrefix(): bool
     {
         return !empty($this->prefix);
     }
@@ -62,7 +62,7 @@ class XmlElement extends Element
     /**
      * @return string
      */
-    final public function getPrefix() : string
+    final public function getPrefix(): string
     {
         return $this->prefix;
     }

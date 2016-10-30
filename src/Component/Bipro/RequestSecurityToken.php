@@ -57,7 +57,7 @@ class RequestSecurityToken extends XmlNode
     /**
      * @return Version
      */
-    public function getBiproVersion() : Version
+    public function getBiproVersion(): Version
     {
         return $this->biproVersion;
     }
@@ -73,7 +73,7 @@ class RequestSecurityToken extends XmlNode
     /**
      * @return string
      */
-    final public function getTokenType() : string
+    final public function getTokenType(): string
     {
         return $this->tokenType;
     }
@@ -97,7 +97,7 @@ class RequestSecurityToken extends XmlNode
     /**
      * @return array
      */
-    public function export() : array
+    public function export(): array
     {
         return ['tokenType', 'requestType', 'biproVersion'];
     }

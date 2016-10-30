@@ -45,7 +45,7 @@ class Element implements AttributeVisitor
     /**
      * @return string
      */
-    final public function getName() : string
+    final public function getName(): string
     {
         return $this->name;
     }
@@ -61,7 +61,7 @@ class Element implements AttributeVisitor
     /**
      * @return string
      */
-    final public function getValue() : string
+    final public function getValue(): string
     {
         return $this->value;
     }
@@ -69,7 +69,7 @@ class Element implements AttributeVisitor
     /**
      * @return bool
      */
-    final public function hasValue() : bool
+    final public function hasValue(): bool
     {
         return !empty($this->value);
     }
@@ -87,7 +87,7 @@ class Element implements AttributeVisitor
     /**
      * @return Attribute[]
      */
-    final public function getAttributes() : array
+    final public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -95,7 +95,7 @@ class Element implements AttributeVisitor
     /**
      * @return bool
      */
-    final public function hasAttributes() : bool
+    final public function hasAttributes(): bool
     {
         return !empty($this->attributes);
     }

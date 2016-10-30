@@ -28,7 +28,7 @@ class XmlNode extends XmlElement implements ElementVisitor
     /**
      * @return bool
      */
-    final public function hasChildren() : bool
+    final public function hasChildren(): bool
     {
         return !empty($this->children);
     }
@@ -36,7 +36,7 @@ class XmlNode extends XmlElement implements ElementVisitor
     /**
      * @return Element[]
      */
-    final public function getChildren() : array
+    final public function getChildren(): array
     {
         return $this->children;
     }
@@ -44,7 +44,7 @@ class XmlNode extends XmlElement implements ElementVisitor
     /**
      * @return array
      */
-    public function export() : array
+    public function export(): array
     {
         return [];
     }

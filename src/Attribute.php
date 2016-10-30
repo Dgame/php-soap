@@ -42,7 +42,7 @@ class Attribute
     /**
      * @return string
      */
-    final public function getName() : string
+    final public function getName(): string
     {
         return $this->name;
     }
@@ -50,7 +50,7 @@ class Attribute
     /**
      * @return string
      */
-    final public function getValue() : string
+    final public function getValue(): string
     {
         return $this->value;
     }

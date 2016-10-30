@@ -33,7 +33,7 @@ class SecurityContextToken extends XmlNode
     /**
      * @return string
      */
-    final public function getId() : string
+    final public function getId(): string
     {
         return $this->id;
     }
@@ -41,7 +41,7 @@ class SecurityContextToken extends XmlNode
     /**
      * @return array
      */
-    public function export() : array
+    public function export(): array
     {
         return ['id' => 'Identifier'];
     }

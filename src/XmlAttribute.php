@@ -32,7 +32,7 @@ class XmlAttribute extends Attribute
     /**
      * @return bool
      */
-    final public function hasPrefix() : bool
+    final public function hasPrefix(): bool
     {
         return !empty($this->prefix);
     }
@@ -40,7 +40,7 @@ class XmlAttribute extends Attribute
     /**
      * @return string
      */
-    final public function getPrefix() : string
+    final public function getPrefix(): string
     {
         return $this->prefix;
     }
@@ -48,7 +48,7 @@ class XmlAttribute extends Attribute
     /**
      * @return string
      */
-    final public function getNamespace() : string
+    final public function getNamespace(): string
     {
         if ($this->hasPrefix()) {
             return sprintf('%s:%s', $this->getName(), $this->prefix);
