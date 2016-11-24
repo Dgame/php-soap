@@ -2,18 +2,18 @@
 
 namespace Dgame\Soap\Visitor;
 
-use Dgame\Soap\Attribute;
-use Dgame\Soap\DefaultXmlnsAttribute;
-use Dgame\Soap\SoapAttribute;
-use Dgame\Soap\XmlAttribute;
-use Dgame\Soap\XmlnsAttribute;
+use Dgame\Soap\Attribute\Attribute;
+use Dgame\Soap\Attribute\DefaultXmlnsAttribute;
+use Dgame\Soap\Attribute\SoapAttribute;
+use Dgame\Soap\Attribute\XmlAttribute;
+use Dgame\Soap\Attribute\XmlnsAttribute;
 use DOMElement;
 
 /**
  * Class AttributeAssembler
  * @package Dgame\Soap\Visitor
  */
-final class AttributeAssembler implements AttributeVisitor
+final class AttributeAssembler implements AttributeVisitorInterface
 {
     /**
      * @var DOMElement

@@ -2,20 +2,15 @@
 
 namespace Dgame\Soap\Component\Bipro;
 
-use Dgame\Soap\XmlNode;
-use Dgame\Soap\XmlnsAttribute;
+use Dgame\Soap\Component\AbstractNode;
+use Dgame\Soap\Attribute\XmlnsAttribute;
 
 /**
  * Class GetShipment
  * @package Dgame\Soap\Component\Bipro
  */
-class GetShipment extends XmlNode
+class GetShipment extends AbstractNode
 {
-    /**
-     * @var Request
-     */
-    private $request;
-
     /**
      * GetShipment constructor.
      *
@@ -25,24 +20,7 @@ class GetShipment extends XmlNode
     {
         parent::__construct();
 
-        $this->request = $request;
-
-        $this->setAttribute(new XmlnsAttribute('transfer', 'http://www.bipro.net/namespace/transfer'));
-    }
-
-    /**
-     * @return Request
-     */
-    public function getRequest(): Request
-    {
-        return $this->request;
-    }
-
-    /**
-     * @return array
-     */
-    public function export(): array
-    {
-        return ['request'];
+        $this->attachAttribute(new XmlnsAttribute('transfer', 'http://www.bipro.net/namespace/transfer'));
+        $this->attachElement($request);
     }
 }

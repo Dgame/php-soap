@@ -2,8 +2,8 @@
 
 namespace Dgame\Soap\Component\Bipro;
 
-use Dgame\Soap\XmlElement;
-use Dgame\Soap\XmlnsAttribute;
+use Dgame\Soap\Attribute\XmlnsAttribute;
+use Dgame\Soap\Element\XmlElement;
 
 /**
  * Class Version
@@ -11,6 +11,8 @@ use Dgame\Soap\XmlnsAttribute;
  */
 class Version extends XmlElement
 {
+    const NAME = 'BiPROVersion';
+
     /**
      * BiProVersion constructor.
      *
@@ -18,8 +20,8 @@ class Version extends XmlElement
      */
     public function __construct(string $version)
     {
-        parent::__construct('BiPROVersion', $version);
+        parent::__construct(self::NAME, $version);
 
-        $this->setAttribute(new XmlnsAttribute('allgemein', 'http://www.bipro.net/namespace/allgemein'));
+        $this->attachAttribute(new XmlnsAttribute('allgemein', 'http://www.bipro.net/namespace/allgemein'));
     }
 }

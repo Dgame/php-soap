@@ -2,31 +2,14 @@
 
 namespace Dgame\Soap\Component\Bipro;
 
-use Dgame\Soap\XmlNode;
+use Dgame\Soap\Component\AbstractNode;
 
 /**
  * Class Request
  * @package Dgame\Soap\Component\Bipro
  */
-class Request extends XmlNode
+class Request extends AbstractNode
 {
-    /**
-     * @var Version
-     */
-    private $biproVersion;
-    /**
-     * @var string
-     */
-    private $consumerId = '';
-    /**
-     * @var string
-     */
-    private $id = '';
-    /**
-     * @var bool
-     */
-    private $bestaetigeLieferungen = false;
-
     /**
      * Request constructor.
      *
@@ -36,74 +19,30 @@ class Request extends XmlNode
     {
         parent::__construct();
 
-        $this->biproVersion = $version;
-    }
-
-    /**
-     * @return Version
-     */
-    final public function getBiproVersion(): Version
-    {
-        return $this->biproVersion;
+        $this->attachElement($version);
     }
 
     /**
      * @param string $consumerId
      */
-    final public function setConsumerId(string $consumerId)
+    final public function setConsumerID(string $consumerId)
     {
-        $this->consumerId = $consumerId;
-    }
-
-    /**
-     * @return null|string
-     */
-    final public function getConsumerId()
-    {
-        return $this->consumerId;
+        $this->setXmlValue('ConsumerID', $consumerId);
     }
 
     /**
      * @param string $id
      */
-    final public function setId(string $id)
+    final public function setID(string $id)
     {
-        $this->id = $id;
+        $this->setXmlValue('ID', $id);
     }
 
     /**
-     * @return null|string
+     * @param boolean $value
      */
-    final public function getId()
+    final public function setBestaetigeLieferungen(bool $value)
     {
-        return $this->id;
-    }
-
-    /**
-     * @param boolean $bestaetigeLieferungen
-     */
-    final public function setBestaetigeLieferungen(bool $bestaetigeLieferungen)
-    {
-        $this->bestaetigeLieferungen = $bestaetigeLieferungen;
-    }
-
-    /**
-     * @return boolean
-     */
-    final public function bestaetigeLieferungen(): bool
-    {
-        return $this->bestaetigeLieferungen;
-    }
-
-    /**
-     * @return array
-     */
-    public function export(): array
-    {
-        return [
-            'biproVersion',
-            'consumerId' => 'ConsumerID',
-            'id'         => 'ID'
-        ];
+        $this->setXmlValue('BestaetigeLieferungen', (int) $value);
     }
 }

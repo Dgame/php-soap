@@ -2,8 +2,8 @@
 
 namespace Dgame\Soap\Component\Bipro;
 
-use Dgame\Soap\Attribute;
-use Dgame\Soap\XmlElement;
+use Dgame\Soap\Attribute\Attribute;
+use Dgame\Soap\Element\XmlElement;
 
 /**
  * Class Password
@@ -20,7 +20,7 @@ class Password extends XmlElement
     {
         parent::__construct('Password', $password);
 
-        $this->setAttribute(
+        $this->attachAttribute(
             new Attribute('Type', 'http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText')
         );
     }

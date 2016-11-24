@@ -33,17 +33,17 @@ $envelope = new Envelope();
 
 $security = new Security();
 $token    = new UsernameToken('Foo', 'Bar');
-$security->appendChild($token);
+$security->attachElement($token);
 
 $header = new Header();
-$header->appendChild($security);
+$header->attachElement($security);
 
 $rst  = new RequestSecurityToken(new Version('2.1.6.1.1'));
 $body = new Body();
-$body->appendChild($rst);
+$body->attachElement($rst);
 
-$envelope->appendChild($header);
-$envelope->appendChild($body);
+$envelope->attachElement($header);
+$envelope->attachElement($body);
 
 $doc = createDocument();
 
@@ -52,23 +52,24 @@ $envelope->assemble($doc);
 print htmlentities($doc->saveXML());
 print str_repeat('-', 50) . PHP_EOL;
 
+exit;
 $envelope = new Envelope();
 
 $security = new Security();
 $token    = new SecurityContextToken('bipro:7860072500822840554');
-$security->appendChild($token);
+$security->attachElement($token);
 
 $header = new Header();
-$header->appendChild($security);
+$header->attachElement($security);
 
 $request  = new Request(new Version('2.1.4.1.1'));
 $shipment = new ListShipments($request);
 
 $body = new Body();
-$body->appendChild($shipment);
+$body->attachElement($shipment);
 
-$envelope->appendChild($header);
-$envelope->appendChild($body);
+$envelope->attachElement($header);
+$envelope->attachElement($body);
 
 $doc = createDocument();
 
@@ -81,10 +82,10 @@ $envelope = new Envelope();
 
 $security = new Security();
 $token    = new SecurityContextToken('bipro:7860072500822840554');
-$security->appendChild($token);
+$security->attachElement($token);
 
 $header = new Header();
-$header->appendChild($security);
+$header->attachElement($security);
 
 $request = new Request(new Version('2.1.4.1.1'));
 $request->setId(1);
@@ -92,10 +93,10 @@ $request->setConsumerId(2);
 $shipment = new GetShipment($request);
 
 $body = new Body();
-$body->appendChild($shipment);
+$body->attachElement($shipment);
 
-$envelope->appendChild($header);
-$envelope->appendChild($body);
+$envelope->attachElement($header);
+$envelope->attachElement($body);
 
 $doc = createDocument();
 
@@ -108,10 +109,10 @@ $envelope = new Envelope();
 
 $security = new Security();
 $token    = new SecurityContextToken('bipro:7860072500822840554');
-$security->appendChild($token);
+$security->attachElement($token);
 
 $header = new Header();
-$header->appendChild($security);
+$header->attachElement($security);
 
 $request = new Request(new Version('2.1.4.1.1'));
 $request->setId(1);
@@ -119,10 +120,10 @@ $request->setConsumerId(2);
 $shipment = new AckShipment($request);
 
 $body = new Body();
-$body->appendChild($shipment);
+$body->attachElement($shipment);
 
-$envelope->appendChild($header);
-$envelope->appendChild($body);
+$envelope->attachElement($header);
+$envelope->attachElement($body);
 
 $doc = createDocument();
 

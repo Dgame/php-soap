@@ -1,6 +1,6 @@
 <?php
 
-namespace Dgame\Soap;
+namespace Dgame\Soap\Component;
 
 use Dgame\Soap\Visitor\DocumentAssembler;
 use DOMDocument;
@@ -9,7 +9,7 @@ use DOMDocument;
  * Class Root
  * @package Dgame\Soap
  */
-class Root extends XmlNode
+abstract class Root extends AbstractNode
 {
     /**
      * @param DOMDocument $document

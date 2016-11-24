@@ -2,19 +2,18 @@
 
 namespace Dgame\Soap\Visitor;
 
-use Dgame\Soap\Attribute;
-use Dgame\Soap\Element;
-use Dgame\Soap\XmlElement;
-use Dgame\Soap\XmlNode;
+use Dgame\Soap\Attribute\Attribute;
+use Dgame\Soap\Element\Element;
+use Dgame\Soap\Element\XmlElement;
+use Dgame\Soap\Element\XmlNode;
 use DOMDocument;
 use DOMNode;
-use ReflectionClass;
 
 /**
  * Class DocumentAssembler
  * @package Dgame\Soap\Visitor
  */
-final class DocumentAssembler implements ElementVisitor
+final class DocumentAssembler implements ElementVisitorInterface
 {
     /**
      * @var DOMDocument
@@ -45,11 +44,9 @@ final class DocumentAssembler implements ElementVisitor
         $assembler = new self($child);
 
         $this->assembleAttributes($node->getAttributes(), new AttributeAssembler($child));
-        $this->assembleProperties($node, $assembler);
-
         $this->node->appendChild($child);
 
-        foreach ($node->getChildren() as $childNode) {
+        foreach ($node->getElements() as $childNode) {
             $childNode->accept($assembler);
         }
     }
@@ -93,39 +90,6 @@ final class DocumentAssembler implements ElementVisitor
         foreach ($attributes as $attribute) {
             if ($attribute->isUsed()) {
                 $attribute->accept($assembler);
-            }
-        }
-    }
-
-    /**
-     * @param XmlNode           $node
-     * @param DocumentAssembler $assembler
-     */
-    private function assembleProperties(XmlNode $node, DocumentAssembler $assembler)
-    {
-        foreach ($node->export() as $property => $alias) {
-            if (is_int($property)) {
-                $property = $alias;
-            }
-
-            $reflection = new ReflectionClass($node);
-            $method     = 'get' . ucfirst($property);
-            if ($reflection->hasMethod($method)) {
-                $value = $reflection->getMethod($method)->invoke($node);
-                if (empty($value)) {
-                    continue;
-                }
-
-                if (!$value instanceof Element) {
-                    $name = ucfirst($alias);
-                    if (!is_string($value)) {
-                        $value = var_export($value, true);
-                    }
-                    $value = new XmlElement($name, $value);
-                }
-
-                $value->inheritPrefix($node);
-                $value->accept($assembler);
             }
         }
     }

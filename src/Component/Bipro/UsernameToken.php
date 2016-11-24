@@ -2,23 +2,15 @@
 
 namespace Dgame\Soap\Component\Bipro;
 
-use Dgame\Soap\XmlNode;
+use Dgame\Soap\Component\AbstractNode;
+use Dgame\Soap\element\XmlElement;
 
 /**
  * Class UsernameToken
  * @package Dgame\Soap\Component\Bipro
  */
-class UsernameToken extends XmlNode
+class UsernameToken extends AbstractNode
 {
-    /**
-     * @var string
-     */
-    private $username;
-    /**
-     * @var Password
-     */
-    private $password;
-
     /**
      * UsernameToken constructor.
      *
@@ -29,31 +21,7 @@ class UsernameToken extends XmlNode
     {
         parent::__construct();
 
-        $this->username = $username;
-        $this->password = new Password($password);
-    }
-
-    /**
-     * @return string
-     */
-    final public function getUsername(): string
-    {
-        return $this->username;
-    }
-
-    /**
-     * @return Password
-     */
-    final public function getPassword(): Password
-    {
-        return $this->password;
-    }
-
-    /**
-     * @return array
-     */
-    public function export(): array
-    {
-        return ['username', 'password'];
+        $this->attachElement(new XmlElement('Username', $username));
+        $this->attachElement(new Password($password));
     }
 }
