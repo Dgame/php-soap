@@ -9,8 +9,15 @@ use Dgame\Soap\Element\XmlNode;
 use function Dgame\Wrapper\assoc;
 use function Dgame\Wrapper\string;
 
+/**
+ * Class AbstractNode
+ * @package Dgame\Soap\Component
+ */
 abstract class AbstractNode extends XmlNode
 {
+    /**
+     * AbstractNode constructor.
+     */
     public function __construct()
     {
         $class = string(static::class)->namespaceInfo()->getClass();
@@ -18,6 +25,11 @@ abstract class AbstractNode extends XmlNode
         parent::__construct($class);
     }
 
+    /**
+     * @param string $name
+     *
+     * @return array
+     */
     final public function findAllElementsByName(string $name): array
     {
         return assoc($this->getElements())->filter(function (Element $element) use ($name) {
@@ -25,6 +37,11 @@ abstract class AbstractNode extends XmlNode
         })->get();
     }
 
+    /**
+     * @param string $name
+     *
+     * @return Optional
+     */
     final public function findElementByName(string $name): Optional
     {
         $result = $this->findAllElementsByName($name);
@@ -32,6 +49,10 @@ abstract class AbstractNode extends XmlNode
         return assoc($result)->popFront();
     }
 
+    /**
+     * @param string $name
+     * @param string $value
+     */
     final public function setXmlValue(string $name, string $value)
     {
         /** @var Element $element */

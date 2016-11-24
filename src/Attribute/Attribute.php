@@ -93,6 +93,9 @@ class Attribute implements AttributeVisitableInterface
         $visitor->visitAttribute($this);
     }
 
+    /**
+     * @param Element $element
+     */
     public function attachedBy(Element $element)
     {
     }

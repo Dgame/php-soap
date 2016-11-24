@@ -52,7 +52,6 @@ $envelope->assemble($doc);
 print htmlentities($doc->saveXML());
 print str_repeat('-', 50) . PHP_EOL;
 
-exit;
 $envelope = new Envelope();
 
 $security = new Security();

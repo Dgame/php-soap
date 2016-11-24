@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 require_once '../vendor/autoload.php';
 
-class TestDocumentAssembler extends TestCase
+class DocumentAssemblerTest extends TestCase
 {
     public function testLoginRequestOutput()
     {
@@ -23,17 +23,17 @@ class TestDocumentAssembler extends TestCase
 
         $security = new Security();
         $token    = new UsernameToken('Foo', 'Bar');
-        $security->appendChild($token);
+        $security->attachElement($token);
 
         $header = new Header();
-        $header->appendChild($security);
+        $header->attachElement($security);
 
         $rst  = new RequestSecurityToken(new Version('2.1.6.1.1'));
         $body = new Body();
-        $body->appendChild($rst);
+        $body->attachElement($rst);
 
-        $envelope->appendChild($header);
-        $envelope->appendChild($body);
+        $envelope->attachElement($header);
+        $envelope->attachElement($body);
 
         $d1                     = new DOMDocument('1.0', 'utf-8');
         $d1->formatOutput       = false;
@@ -55,19 +55,19 @@ class TestDocumentAssembler extends TestCase
 
         $security = new Security();
         $token    = new SecurityContextToken('bipro:7860072500822840554');
-        $security->appendChild($token);
+        $security->attachElement($token);
 
         $header = new Header();
-        $header->appendChild($security);
+        $header->attachElement($security);
 
         $request  = new Request(new Version('2.1.4.1.1'));
         $shipment = new ListShipments($request);
 
         $body = new Body();
-        $body->appendChild($shipment);
+        $body->attachElement($shipment);
 
-        $envelope->appendChild($header);
-        $envelope->appendChild($body);
+        $envelope->attachElement($header);
+        $envelope->attachElement($body);
 
         $d1                     = new DOMDocument('1.0', 'utf-8');
         $d1->formatOutput       = false;
@@ -89,21 +89,21 @@ class TestDocumentAssembler extends TestCase
 
         $security = new Security();
         $token    = new SecurityContextToken('bipro:7860072500822840554');
-        $security->appendChild($token);
+        $security->attachElement($token);
 
         $header = new Header();
-        $header->appendChild($security);
+        $header->attachElement($security);
 
         $request = new Request(new Version('2.1.4.1.1'));
-        $request->setId(1);
         $request->setConsumerId(2);
+        $request->setId(1);
         $shipment = new GetShipment($request);
 
         $body = new Body();
-        $body->appendChild($shipment);
+        $body->attachElement($shipment);
 
-        $envelope->appendChild($header);
-        $envelope->appendChild($body);
+        $envelope->attachElement($header);
+        $envelope->attachElement($body);
 
         $d1                     = new DOMDocument('1.0', 'utf-8');
         $d1->formatOutput       = false;
