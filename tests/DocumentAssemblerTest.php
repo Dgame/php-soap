@@ -1,5 +1,6 @@
 <?php
 
+use Dgame\Soap\Component\Bipro\AcknowledgeShipment;
 use Dgame\Soap\Component\Bipro\GetShipment;
 use Dgame\Soap\Component\Bipro\ListShipments;
 use Dgame\Soap\Component\Bipro\Request;
@@ -109,6 +110,42 @@ class DocumentAssemblerTest extends TestCase
         $d1->formatOutput       = false;
         $d1->preserveWhiteSpace = false;
         $d1->load(getcwd() . '/xml/get_shipment.xml');
+
+        $d2                     = new DOMDocument('1.0', 'utf-8');
+        $d2->formatOutput       = false;
+        $d2->preserveWhiteSpace = false;
+
+        $envelope->assemble($d2);
+
+        $this->assertEquals($d1->saveXML(), $d2->saveXML());
+    }
+
+    public function testAcknowledgeShipmentOutput()
+    {
+        $envelope = new Envelope();
+
+        $security = new Security();
+        $token    = new SecurityContextToken('bipro:7860072500822840554');
+        $security->attachElement($token);
+
+        $header = new Header();
+        $header->attachElement($security);
+
+        $request = new Request(new Version('2.1.4.1.1'));
+        $request->setConsumerId(2);
+        $request->setId(1);
+        $shipment = new AcknowledgeShipment($request);
+
+        $body = new Body();
+        $body->attachElement($shipment);
+
+        $envelope->attachElement($header);
+        $envelope->attachElement($body);
+
+        $d1                     = new DOMDocument('1.0', 'utf-8');
+        $d1->formatOutput       = false;
+        $d1->preserveWhiteSpace = false;
+        $d1->load(getcwd() . '/xml/ack_shipment.xml');
 
         $d2                     = new DOMDocument('1.0', 'utf-8');
         $d2->formatOutput       = false;

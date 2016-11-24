@@ -9,7 +9,7 @@ use Dgame\Soap\Component\AbstractNode;
  * Class AckShipment
  * @package Dgame\Soap\Component\Bipro
  */
-class AckShipment extends AbstractNode
+class AcknowledgeShipment extends AbstractNode
 {
     /**
      * GetShipment constructor.

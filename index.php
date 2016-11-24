@@ -1,6 +1,6 @@
 <?php
 
-use Dgame\Soap\Component\Bipro\AckShipment;
+use Dgame\Soap\Component\Bipro\AcknowledgeShipment;
 use Dgame\Soap\Component\Bipro\GetShipment;
 use Dgame\Soap\Component\Bipro\ListShipments;
 use Dgame\Soap\Component\Bipro\Request;
@@ -87,8 +87,8 @@ $header = new Header();
 $header->attachElement($security);
 
 $request = new Request(new Version('2.1.4.1.1'));
-$request->setId(1);
 $request->setConsumerId(2);
+$request->setId(1);
 $shipment = new GetShipment($request);
 
 $body = new Body();
@@ -114,9 +114,9 @@ $header = new Header();
 $header->attachElement($security);
 
 $request = new Request(new Version('2.1.4.1.1'));
-$request->setId(1);
 $request->setConsumerId(2);
-$shipment = new AckShipment($request);
+$request->setId(1);
+$shipment = new AcknowledgeShipment($request);
 
 $body = new Body();
 $body->attachElement($shipment);
