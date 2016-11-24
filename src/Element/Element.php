@@ -21,7 +21,7 @@ class Element implements ElementVisitableInterface
      */
     private $value;
     /**
-     * @var array
+     * @var Attribute[]
      */
     private $attributes = [];
 
@@ -80,7 +80,7 @@ class Element implements ElementVisitableInterface
     }
 
     /**
-     * @return array
+     * @return Attribute[]
      */
     final public function getAttributes(): array
     {
