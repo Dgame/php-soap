@@ -6,7 +6,7 @@ use Dgame\Soap\Visitor\AttributeVisitorInterface;
 
 class SoapAttribute extends XmlAttribute
 {
-    public function __construct(string $value, string $prefix = null)
+    public function __construct(string $prefix, string $value)
     {
         parent::__construct('soap', $value, $prefix);
     }
