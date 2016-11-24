@@ -28,5 +28,9 @@ class PrefixInheritVisitor implements ElementVisitorInterface
     public function visitXmlNode(XmlNode $node)
     {
         $node->inheritPrefix($this->prefixable);
+
+        foreach ($node->getElements() as $element) {
+            $element->accept($this);
+        }
     }
 }
