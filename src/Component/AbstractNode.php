@@ -7,7 +7,7 @@ use Dgame\Soap\Element\Element;
 use Dgame\Soap\element\XmlElement;
 use Dgame\Soap\Element\XmlNode;
 use function Dgame\Wrapper\assoc;
-use function Dgame\Wrapper\string;
+use function Dgame\Wrapper\object;
 
 /**
  * Class AbstractNode
@@ -20,7 +20,7 @@ abstract class AbstractNode extends XmlNode
      */
     public function __construct()
     {
-        $class = string(static::class)->namespaceInfo()->getClass();
+        $class = object(static::class)->getNamespaceInfo()->getClass();
 
         parent::__construct($class);
     }

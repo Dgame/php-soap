@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": ">=7.0",
-        "dgame/php-function-wrapper": "dev-master",
+        "dgame/php-wrapper": "dev-master",
         "dgame/php-optional": "@dev"
     },
     "require-dev": {
