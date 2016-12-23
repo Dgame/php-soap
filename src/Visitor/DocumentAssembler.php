@@ -6,7 +6,6 @@ use Dgame\Soap\Attribute\Attribute;
 use Dgame\Soap\Element\Element;
 use Dgame\Soap\Element\XmlElement;
 use Dgame\Soap\Element\XmlNode;
-use DOMDocument;
 use DOMNode;
 
 /**
@@ -16,9 +15,9 @@ use DOMNode;
 final class DocumentAssembler implements ElementVisitorInterface
 {
     /**
-     * @var DOMDocument
+     * @var DOMNode
      */
-    private $document;
+    private $owner;
     /**
      * @var DOMNode
      */
@@ -31,8 +30,8 @@ final class DocumentAssembler implements ElementVisitorInterface
      */
     public function __construct(DOMNode $node)
     {
-        $this->document = $node->ownerDocument ?? $node;
-        $this->node     = $node;
+        $this->owner = $node->ownerDocument ?? $node;
+        $this->node  = $node;
     }
 
     /**
@@ -40,7 +39,7 @@ final class DocumentAssembler implements ElementVisitorInterface
      */
     public function visitXmlNode(XmlNode $node)
     {
-        $child     = $this->document->createElement($node->getNamespace());
+        $child     = $this->owner->createElement($node->getNamespace());
         $assembler = new self($child);
 
         $this->assembleAttributes($node->getAttributes(), new AttributeAssembler($child));
@@ -57,9 +56,9 @@ final class DocumentAssembler implements ElementVisitorInterface
     public function visitXmlElement(XmlElement $element)
     {
         if ($element->hasValue()) {
-            $child = $this->document->createElement($element->getNamespace(), $element->getValue());
+            $child = $this->owner->createElement($element->getNamespace(), $element->getValue());
         } else {
-            $child = $this->document->createElement($element->getNamespace());
+            $child = $this->owner->createElement($element->getNamespace());
         }
 
         $this->node->appendChild($child);
@@ -72,9 +71,9 @@ final class DocumentAssembler implements ElementVisitorInterface
     public function visitElement(Element $element)
     {
         if ($element->hasValue()) {
-            $child = $this->document->createElement($element->getName(), $element->getValue());
+            $child = $this->owner->createElement($element->getName(), $element->getValue());
         } else {
-            $child = $this->document->createElement($element->getName());
+            $child = $this->owner->createElement($element->getName());
         }
 
         $this->node->appendChild($child);
