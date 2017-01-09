@@ -37,7 +37,7 @@ class DocumentAssemblerTest extends TestCase
         $d1                     = new DOMDocument('1.0', 'utf-8');
         $d1->formatOutput       = false;
         $d1->preserveWhiteSpace = false;
-        $d1->load(getcwd() . '/xml/login_request.xml');
+        $d1->load(dirname(__FILE__) . '/xml/login_request.xml');
 
         $d2                     = new DOMDocument('1.0', 'utf-8');
         $d2->formatOutput       = false;
@@ -71,7 +71,7 @@ class DocumentAssemblerTest extends TestCase
         $d1                     = new DOMDocument('1.0', 'utf-8');
         $d1->formatOutput       = false;
         $d1->preserveWhiteSpace = false;
-        $d1->load(getcwd() . '/xml/list_shipment.xml');
+        $d1->load(dirname(__FILE__) . '/xml/list_shipment.xml');
 
         $d2                     = new DOMDocument('1.0', 'utf-8');
         $d2->formatOutput       = false;
@@ -107,7 +107,7 @@ class DocumentAssemblerTest extends TestCase
         $d1                     = new DOMDocument('1.0', 'utf-8');
         $d1->formatOutput       = false;
         $d1->preserveWhiteSpace = false;
-        $d1->load(getcwd() . '/xml/get_shipment.xml');
+        $d1->load(dirname(__FILE__) . '/xml/get_shipment.xml');
 
         $d2                     = new DOMDocument('1.0', 'utf-8');
         $d2->formatOutput       = false;
@@ -143,7 +143,7 @@ class DocumentAssemblerTest extends TestCase
         $d1                     = new DOMDocument('1.0', 'utf-8');
         $d1->formatOutput       = false;
         $d1->preserveWhiteSpace = false;
-        $d1->load(getcwd() . '/xml/ack_shipment.xml');
+        $d1->load(dirname(__FILE__) . '/xml/ack_shipment.xml');
 
         $d2                     = new DOMDocument('1.0', 'utf-8');
         $d2->formatOutput       = false;
