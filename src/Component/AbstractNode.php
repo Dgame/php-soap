@@ -32,7 +32,7 @@ abstract class AbstractNode extends XmlNode
      */
     final public function findAllElementsByName(string $name): array
     {
-        return assoc($this->getElements())->filter(function (Element $element) use ($name) {
+        return assoc($this->getElements())->filter(function(Element $element) use ($name) {
             return $element->getName() === $name;
         })->get();
     }
