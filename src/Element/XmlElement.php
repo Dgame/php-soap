@@ -1,6 +1,6 @@
 <?php
 
-namespace Dgame\Soap\element;
+namespace Dgame\Soap\Element;
 
 use Dgame\Soap\PrefixableInterface;
 use Dgame\Soap\PrefixTrait;
