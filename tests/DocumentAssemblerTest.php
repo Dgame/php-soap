@@ -14,8 +14,6 @@ use Dgame\Soap\Component\Header;
 use Dgame\Soap\Component\Security;
 use PHPUnit\Framework\TestCase;
 
-require_once '../vendor/autoload.php';
-
 class DocumentAssemblerTest extends TestCase
 {
     public function testLoginRequestOutput()
