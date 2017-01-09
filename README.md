@@ -2,6 +2,8 @@
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Dgame/php-soap/badges/quality-score.png?b=master&s=49f58edec3c1ad598272b2c5bd0d6eecccd35ac7)](https://scrutinizer-ci.com/g/Dgame/php-soap/?branch=master)
 
+[![Build Status](https://travis-ci.org/Dgame/php-soap.svg?branch=master)](https://travis-ci.org/Dgame/php-soap)
+
 ## Bipro
 
 ### RequestTokenService
