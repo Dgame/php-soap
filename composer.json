@@ -30,5 +30,10 @@
         "psr-4": {
             "Dgame\\Soap\\": "src/"
         }
+    },
+    "scripts": {
+        "test": [
+            "phpunit"
+        ]
     }
 }
