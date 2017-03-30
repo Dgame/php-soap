@@ -111,7 +111,7 @@ final class Translator
             $child = $this->translateNode($childNode);
             if ($child !== null) {
                 $parent->appendChild($child);
-            } else if ($childNode->nodeType === XML_TEXT_NODE) {
+            } elseif ($childNode->nodeType === XML_TEXT_NODE) {
                 $parent->setValue($childNode->nodeValue);
             }
         }

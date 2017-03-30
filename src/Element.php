@@ -2,9 +2,9 @@
 
 namespace Dgame\Soap;
 
-use Dgame\Soap\Hydrator\VisitorInterface;
-use Dgame\Soap\Hydrator\VisitableInterface;
 use Dgame\Soap\Attribute\Attribute;
+use Dgame\Soap\Hydrator\VisitableInterface;
+use Dgame\Soap\Hydrator\VisitorInterface;
 
 /**
  * Class Element

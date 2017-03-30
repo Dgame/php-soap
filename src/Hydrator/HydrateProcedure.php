@@ -160,9 +160,9 @@ final class HydrateProcedure implements VisitorInterface
 
         if ($this->isValid() && $hydrator->isValid()) {
             $this->hydratable->append($hydrator->getHydratable());
-        } else if ($this->isValid()) {
+        } elseif ($this->isValid()) {
             $this->hydratable->assign($element);
-        } else if ($hydrator->isValid()) {
+        } elseif ($hydrator->isValid()) {
             $this->hydratable = $hydrator->getHydratable();
         }
     }
