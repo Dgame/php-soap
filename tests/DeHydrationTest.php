@@ -23,7 +23,7 @@ final class DeHydrationTest extends TestCase
         $doc                     = new DOMDocument('1.0', 'utf-8');
         $doc->formatOutput       = false;
         $doc->preserveWhiteSpace = false;
-        $doc->load(__DIR__ . '/test1.xml');
+        $doc->load(__DIR__ . '/xml/test1.xml');
 
         $mapper = new ClassMapper(
             [

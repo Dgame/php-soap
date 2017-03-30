@@ -95,7 +95,7 @@ final class TranslatorTest extends TestCase
     public function testDocumentTranslation()
     {
         $doc = new DOMDocument('1.0');
-        $doc->load(__DIR__ . '/test1.xml');
+        $doc->load(__DIR__ . '/xml/test1.xml');
 
         $translator = new Translator();
         $elements   = $translator->translateDocument($doc);
