@@ -50,6 +50,7 @@ final class DeHydrationTest extends TestCase
         $doc2 = new DOMDocument('1.0', 'utf-8');
         $hydrator->assemble($root, $doc2);
 
-        $this->assertEquals($doc->saveXML(), $doc2->saveXML());
+        $xml = preg_replace('#<([^>]+)(\s*[^>]*)></\1>#', '<$1$2/>', $doc2->saveXml());
+        $this->assertEquals($doc->saveXML(), $xml);
     }
 }
