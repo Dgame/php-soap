@@ -2,30 +2,20 @@
 
 namespace Dgame\Soap\Attribute;
 
-use Dgame\Soap\Visitor\AttributeVisitorInterface;
-
 /**
  * Class SoapAttribute
- * @package Dgame\Soap\Attribute
+ * @package Dgame\Soap\Dom
  */
-class SoapAttribute extends XmlAttribute
+final class SoapAttribute extends XmlAttribute
 {
     /**
      * SoapAttribute constructor.
      *
-     * @param string $prefix
-     * @param string $value
+     * @param string      $name
+     * @param string|null $value
      */
-    public function __construct(string $prefix, string $value)
+    public function __construct(string $name, string $value = null)
     {
-        parent::__construct('soap', $value, $prefix);
-    }
-
-    /**
-     * @param AttributeVisitorInterface $visitor
-     */
-    public function accept(AttributeVisitorInterface $visitor)
-    {
-        $visitor->visitSoapAttribute($this);
+        parent::__construct($name, $value, 'soap');
     }
 }

@@ -2,28 +2,27 @@
 
 namespace Dgame\Soap\Attribute;
 
-use Dgame\Soap\Element\Element;
-use Dgame\Soap\PrefixableInterface;
-use Dgame\Soap\PrefixTrait;
-use Dgame\Soap\Visitor\AttributeVisitorInterface;
-use Dgame\Soap\Visitor\PrefixInheritVisitor;
+use Dgame\Soap\Hydrator\Attribute\AttributeHydratorInterface;
 
 /**
  * Class XmlAttribute
  * @package Dgame\Soap\Attribute
  */
-class XmlAttribute extends Attribute implements PrefixableInterface
+class XmlAttribute extends Attribute
 {
-    use PrefixTrait;
+    /**
+     * @var null|string
+     */
+    private $prefix;
 
     /**
      * XmlAttribute constructor.
      *
      * @param string      $name
-     * @param string      $value
+     * @param string|null $value
      * @param string|null $prefix
      */
-    public function __construct(string $name, string $value, string $prefix = null)
+    public function __construct(string $name, string $value = null, string $prefix = null)
     {
         parent::__construct($name, $value);
 
@@ -31,41 +30,26 @@ class XmlAttribute extends Attribute implements PrefixableInterface
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    final public function getNamespace(): string
+    final public function getPrefix(): ?string
     {
-        if ($this->hasPrefix()) {
-            return sprintf('%s:%s', $this->getName(), $this->getPrefix());
-        }
-
-        return $this->getName();
+        return $this->prefix;
     }
 
     /**
-     * @param Element $element
+     * @param string $prefix
      */
-    public function attachedBy(Element $element)
+    final public function setPrefix(string $prefix)
     {
-        parent::attachedBy($element);
-
-        $visitor = new PrefixInheritVisitor($this);
-        $element->accept($visitor);
+        $this->prefix = $prefix;
     }
 
     /**
-     * @param AttributeVisitorInterface $visitor
+     * @param AttributeHydratorInterface $hydrator
      */
-    public function accept(AttributeVisitorInterface $visitor)
+    public function hydration(AttributeHydratorInterface $hydrator)
     {
-        $visitor->visitXmlAttribute($this);
-    }
-
-    /**
-     * @param Element $element
-     */
-    public function prefixUsedBy(Element $element)
-    {
-        $this->increaseUsage();
+        $hydrator->visitXmlAttribute($this);
     }
 }
