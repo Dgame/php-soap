@@ -29,7 +29,7 @@ final class AttributeHydrator implements AttributeHydratorInterface
     {
         $this->element = $document->createElement($element->getName(), $element->getValue());
         foreach ($element->getAttributes() as $attribute) {
-            $attribute->hydration($this);
+            $attribute->accept($this);
         }
     }
 

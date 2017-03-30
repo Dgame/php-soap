@@ -2,21 +2,22 @@
 
 namespace Dgame\Soap\Test;
 
+use Dgame\Soap\Dom\Translator;
 use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
-use Dgame\Soap\XmlTranslator;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class XmlTranslatorTest
+ * Class TranslatorTest
+ * @package Dgame\Soap\Test
  */
-final class XmlTranslatorTest extends TestCase
+final class TranslatorTest extends TestCase
 {
     public function testXmlElementTranslation()
     {
         $doc        = new DOMDocument('1.0');
-        $translator = new XmlTranslator();
+        $translator = new Translator();
 
         $node = $translator->translateNode($doc->createElement('test', 'foobar'));
 
@@ -60,7 +61,7 @@ final class XmlTranslatorTest extends TestCase
     public function testXmlNodeTranslation()
     {
         $doc        = new DOMDocument('1.0');
-        $translator = new XmlTranslator();
+        $translator = new Translator();
 
         $element = $doc->createElementNs('http://www.example.com/abc', 'abc:test');
         $element->setAttribute('id', '0');
@@ -78,7 +79,7 @@ final class XmlTranslatorTest extends TestCase
         $this->assertTrue($node->hasPrefix());
         $this->assertEquals('abc', $node->getPrefix());
         $this->assertEquals('test', $node->getName());
-        $this->assertNull($node->getValue());
+        $this->assertFalse($node->hasValue());
         $this->assertCount(1, $node->getAttributes());
         $this->assertEquals('id', $node->getAttributes()[0]->getName());
         $this->assertEquals(0, $node->getAttributes()[0]->getValue());
@@ -94,9 +95,9 @@ final class XmlTranslatorTest extends TestCase
     public function testDocumentTranslation()
     {
         $doc = new DOMDocument('1.0');
-        $doc->load(__DIR__ . '/dom.xml');
+        $doc->load(__DIR__ . '/test1.xml');
 
-        $translator = new XmlTranslator();
+        $translator = new Translator();
         $elements   = $translator->translateDocument($doc);
 
         $this->assertCount(1, $elements);
@@ -120,7 +121,7 @@ final class XmlTranslatorTest extends TestCase
 
         $this->assertInstanceOf(XmlElement::class, $child1->getChildren()[0]);
         $this->assertEquals('car', $child1->getChildren()[0]->getName());
-        $this->assertNull($child1->getChildren()[0]->getValue());
+        $this->assertFalse($child1->getChildren()[0]->hasValue());
         $this->assertCount(2, $child1->getChildren()[0]->getAttributes());
         $this->assertEquals('marke', $child1->getChildren()[0]->getAttributes()[0]->getName());
         $this->assertEquals('BMW', $child1->getChildren()[0]->getAttributes()[0]->getValue());
@@ -139,7 +140,7 @@ final class XmlTranslatorTest extends TestCase
 
         $this->assertInstanceOf(XmlNode::class, $child1->getChildren()[3]);
         $this->assertEquals('address', $child1->getChildren()[3]->getName());
-        $this->assertNull($child1->getChildren()[3]->getValue());
+        $this->assertFalse($child1->getChildren()[3]->hasValue());
         $this->assertFalse($child1->getChildren()[3]->hasAttributes());
         $this->assertCount(2, $child1->getChildren()[3]->getChildren());
 
@@ -162,7 +163,7 @@ final class XmlTranslatorTest extends TestCase
 
         $this->assertInstanceOf(XmlElement::class, $child2->getChildren()[0]);
         $this->assertEquals('car', $child2->getChildren()[0]->getName());
-        $this->assertNull($child2->getChildren()[0]->getValue());
+        $this->assertFalse($child2->getChildren()[0]->hasValue());
         $this->assertCount(2, $child2->getChildren()[0]->getAttributes());
         $this->assertEquals('marke', $child2->getChildren()[0]->getAttributes()[0]->getName());
         $this->assertEquals('Audi', $child2->getChildren()[0]->getAttributes()[0]->getValue());
@@ -181,7 +182,7 @@ final class XmlTranslatorTest extends TestCase
 
         $this->assertInstanceOf(XmlNode::class, $child2->getChildren()[3]);
         $this->assertEquals('address', $child2->getChildren()[3]->getName());
-        $this->assertNull($child2->getChildren()[3]->getValue());
+        $this->assertFalse($child2->getChildren()[3]->hasValue());
         $this->assertFalse($child2->getChildren()[3]->hasAttributes());
         $this->assertCount(2, $child2->getChildren()[3]->getChildren());
 

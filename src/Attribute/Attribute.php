@@ -2,14 +2,15 @@
 
 namespace Dgame\Soap\Attribute;
 
-use Dgame\Soap\Hydrator\Attribute\AttributeHydratorInterface;
-use Dgame\Soap\Hydrator\Attribute\AttributeHydrogenableInterface;
+use Dgame\Soap\AssignableInterface;
+use Dgame\Soap\Hydrator\VisitableInterface;
+use Dgame\Soap\Hydrator\VisitorInterface;
 
 /**
  * Class Attribute
  * @package Dgame\Soap\Attribute
  */
-class Attribute implements AttributeHydrogenableInterface
+class Attribute implements VisitableInterface, AssignableInterface
 {
     /**
      * @var string
@@ -35,9 +36,9 @@ class Attribute implements AttributeHydrogenableInterface
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    final public function getValue()
+    final public function getValue(): string
     {
         return $this->value;
     }
@@ -70,9 +71,9 @@ class Attribute implements AttributeHydrogenableInterface
     }
 
     /**
-     * @param AttributeHydratorInterface $hydrator
+     * @param VisitorInterface $hydrator
      */
-    public function hydration(AttributeHydratorInterface $hydrator)
+    public function accept(VisitorInterface $hydrator)
     {
         $hydrator->visitAttribute($this);
     }

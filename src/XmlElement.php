@@ -2,13 +2,13 @@
 
 namespace Dgame\Soap;
 
-use Dgame\Soap\Hydrator\HydratorInterface;
+use Dgame\Soap\Hydrator\VisitorInterface;
 
 /**
  * Class XmlElement
  * @package Dgame\Soap
  */
-class XmlElement extends Element
+class XmlElement extends Element implements PrefixableInterface
 {
     /**
      * @var null|string
@@ -27,14 +27,14 @@ class XmlElement extends Element
         parent::__construct($name, $value);
 
         if ($prefix !== null) {
-            $this->prefix = $prefix;
+            $this->setPrefix($prefix);
         }
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    final public function getPrefix()
+    final public function getPrefix(): string
     {
         return $this->prefix;
     }
@@ -59,10 +59,10 @@ class XmlElement extends Element
     }
 
     /**
-     * @param HydratorInterface $hydrator
+     * @param VisitorInterface $hydrator
      */
-    public function hydration(HydratorInterface $hydrator)
+    public function accept(VisitorInterface $hydrator)
     {
-        $hydrator->hydrateXmlElement($this);
+        $hydrator->visitXmlElement($this);
     }
 }

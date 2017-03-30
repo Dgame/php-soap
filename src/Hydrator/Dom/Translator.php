@@ -1,18 +1,21 @@
 <?php
 
-namespace Dgame\Soap;
+namespace Dgame\Soap\Dom;
 
 use Dgame\Soap\Attribute\Attribute;
 use Dgame\Soap\Attribute\XmlAttribute;
+use Dgame\Soap\Element;
+use Dgame\Soap\XmlElement;
+use Dgame\Soap\XmlNode;
 use DOMAttr;
 use DOMDocument;
 use DOMNode;
 
 /**
- * Class XmlTranslator
+ * Class DomTranslator
  * @package Dgame\Soap
  */
-final class XmlTranslator
+final class Translator
 {
     /**
      * @param DOMDocument $document
@@ -108,6 +111,8 @@ final class XmlTranslator
             $child = $this->translateNode($childNode);
             if ($child !== null) {
                 $parent->appendChild($child);
+            } else if ($childNode->nodeType === XML_TEXT_NODE) {
+                $parent->setValue($childNode->nodeValue);
             }
         }
     }

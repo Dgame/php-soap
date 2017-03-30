@@ -3,10 +3,10 @@
 namespace Dgame\Soap\Hydrator\Attribute;
 
 /**
- * Interface AttributeHydrogenableInterface
+ * Interface AttributeHydrateInterface
  * @package Dgame\Soap\Hydrator\Attribute
  */
-interface AttributeHydrogenableInterface
+interface AttributeHydrateInterface
 {
     /**
      * @param AttributeHydratorInterface $hydrator

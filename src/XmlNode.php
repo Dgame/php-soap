@@ -2,7 +2,7 @@
 
 namespace Dgame\Soap;
 
-use Dgame\Soap\Hydrator\HydratorInterface;
+use Dgame\Soap\Hydrator\VisitorInterface;
 
 /**
  * Class XmlNode
@@ -40,10 +40,10 @@ final class XmlNode extends XmlElement
     }
 
     /**
-     * @param HydratorInterface $hydrator
+     * @param VisitorInterface $hydrator
      */
-    public function hydration(HydratorInterface $hydrator)
+    public function accept(VisitorInterface $hydrator)
     {
-        $hydrator->hydrateXmlNode($this);
+        $hydrator->visitXmlNode($this);
     }
 }

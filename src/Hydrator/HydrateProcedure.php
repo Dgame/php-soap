@@ -2,6 +2,8 @@
 
 namespace Dgame\Soap\Hydrator;
 
+use Dgame\Soap\Attribute\Attribute;
+use Dgame\Soap\Attribute\XmlAttribute;
 use Dgame\Soap\Element;
 use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
@@ -11,9 +13,9 @@ use function Dgame\Conditional\debug;
  * Class HydrateProcedure
  * @package Dgame\Soap\Hydrator
  */
-final class HydrateProcedure implements HydratorInterface
+final class HydrateProcedure implements VisitorInterface
 {
-    const DEBUG_LABEL = 'Debug_Soap_Hydrat';
+    const DEBUG_LABEL = 'Debug_Soap_Hydrator';
 
     /**
      * @var string
@@ -59,85 +61,109 @@ final class HydrateProcedure implements HydratorInterface
     /**
      * @param Element $element
      */
-    public function hydrateElement(Element $element)
+    public function visitElement(Element $element)
     {
         debug(self::DEBUG_LABEL)->output($this->tab . ' - Element: ' . $element->getName());
 
-        $this->hydrate($element);
+        $this->visit($element);
     }
 
     /**
      * @param XmlElement $element
      */
-    public function hydrateXmlElement(XmlElement $element)
+    public function visitXmlElement(XmlElement $element)
     {
         debug(self::DEBUG_LABEL)->output($this->tab . ' - XmlElement: ' . $element->getName());
 
-        $this->hydrate($element);
+        $this->visit($element);
     }
 
     /**
      * @param XmlNode $node
      */
-    public function hydrateXmlNode(XmlNode $node)
+    public function visitXmlNode(XmlNode $node)
     {
         debug(self::DEBUG_LABEL)->output($this->tab . ' - XmlNode: ' . $node->getName());
 
-        $this->hydrate($node);
-        $this->hydrateChildrenOf($node);
+        $this->visit($node);
+        $this->visitChildrenOf($node);
+    }
+
+    /**
+     * @param Attribute $attribute
+     */
+    public function visitAttribute(Attribute $attribute)
+    {
+        $this->assignAttribute($attribute);
+    }
+
+    /**
+     * @param XmlAttribute $attribute
+     */
+    public function visitXmlAttribute(XmlAttribute $attribute)
+    {
+        $this->assignAttribute($attribute);
+    }
+
+    /**
+     * @param Attribute $attribute
+     */
+    private function assignAttribute(Attribute $attribute)
+    {
+        if ($attribute->hasValue()) {
+            $this->hydratable->assign($attribute);
+        }
     }
 
     /**
      * @param Element $element
      */
-    private function hydrate(Element $element)
+    private function visit(Element $element)
     {
         $this->hydratable = $this->mapper->getInstanceOf($element->getName());
         if ($this->isValid()) {
-            $this->hydrateAttributesOf($element);
+            $this->visitAttributesOf($element);
         }
     }
 
     /**
      * @param Element $element
      */
-    private function hydrateAttributesOf(Element $element)
+    private function visitAttributesOf(Element $element)
     {
         foreach ($element->getAttributes() as $attribute) {
-            if ($attribute->hasValue()) {
-                $this->hydratable->assignAttribute($attribute);
-            }
+            $attribute->accept($this);
         }
 
         if ($element->hasValue()) {
-            $this->hydratable->assign('value', $element->getValue());
+            $this->hydratable->assignValue('value', $element->getValue());
         }
     }
 
     /**
      * @param XmlNode $node
      */
-    private function hydrateChildrenOf(XmlNode $node)
+    private function visitChildrenOf(XmlNode $node)
     {
         foreach ($node->getChildren() as $child) {
-            $this->hydrateChild($child);
+            $this->visitChild($child);
         }
     }
 
     /**
      * @param Element $element
      */
-    private function hydrateChild(Element $element)
+    private function visitChild(Element $element)
     {
-        $hydrat = new self($this->mapper, $this->tab);
-        $element->hydration($hydrat);
+        $hydrator = new self($this->mapper, $this->tab);
+        $element->accept($hydrator);
 
-        if ($this->isValid() && $hydrat->isValid()) {
-            $this->hydratable->assignHydratable($hydrat->getHydratable());
+        if ($this->isValid() && $hydrator->isValid()) {
+            $this->hydratable->append($hydrator->getHydratable());
         } else if ($this->isValid()) {
-            $this->hydratable->assignElement($element);
-        } else if ($hydrat->isValid()) {
-            $this->hydratable = $hydrat->getHydratable();
+            $this->hydratable->assign($element);
+        } else if ($hydrator->isValid()) {
+            $this->hydratable = $hydrator->getHydratable();
         }
     }
 }

@@ -2,13 +2,16 @@
 
 namespace Dgame\Soap\Test\Object;
 
+use Dgame\Soap\Attribute\Attribute;
+use Dgame\Soap\Element;
+use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
 use Dgame\Soap\Hydrator\Hydratable;
 
 /**
  * Class Phone
  * @package Dgame\Soap\Test\Object
  */
-final class Phone extends Hydratable
+final class Phone extends Hydratable implements AssemblableInterface
 {
     /**
      * @var string
@@ -49,5 +52,16 @@ final class Phone extends Hydratable
     public function getValue(): string
     {
         return $this->version;
+    }
+
+    /**
+     * @return Element
+     */
+    public function assemble(): Element
+    {
+        $element = new Element('phone', $this->version);
+        $element->setAttribute(new Attribute('name', $this->name));
+
+        return $element;
     }
 }

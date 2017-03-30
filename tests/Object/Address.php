@@ -2,13 +2,16 @@
 
 namespace Dgame\Soap\Test\Object;
 
+use Dgame\Soap\Element;
+use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
 use Dgame\Soap\Hydrator\Hydratable;
+use Dgame\Soap\XmlNode;
 
 /**
  * Class Address
  * @package Dgame\Soap\Test\Object
  */
-final class Address extends Hydratable
+final class Address extends Hydratable implements AssemblableInterface
 {
     /**
      * @var string
@@ -49,5 +52,17 @@ final class Address extends Hydratable
     public function getPlz(): int
     {
         return $this->plz;
+    }
+
+    /**
+     * @return Element
+     */
+    public function assemble(): Element
+    {
+        $node = new XmlNode('address');
+        $node->appendChild(new Element('street', $this->street));
+        $node->appendChild(new Element('plz', $this->plz));
+
+        return $node;
     }
 }

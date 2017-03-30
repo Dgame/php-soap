@@ -2,13 +2,17 @@
 
 namespace Dgame\Soap\Test\Object;
 
+use Dgame\Soap\Attribute\Attribute;
+use Dgame\Soap\Element;
+use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
 use Dgame\Soap\Hydrator\Hydratable;
+use Dgame\Soap\XmlNode;
 
 /**
  * Class Person
  * @package Dgame\Soap\Test\Object
  */
-final class Person extends Hydratable
+final class Person extends Hydratable implements AssemblableInterface
 {
     /**
      * @var string
@@ -109,5 +113,20 @@ final class Person extends Hydratable
     public function getAddress(): Address
     {
         return $this->address;
+    }
+
+    /**
+     * @return Element
+     */
+    public function assemble(): Element
+    {
+        $node = new XmlNode('person');
+        $node->setAttribute(new Attribute('name', $this->name));
+        $node->appendChild($this->car->assemble());
+        $node->appendChild($this->phone->assemble());
+        $node->appendChild(new Element('birth-place', $this->birthplace));
+        $node->appendChild($this->address->assemble());
+
+        return $node;
     }
 }

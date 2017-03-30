@@ -2,16 +2,14 @@
 
 namespace Dgame\Soap\Test;
 
-use function Dgame\Conditional\debug;
 use Dgame\Soap\Hydrator\ClassMapper;
-use Dgame\Soap\Hydrator\HydratableInterface;
-use Dgame\Soap\Hydrator\HydrateProcedure;
-use Dgame\Soap\Hydrator\Hydrator;
+use Dgame\Soap\Hydrator\Dom\Hydrator;
 use Dgame\Soap\Test\Object\Address;
 use Dgame\Soap\Test\Object\Car;
 use Dgame\Soap\Test\Object\Person;
 use Dgame\Soap\Test\Object\Phone;
 use Dgame\Soap\Test\Object\Root;
+use Dgame\Soap\Test\Object\Stammdaten;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -20,15 +18,10 @@ use PHPUnit\Framework\TestCase;
  */
 final class HydrationTest extends TestCase
 {
-    /**
-     * @var HydratableInterface[]
-     */
-    private $objects = [];
-
-    public function setUp()
+    public function testObjects()
     {
         $doc = new DOMDocument();
-        $doc->load(__DIR__ . '/dom.xml');
+        $doc->load(__DIR__ . '/test1.xml');
 
         $mapper = new ClassMapper(
             [
@@ -41,24 +34,17 @@ final class HydrationTest extends TestCase
         );
         $mapper->appendPattern('/^(?:soap\-?)?env(?:elope)?/iS', 'Root');
 
-        $hydrator      = new Hydrator($mapper);
-        $this->objects = $hydrator->hydrateDocument($doc);
-    }
+        $hydrator = new Hydrator($mapper);
+        $objects  = $hydrator->hydrateDocument($doc);
 
-    public function testObjects()
-    {
-        $this->assertCount(1, $this->objects);
+        $this->assertCount(1, $objects);
 
-        $envelope = $this->objects[0];
+        /** @var Root $root */
+        $root = $objects[0];
 
-        $this->assertNotNull($envelope);
-        $this->assertInstanceOf(Root::class, $envelope);
+        $this->assertNotNull($root);
+        $this->assertInstanceOf(Root::class, $root);
 
-        $this->validateRoot($envelope);
-    }
-
-    private function validateRoot(Root $root)
-    {
         $persons = $root->getPersons();
         $this->assertCount(2, $persons);
 
@@ -66,9 +52,8 @@ final class HydrationTest extends TestCase
         $this->assertEquals('Max Musterman', $persons[0]->getName());
         $this->assertInstanceOf(Car::class, $persons[0]->getCar());
         $this->assertEquals('BMW', $persons[0]->getCar()->getMarke());
-        $this->assertNotEmpty($persons[0]->getCar()->getAttributes());
-        $this->assertArrayHasKey('kennung', $persons[0]->getCar()->getAttributes());
-        $this->assertEquals('i8', $persons[0]->getCar()->getAttribute('kennung'));
+        $this->assertNotEmpty($persons[0]->getCar()->kennung);
+        $this->assertEquals('i8', $persons[0]->getCar()->kennung);
         $this->assertInstanceOf(Phone::class, $persons[0]->getPhone());
         $this->assertEquals('iPhone', $persons[0]->getPhone()->getName());
         $this->assertEquals(9, $persons[0]->getPhone()->getValue());
@@ -76,15 +61,13 @@ final class HydrationTest extends TestCase
         $this->assertInstanceOf(Address::class, $persons[0]->getAddress());
         $this->assertEquals('Hauptstraße 1', $persons[0]->getAddress()->getStreet());
         $this->assertEquals(245698, $persons[0]->getAddress()->getPlz());
-        $this->assertEmpty($persons[0]->getAttributes());
 
         $this->assertInstanceOf(Person::class, $persons[1]);
         $this->assertEquals('Dr. Dolittle', $persons[1]->getName());
         $this->assertInstanceOf(Car::class, $persons[1]->getCar());
         $this->assertEquals('Audi', $persons[1]->getCar()->getMarke());
-        $this->assertNotEmpty($persons[0]->getCar()->getAttributes());
-        $this->assertArrayHasKey('kennung', $persons[0]->getCar()->getAttributes());
-        $this->assertEquals('A3', $persons[1]->getCar()->getAttribute('kennung'));
+        $this->assertNotEmpty($persons[0]->getCar()->kennung);
+        $this->assertEquals('A3', $persons[1]->getCar()->kennung);
         $this->assertInstanceOf(Phone::class, $persons[1]->getPhone());
         $this->assertEquals('Sony', $persons[1]->getPhone()->getName());
         $this->assertEquals('Xperia Z3', $persons[1]->getPhone()->getValue());
@@ -92,6 +75,50 @@ final class HydrationTest extends TestCase
         $this->assertInstanceOf(Address::class, $persons[1]->getAddress());
         $this->assertEquals('Partkstraße', $persons[1]->getAddress()->getStreet());
         $this->assertEquals(365494, $persons[1]->getAddress()->getPlz());
-        $this->assertEmpty($persons[1]->getAttributes());
+    }
+
+    public function testWithoutFirstObject()
+    {
+        $doc = new DOMDocument();
+        $doc->loadXml('<root><Car marke="Mercedes" /></root>');
+
+        $mapper = new ClassMapper(
+            [
+                'Car' => Car::class
+            ]
+        );
+
+        $hydrator = new Hydrator($mapper);
+        $objects  = $hydrator->hydrateDocument($doc);
+
+        $this->assertCount(1, $objects);
+        $this->assertArrayHasKey(0, $objects);
+        $this->assertInstanceOf(Car::class, $objects[0]);
+        /** @var Car $car */
+        $car = $objects[0];
+        $this->assertEquals('Mercedes', $car->getMarke());
+    }
+
+    public function testPropertyAssignment()
+    {
+        $doc = new DOMDocument();
+        $doc->load(__DIR__ . '/test2.xml');
+
+        $mapper = new ClassMapper(
+            [
+                'Stammdaten' => Stammdaten::class
+            ]
+        );
+
+        $hydrator = new Hydrator($mapper);
+        $objects  = $hydrator->hydrateDocument($doc);
+
+        $this->assertCount(1, $objects);
+        $this->assertArrayHasKey(0, $objects);
+        $this->assertInstanceOf(Stammdaten::class, $objects[0]);
+        /** @var Stammdaten $stammdaten */
+        $stammdaten = $objects[0];
+        $this->assertEquals('Muster',$stammdaten->Name);
+        $this->assertEquals('Max', $stammdaten->Vorname);
     }
 }

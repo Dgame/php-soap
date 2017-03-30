@@ -2,8 +2,7 @@
 
 namespace Dgame\Soap\Hydrator;
 
-use Dgame\Soap\Attribute\Attribute;
-use Dgame\Soap\Element;
+use Dgame\Soap\AssignableInterface;
 
 /**
  * Interface HydratInterface
@@ -12,27 +11,22 @@ use Dgame\Soap\Element;
 interface HydratableInterface
 {
     /**
-     * @param Attribute $attribute
+     * @param AssignableInterface $assignable
      */
-    public function assignAttribute(Attribute $attribute);
-
-    /**
-     * @param Element $element
-     */
-    public function assignElement(Element $element);
+    public function assign(AssignableInterface $assignable);
 
     /**
      * @param HydratableInterface $hydratable
      *
      * @return bool
      */
-    public function assignHydratable(self $hydratable): bool;
+    public function append(self $hydratable): bool;
 
     /**
      * @param string $name
      * @param string $value
      */
-    public function assign(string $name, string $value);
+    public function assignValue(string $name, string $value);
 
     /**
      * @return string

@@ -2,8 +2,7 @@
 
 namespace Dgame\Soap\Hydrator;
 
-use Dgame\Soap\Attribute\Attribute;
-use Dgame\Soap\Element;
+use Dgame\Soap\AssignableInterface;
 
 /**
  * Class Hydratable
@@ -12,55 +11,40 @@ use Dgame\Soap\Element;
 class Hydratable implements HydratableInterface
 {
     /**
-     * @var array
+     * @param AssignableInterface $assignable
      */
-    private $attributes = [];
-
-    /**
-     * @param Attribute $attribute
-     */
-    final public function assignAttribute(Attribute $attribute)
+    public function assign(AssignableInterface $assignable)
     {
-        if ($attribute->hasValue()) {
-            $this->assign($attribute->getName(), $attribute->getValue());
+        if ($assignable->hasValue()) {
+            $this->assignValue($assignable->getName(), $assignable->getValue());
         }
     }
 
     /**
-     * @param Element $element
+     * @param HydratableInterface $hydratable
+     *
+     * @return bool
      */
-    final public function assignElement(Element $element)
+    public function append(HydratableInterface $hydratable): bool
     {
-        if ($element->hasValue()) {
-            $this->assign($element->getName(), $element->getValue());
-        }
+        return Method::of($hydratable->getClassName(), $this)->assign($hydratable);
     }
 
     /**
      * @param string $name
      * @param string $value
      */
-    final public function assign(string $name, string $value)
+    public function assignValue(string $name, string $value)
     {
-        if (!Method::of($name, $this)->assign($value)) {
-            $this->setAttribute($name, $value);
+        if (!Method::of($name, $this)->assign($value) && property_exists($this, $name)) {
+            $this->{$name} = $value;
         }
-    }
-
-    /**
-     * @param HydratableInterface $hydrat
-     *
-     * @return bool
-     */
-    final public function assignHydratable(HydratableInterface $hydrat): bool
-    {
-        return Method::of($hydrat->getClassName(), $this)->assign($hydrat);
     }
 
     /**
      * @return string
      */
-    final public function getClassName(): string
+    public function getClassName(): string
     {
         static $name = null;
         if ($name === null) {
@@ -68,50 +52,5 @@ class Hydratable implements HydratableInterface
         }
 
         return $name;
-    }
-
-    /**
-     * @param string $name
-     * @param        $value
-     */
-    final public function setAttribute(string $name, $value)
-    {
-        $this->attributes[$name] = $value;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return mixed
-     */
-    final public function getAttribute(string $name)
-    {
-        return $this->attributes[$name];
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return bool
-     */
-    final public function hasAttribute(string $name): bool
-    {
-        return array_key_exists($name, $this->attributes);
-    }
-
-    /**
-     * @return array
-     */
-    final public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * @param array $attributes
-     */
-    final public function setAttributes(array $attributes)
-    {
-        $this->attributes = $attributes;
     }
 }

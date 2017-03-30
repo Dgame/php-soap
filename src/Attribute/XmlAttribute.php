@@ -2,13 +2,14 @@
 
 namespace Dgame\Soap\Attribute;
 
-use Dgame\Soap\Hydrator\Attribute\AttributeHydratorInterface;
+use Dgame\Soap\Hydrator\VisitorInterface;
+use Dgame\Soap\PrefixableInterface;
 
 /**
  * Class XmlAttribute
  * @package Dgame\Soap\Attribute
  */
-class XmlAttribute extends Attribute
+class XmlAttribute extends Attribute implements PrefixableInterface
 {
     /**
      * @var null|string
@@ -26,13 +27,15 @@ class XmlAttribute extends Attribute
     {
         parent::__construct($name, $value);
 
-        $this->prefix = $prefix;
+        if ($prefix !== null) {
+            $this->setPrefix($prefix);
+        }
     }
 
     /**
-     * @return null|string
+     * @return string
      */
-    final public function getPrefix()
+    final public function getPrefix(): string
     {
         return $this->prefix;
     }
@@ -42,13 +45,24 @@ class XmlAttribute extends Attribute
      */
     final public function setPrefix(string $prefix)
     {
-        $this->prefix = $prefix;
+        $prefix = trim($prefix);
+        if (strlen($prefix) !== 0) {
+            $this->prefix = $prefix;
+        }
     }
 
     /**
-     * @param AttributeHydratorInterface $hydrator
+     * @return bool
      */
-    public function hydration(AttributeHydratorInterface $hydrator)
+    final public function hasPrefix(): bool
+    {
+        return $this->prefix !== null;
+    }
+
+    /**
+     * @param VisitorInterface $hydrator
+     */
+    public function accept(VisitorInterface $hydrator)
     {
         $hydrator->visitXmlAttribute($this);
     }
