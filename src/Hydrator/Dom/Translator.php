@@ -42,15 +42,15 @@ final class Translator
      */
     public function translateNode(DOMNode $node)
     {
-        if ($node->nodeType === XML_ELEMENT_NODE) {
-            if ($this->isElementNode($node)) {
-                return $this->createElement($node);
-            }
-
-            return $this->createNode($node);
+        if ($node->nodeType !== XML_ELEMENT_NODE) {
+            return null;
         }
 
-        return null;
+        if ($this->isElementNode($node)) {
+            return $this->createElement($node);
+        }
+
+        return $this->createNode($node);
     }
 
     /**
