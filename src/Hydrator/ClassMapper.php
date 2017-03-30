@@ -65,7 +65,7 @@ final class ClassMapper
      *
      * @return string|null
      */
-    private function resolvePattern(string $class): ?string
+    private function resolvePattern(string $class)
     {
         foreach ($this->pattern as $pattern => $name) {
             if (preg_match($pattern, $class) === 1) {
@@ -81,7 +81,7 @@ final class ClassMapper
      *
      * @return HydratableInterface|null
      */
-    public function getInstanceOf(string $class): ?HydratableInterface
+    public function getInstanceOf(string $class)
     {
         $class = $this->getClass($class);
 

@@ -34,7 +34,7 @@ class XmlElement extends Element
     /**
      * @return null|string
      */
-    final public function getPrefix(): ?string
+    final public function getPrefix()
     {
         return $this->prefix;
     }

@@ -42,7 +42,7 @@ class Element implements HydrateInterface
     /**
      * @return null|string
      */
-    final public function getValue(): ?string
+    final public function getValue()
     {
         return $this->value;
     }

@@ -32,7 +32,7 @@ class XmlAttribute extends Attribute
     /**
      * @return null|string
      */
-    final public function getPrefix(): ?string
+    final public function getPrefix()
     {
         return $this->prefix;
     }
