@@ -22,12 +22,13 @@ class Hydratable implements HydratableInterface
 
     /**
      * @param HydratableInterface $hydratable
-     *
-     * @return bool
      */
-    public function append(HydratableInterface $hydratable): bool
+    public function append(HydratableInterface $hydratable)
     {
-        return Method::of($hydratable->getClassName(), $this)->assign($hydratable);
+        $name = $hydratable->getClassName();
+        if (!Method::of($name, $this)->assign($hydratable) && property_exists($this, $name)) {
+            $this->{$name} = $hydratable;
+        }
     }
 
     /**

@@ -17,10 +17,8 @@ interface HydratableInterface
 
     /**
      * @param HydratableInterface $hydratable
-     *
-     * @return bool
      */
-    public function append(self $hydratable): bool;
+    public function append(self $hydratable);
 
     /**
      * @param string $name
