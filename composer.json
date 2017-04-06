@@ -18,6 +18,7 @@
     "require": {
         "php": ">=7.0",
         "dgame/php-conditional": "0.5.*",
+        "dgame/php-object": "dev-master",
         "icanboogie/inflector": "1.4.*",
         "spatie/string": "2.1.*"
     },

@@ -40,10 +40,10 @@ final class XmlNode extends XmlElement
     }
 
     /**
-     * @param VisitorInterface $hydrator
+     * @param VisitorInterface $visitor
      */
-    public function accept(VisitorInterface $hydrator)
+    public function accept(VisitorInterface $visitor)
     {
-        $hydrator->visitXmlNode($this);
+        $visitor->visitXmlNode($this);
     }
 }

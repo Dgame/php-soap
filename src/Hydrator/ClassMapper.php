@@ -48,28 +48,18 @@ final class ClassMapper
     /**
      * @param string $class
      *
-     * @return string
+     * @return null|string
      */
-    private function getClass(string $class): string
+    private function findClassName(string $class)
     {
-        $class = $this->resolvePattern($class) ?? ucfirst($class);
-        if (array_key_exists($class, $this->classmap)) {
-            return $this->classmap[$class];
+        $name = $this->getClassName($class);
+        if ($name !== null) {
+            return $name;
         }
 
-        return $class;
-    }
-
-    /**
-     * @param string $class
-     *
-     * @return string|null
-     */
-    private function resolvePattern(string $class)
-    {
         foreach ($this->pattern as $pattern => $name) {
             if (preg_match($pattern, $class) === 1) {
-                return $name;
+                return $this->getClassName($name);
             }
         }
 
@@ -79,12 +69,36 @@ final class ClassMapper
     /**
      * @param string $class
      *
+     * @return string
+     */
+    private function lookUpClassName(string $class): string
+    {
+        return array_key_exists($class, $this->classmap) ? $this->classmap[$class] : $class;
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return string
+     */
+    private function getClassName(string $class)
+    {
+        $class = $this->lookUpClassName(ucfirst($class));
+
+        return class_exists($class) ? $class : null;
+    }
+
+    /**
+     * @param string $class
+     *
      * @return HydratableInterface|null
      */
     public function getInstanceOf(string $class)
     {
-        $class = $this->getClass($class);
+        if (($class = $this->findClassName($class)) !== null) {
+            return new $class();
+        }
 
-        return class_exists($class) ? new $class() : null;
+        return null;
     }
 }

@@ -60,10 +60,10 @@ class XmlAttribute extends Attribute implements PrefixableInterface
     }
 
     /**
-     * @param VisitorInterface $hydrator
+     * @param VisitorInterface $visitor
      */
-    public function accept(VisitorInterface $hydrator)
+    public function accept(VisitorInterface $visitor)
     {
-        $hydrator->visitXmlAttribute($this);
+        $visitor->visitXmlAttribute($this);
     }
 }

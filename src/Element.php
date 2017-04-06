@@ -110,10 +110,10 @@ class Element implements VisitableInterface, AssignableInterface
     }
 
     /**
-     * @param VisitorInterface $hydrator
+     * @param VisitorInterface $visitor
      */
-    public function accept(VisitorInterface $hydrator)
+    public function accept(VisitorInterface $visitor)
     {
-        $hydrator->visitElement($this);
+        $visitor->visitElement($this);
     }
 }

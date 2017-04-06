@@ -9,7 +9,7 @@ namespace Dgame\Soap\Hydrator;
 interface VisitableInterface
 {
     /**
-     * @param VisitorInterface $hydrator
+     * @param VisitorInterface $visitor
      */
-    public function accept(VisitorInterface $hydrator);
+    public function accept(VisitorInterface $visitor);
 }
