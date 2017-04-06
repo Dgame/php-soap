@@ -4,7 +4,6 @@ namespace Dgame\Soap\Test;
 
 use Dgame\Soap\Hydrator\ClassMapper;
 use Dgame\Soap\Hydrator\Dom\Hydrator;
-use Dgame\Soap\Hydrator\HydrateProcedure;
 use Dgame\Soap\Test\Object\Address;
 use Dgame\Soap\Test\Object\Car;
 use Dgame\Soap\Test\Object\Person;
@@ -12,7 +11,6 @@ use Dgame\Soap\Test\Object\Phone;
 use Dgame\Soap\Test\Object\Root;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use function Dgame\Conditional\debug;
 
 /**
  * Class DeHydrationTest
