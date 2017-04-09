@@ -52,11 +52,21 @@ final class Translator
             return null;
         }
 
-        if (!$node->hasChildNodes() || ($node->childNodes->length === 1 && $node->firstChild->nodeType === XML_TEXT_NODE)) {
+        if ($this->isElement($node)) {
             return $this->createElement($node);
         }
 
         return $this->createNode($node);
+    }
+
+    /**
+     * @param DOMNode $node
+     *
+     * @return bool
+     */
+    public function isElement(DOMNode $node): bool
+    {
+        return !$node->hasChildNodes() || ($node->childNodes->length === 1 && $node->firstChild->nodeType === XML_TEXT_NODE);
     }
 
     /**
