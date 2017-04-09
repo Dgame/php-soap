@@ -17,8 +17,7 @@
     ],
     "require": {
         "php": ">=7.0",
-        "dgame/php-conditional": "0.5.*",
-        "dgame/php-object": "0.2.*",
+        "dgame/php-object": "0.3.*",
         "icanboogie/inflector": "1.4.*"
     },
     "require-dev": {

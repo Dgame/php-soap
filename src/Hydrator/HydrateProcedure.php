@@ -7,7 +7,6 @@ use Dgame\Soap\Attribute\XmlAttribute;
 use Dgame\Soap\Element;
 use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
-use function Dgame\Conditional\debug;
 
 /**
  * Class HydrateProcedure
@@ -15,12 +14,6 @@ use function Dgame\Conditional\debug;
  */
 final class HydrateProcedure implements VisitorInterface
 {
-    const DEBUG_LABEL = 'Debug_Hydrate_Procedure';
-
-    /**
-     * @var string
-     */
-    private $tab;
     /**
      * @var Hydrate
      */
@@ -34,12 +27,10 @@ final class HydrateProcedure implements VisitorInterface
      * Hydrat constructor.
      *
      * @param ClassMapper $mapper
-     * @param string|null $tab
      */
-    public function __construct(ClassMapper $mapper, string $tab = null)
+    public function __construct(ClassMapper $mapper)
     {
         $this->mapper = $mapper;
-        $this->tab    = "\t" . $tab;
     }
 
     /**
@@ -63,8 +54,6 @@ final class HydrateProcedure implements VisitorInterface
      */
     public function visitElement(Element $element)
     {
-        debug(self::DEBUG_LABEL)->output($this->tab . ' - Element: ' . $element->getName());
-
         $this->visit($element);
     }
 
@@ -73,8 +62,6 @@ final class HydrateProcedure implements VisitorInterface
      */
     public function visitXmlElement(XmlElement $element)
     {
-        debug(self::DEBUG_LABEL)->output($this->tab . ' - XmlElement: ' . $element->getName());
-
         $this->visit($element);
     }
 
@@ -83,8 +70,6 @@ final class HydrateProcedure implements VisitorInterface
      */
     public function visitXmlNode(XmlNode $node)
     {
-        debug(self::DEBUG_LABEL)->output($this->tab . ' - XmlNode: ' . $node->getName());
-
         $this->visit($node);
         $this->visitChildrenOf($node);
     }
@@ -155,7 +140,7 @@ final class HydrateProcedure implements VisitorInterface
      */
     private function visitChild(Element $element)
     {
-        $procedure = new self($this->mapper, $this->tab);
+        $procedure = new self($this->mapper);
         $element->accept($procedure);
 
         if ($this->isValid()) {
