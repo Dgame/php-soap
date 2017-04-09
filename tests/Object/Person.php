@@ -5,14 +5,13 @@ namespace Dgame\Soap\Test\Object;
 use Dgame\Soap\Attribute\Attribute;
 use Dgame\Soap\Element;
 use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
-use Dgame\Soap\Hydrator\Hydratable;
 use Dgame\Soap\XmlNode;
 
 /**
  * Class Person
  * @package Dgame\Soap\Test\Object
  */
-final class Person extends Hydratable implements AssemblableInterface
+final class Person implements AssemblableInterface
 {
     /**
      * @var string

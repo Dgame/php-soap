@@ -2,13 +2,11 @@
 
 namespace Dgame\Soap\Test\Object;
 
-use Dgame\Soap\Hydrator\Hydratable;
-
 /**
  * Class OrtsTeil
  * @package Dgame\Soap\Test\Object
  */
-final class OrtsTeil extends Hydratable
+final class OrtsTeil
 {
     /**
      * @var string

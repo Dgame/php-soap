@@ -2,13 +2,11 @@
 
 namespace Dgame\Soap\Test\Object;
 
-use Dgame\Soap\Hydrator\Hydratable;
-
 /**
  * Class Strassen
  * @package Dgame\Soap\Test\Object
  */
-final class Strassen extends Hydratable
+final class Strassen
 {
     /**
      * @var array

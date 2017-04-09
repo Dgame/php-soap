@@ -2,9 +2,7 @@
 
 namespace Dgame\Soap\Dom;
 
-use Dgame\Soap\Attribute\Attribute;
 use Dgame\Soap\Attribute\XmlAttribute;
-use Dgame\Soap\Element;
 use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 use DOMAttr;
@@ -18,9 +16,17 @@ use DOMNode;
 final class Translator
 {
     /**
+     * @return Translator
+     */
+    public static function new(): self
+    {
+        return new self();
+    }
+
+    /**
      * @param DOMDocument $document
      *
-     * @return Element[]|XmlNode[]
+     * @return XmlElement[]|XmlNode[]
      */
     public function translateDocument(DOMDocument $document): array
     {
@@ -38,7 +44,7 @@ final class Translator
     /**
      * @param DOMNode $node
      *
-     * @return XmlNode|Element|null
+     * @return XmlNode|XmlElement|null
      */
     public function translateNode(DOMNode $node)
     {
@@ -46,7 +52,7 @@ final class Translator
             return null;
         }
 
-        if ($this->isElementNode($node)) {
+        if (!$node->hasChildNodes() || ($node->childNodes->length === 1 && $node->firstChild->nodeType === XML_TEXT_NODE)) {
             return $this->createElement($node);
         }
 
@@ -56,9 +62,9 @@ final class Translator
     /**
      * @param DOMNode $node
      *
-     * @return Element
+     * @return XmlElement
      */
-    private function createElement(DOMNode $node): Element
+    private function createElement(DOMNode $node): XmlElement
     {
         $element = new XmlElement($node->localName, $node->nodeValue, $node->prefix);
         $this->setAttributes($node, $element);
@@ -81,10 +87,10 @@ final class Translator
     }
 
     /**
-     * @param DOMNode $node
-     * @param Element $element
+     * @param DOMNode    $node
+     * @param XmlElement $element
      */
-    private function setAttributes(DOMNode $node, Element $element)
+    private function setAttributes(DOMNode $node, XmlElement $element)
     {
         foreach ($node->attributes as $attribute) {
             $element->setAttribute($this->createAttribute($attribute));
@@ -94,9 +100,9 @@ final class Translator
     /**
      * @param DOMAttr $attr
      *
-     * @return Attribute
+     * @return XmlAttribute
      */
-    private function createAttribute(DOMAttr $attr): Attribute
+    private function createAttribute(DOMAttr $attr): XmlAttribute
     {
         return new XmlAttribute($attr->name, $attr->value, $attr->prefix);
     }
@@ -115,15 +121,5 @@ final class Translator
                 $parent->setValue($childNode->nodeValue);
             }
         }
-    }
-
-    /**
-     * @param DOMNode $node
-     *
-     * @return bool
-     */
-    private function isElementNode(DOMNode $node): bool
-    {
-        return $node->childNodes->length === 0 || ($node->childNodes->length === 1 && $node->firstChild->nodeType === XML_TEXT_NODE);
     }
 }

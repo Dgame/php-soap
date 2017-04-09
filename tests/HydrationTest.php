@@ -123,8 +123,10 @@ final class HydrationTest extends TestCase
         $this->assertCount(1, $objects);
         $this->assertArrayHasKey(0, $objects);
         $this->assertInstanceOf(Stammdaten::class, $objects[0]);
+
         /** @var Stammdaten $stammdaten */
         $stammdaten = $objects[0];
+
         $this->assertEquals('Muster', $stammdaten->Name);
         $this->assertEquals('Max', $stammdaten->Vorname);
     }

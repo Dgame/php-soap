@@ -37,14 +37,13 @@ final class Hydrator
      */
     public function hydrateDocument(DOMDocument $document): array
     {
-        $translator = new Translator();
-        $elements   = $translator->translateDocument($document);
+        $elements = Translator::new()->translateDocument($document);
 
         $output = [];
         foreach ($elements as $element) {
-            $hydrate = $this->hydrate($element);
-            if ($hydrate->isValid()) {
-                $output[] = $hydrate->getHydratable();
+            $procedure = $this->hydrate($element);
+            if ($procedure->isValid()) {
+                $output[] = $procedure->getHydrate()->getObject();
             }
         }
 
@@ -58,8 +57,10 @@ final class Hydrator
      */
     public function hydrateNode(DOMNode $node): HydrateProcedure
     {
-        $translator = new Translator();
-        $element    = $translator->translateNode($node);
+        $element = Translator::new()->translateNode($node);
+        if ($element === null) {
+            return new HydrateProcedure($this->mapper);
+        }
 
         return $this->hydrate($element);
     }
@@ -98,9 +99,9 @@ final class Hydrator
      */
     private function hydrate(Element $element): HydrateProcedure
     {
-        $hydrate = new HydrateProcedure($this->mapper);
-        $element->accept($hydrate);
+        $procedure = new HydrateProcedure($this->mapper);
+        $element->accept($procedure);
 
-        return $hydrate;
+        return $procedure;
     }
 }

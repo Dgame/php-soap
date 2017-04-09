@@ -48,6 +48,20 @@ final class ClassMapper
     /**
      * @param string $class
      *
+     * @return Hydrate|null
+     */
+    public function new(string $class)
+    {
+        if (($class = $this->findClassName($class)) !== null) {
+            return Hydrate::new($class);
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $class
+     *
      * @return null|string
      */
     private function findClassName(string $class)
@@ -69,36 +83,13 @@ final class ClassMapper
     /**
      * @param string $class
      *
-     * @return string
-     */
-    private function lookUpClassName(string $class): string
-    {
-        return array_key_exists($class, $this->classmap) ? $this->classmap[$class] : $class;
-    }
-
-    /**
-     * @param string $class
-     *
-     * @return string
+     * @return null|string
      */
     private function getClassName(string $class)
     {
-        $class = $this->lookUpClassName(ucfirst($class));
+        $class = ucfirst($class);
+        $class = array_key_exists($class, $this->classmap) ? $this->classmap[$class] : $class;
 
         return class_exists($class) ? $class : null;
-    }
-
-    /**
-     * @param string $class
-     *
-     * @return HydratableInterface|null
-     */
-    public function getInstanceOf(string $class)
-    {
-        if (($class = $this->findClassName($class)) !== null) {
-            return new $class();
-        }
-
-        return null;
     }
 }

@@ -2,13 +2,11 @@
 
 namespace Dgame\Soap\Test\Object;
 
-use Dgame\Soap\Hydrator\Hydratable;
-
 /**
  * Class Envelope
  * @package Dgame\Soap\Test\Object
  */
-final class Envelope extends Hydratable
+final class Envelope
 {
     /**
      * @var Body

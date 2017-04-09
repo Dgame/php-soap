@@ -2,13 +2,11 @@
 
 namespace Dgame\Soap\Test\Object;
 
-use Dgame\Soap\Hydrator\Hydratable;
-
 /**
  * Class Stammdaten
  * @package Dgame\Soap\Test\Object
  */
-final class Stammdaten extends Hydratable
+final class Stammdaten
 {
     /**
      * @var string

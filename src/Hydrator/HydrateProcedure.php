@@ -15,16 +15,16 @@ use function Dgame\Conditional\debug;
  */
 final class HydrateProcedure implements VisitorInterface
 {
-    const DEBUG_LABEL = 'Debug_Soap_Hydrator';
+    const DEBUG_LABEL = 'Debug_Hydrate_Procedure';
 
     /**
      * @var string
      */
     private $tab;
     /**
-     * @var HydratableInterface
+     * @var Hydrate
      */
-    private $hydratable;
+    private $hydrate;
     /**
      * @var ClassMapper
      */
@@ -43,11 +43,11 @@ final class HydrateProcedure implements VisitorInterface
     }
 
     /**
-     * @return HydratableInterface
+     * @return Hydrate
      */
-    public function getHydratable(): HydratableInterface
+    public function getHydrate(): Hydrate
     {
-        return $this->hydratable;
+        return $this->hydrate;
     }
 
     /**
@@ -55,7 +55,7 @@ final class HydrateProcedure implements VisitorInterface
      */
     public function isValid(): bool
     {
-        return $this->hydratable !== null;
+        return $this->hydrate !== null;
     }
 
     /**
@@ -111,7 +111,7 @@ final class HydrateProcedure implements VisitorInterface
     private function assignAttribute(Attribute $attribute)
     {
         if ($attribute->hasValue()) {
-            $this->hydratable->assign($attribute);
+            $this->hydrate->assign($attribute);
         }
     }
 
@@ -120,7 +120,7 @@ final class HydrateProcedure implements VisitorInterface
      */
     private function visit(Element $element)
     {
-        $this->hydratable = $this->mapper->getInstanceOf($element->getName());
+        $this->hydrate = $this->mapper->new($element->getName());
         if ($this->isValid()) {
             $this->visitAttributesOf($element);
         }
@@ -136,7 +136,7 @@ final class HydrateProcedure implements VisitorInterface
         }
 
         if ($element->hasValue()) {
-            $this->hydratable->assignValue('value', $element->getValue());
+            $this->hydrate->assignValue('value', $element->getValue());
         }
     }
 
@@ -155,15 +155,36 @@ final class HydrateProcedure implements VisitorInterface
      */
     private function visitChild(Element $element)
     {
-        $hydrator = new self($this->mapper, $this->tab);
-        $element->accept($hydrator);
+        $procedure = new self($this->mapper, $this->tab);
+        $element->accept($procedure);
 
-        if ($this->isValid() && $hydrator->isValid()) {
-            $this->hydratable->append($hydrator->getHydratable());
-        } elseif ($this->isValid()) {
-            $this->hydratable->assign($element);
-        } elseif ($hydrator->isValid()) {
-            $this->hydratable = $hydrator->getHydratable();
+        if ($this->isValid()) {
+            $this->appendOrAssign($procedure, $element);
+        } else {
+            $this->skipTo($procedure);
+        }
+    }
+
+    /**
+     * @param HydrateProcedure $procedure
+     * @param Element          $element
+     */
+    private function appendOrAssign(self $procedure, Element $element)
+    {
+        if ($procedure->isValid()) {
+            $this->hydrate->append($procedure->getHydrate());
+        } else {
+            $this->hydrate->assign($element);
+        }
+    }
+
+    /**
+     * @param HydrateProcedure $procedure
+     */
+    private function skipTo(self $procedure)
+    {
+        if ($procedure->isValid()) {
+            $this->hydrate = $procedure->getHydrate();
         }
     }
 }
