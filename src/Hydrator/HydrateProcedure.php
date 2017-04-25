@@ -121,7 +121,7 @@ final class HydrateProcedure implements VisitorInterface
         }
 
         if ($element->hasValue()) {
-            $this->hydrate->assignValue('value', $element->getValue());
+            $this->hydrate->setValue('value', $element->getValue());
         }
     }
 

@@ -4,7 +4,6 @@ namespace Dgame\Soap\Hydrator;
 
 use Dgame\Object\ObjectFacade;
 use Dgame\Soap\AssignableInterface;
-use ICanBoogie\Inflector;
 
 /**
  * Class Hydrate
@@ -24,48 +23,20 @@ final class Hydrate extends ObjectFacade
 
     /**
      * @param Hydrate $hydrat
-     *
-     * @return bool
      */
-    public function append(self $hydrat): bool
+    public function append(self $hydrat)
     {
-        return $this->assignValue($hydrat->getClassName(), $hydrat->getObject());
+        $this->setValue($hydrat->getClassName(), $hydrat->getObject());
     }
 
     /**
      * @param AssignableInterface $assignable
-     *
-     * @return bool
      */
-    public function assign(AssignableInterface $assignable): bool
+    public function assign(AssignableInterface $assignable)
     {
         if ($assignable->hasValue()) {
-            return $this->assignValue($assignable->getName(), $assignable->getValue());
+            $this->setValue($assignable->getName(), $assignable->getValue());
         }
-
-        return false;
-    }
-
-    /**
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return bool
-     */
-    public function assignValue(string $name, $value): bool
-    {
-        $names = [
-            Inflector::get()->camelize($name, Inflector::DOWNCASE_FIRST_LETTER),
-            Inflector::get()->camelize($name, Inflector::UPCASE_FIRST_LETTER)
-        ];
-
-        foreach ($names as $name) {
-            if ($this->setValueByMethod($name, $value) || $this->setValueByProperty($name, $value)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
