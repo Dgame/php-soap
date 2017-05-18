@@ -2,8 +2,6 @@
 
 namespace Dgame\Soap;
 
-use Dgame\Soap\Attribute\Attribute;
-use Dgame\Soap\Attribute\XmlAttribute;
 use Dgame\Soap\Hydrator\VisitorInterface;
 
 /**

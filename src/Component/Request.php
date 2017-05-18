@@ -3,7 +3,6 @@
 namespace Dgame\Soap\Component;
 
 use Dgame\Soap\XmlElement;
-use Exception;
 
 /**
  * Class Request
