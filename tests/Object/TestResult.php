@@ -3,26 +3,26 @@
 namespace Dgame\Soap\Test\Object;
 
 /**
- * Class Result
+ * Class TestResult
  * @package Dgame\Soap\Test\Object
  */
-final class Result
+final class TestResult
 {
     /**
-     * @var Ort[]
+     * @var TestOrt[]
      */
     private $orte = [];
 
     /**
-     * @param Ort $ort
+     * @param TestOrt $ort
      */
-    public function appendOrt(Ort $ort)
+    public function appendTestOrt(TestOrt $ort)
     {
         $this->orte[] = $ort;
     }
 
     /**
-     * @return Ort[]
+     * @return TestOrt[]
      */
     public function getOrte(): array
     {

@@ -7,10 +7,10 @@ use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
 use Dgame\Soap\XmlElement;
 
 /**
- * Class Car
+ * Class TestCar
  * @package Dgame\Soap\Test\Object
  */
-final class Car implements AssemblableInterface
+final class TestCar implements AssemblableInterface
 {
     /**
      * @var string

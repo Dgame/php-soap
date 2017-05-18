@@ -3,17 +3,17 @@
 namespace Dgame\Soap\Test\Object;
 
 /**
- * Class OrtsTeil
+ * Class TestOrtsTeil
  * @package Dgame\Soap\Test\Object
  */
-final class OrtsTeil
+final class TestOrtsTeil
 {
     /**
      * @var string
      */
     private $name;
     /**
-     * @var Strassen
+     * @var TestStrassen
      */
     private $strassen;
 
@@ -34,17 +34,17 @@ final class OrtsTeil
     }
 
     /**
-     * @return Strassen
+     * @return TestStrassen
      */
-    public function getStrassen(): Strassen
+    public function getStrassen(): TestStrassen
     {
         return $this->strassen;
     }
 
     /**
-     * @param Strassen $strassen
+     * @param TestStrassen $strassen
      */
-    public function setStrassen(Strassen $strassen)
+    public function setTestStrassen(TestStrassen $strassen)
     {
         $this->strassen = $strassen;
     }

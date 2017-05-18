@@ -3,10 +3,10 @@
 namespace Dgame\Soap\Test\Object;
 
 /**
- * Class Strassen
+ * Class TestStrassen
  * @package Dgame\Soap\Test\Object
  */
-final class Strassen
+final class TestStrassen
 {
     /**
      * @var array

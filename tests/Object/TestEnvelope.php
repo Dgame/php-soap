@@ -3,28 +3,28 @@
 namespace Dgame\Soap\Test\Object;
 
 /**
- * Class Envelope
+ * Class TestEnvelope
  * @package Dgame\Soap\Test\Object
  */
-final class Envelope
+final class TestEnvelope
 {
     /**
-     * @var Body
+     * @var TestBody
      */
     private $body;
 
     /**
-     * @return Body
+     * @return TestBody
      */
-    public function getBody(): Body
+    public function getBody(): TestBody
     {
         return $this->body;
     }
 
     /**
-     * @param Body $body
+     * @param TestBody $body
      */
-    public function setBody(Body $body)
+    public function setTestBody(TestBody $body)
     {
         $this->body = $body;
     }

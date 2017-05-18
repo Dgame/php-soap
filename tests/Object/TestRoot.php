@@ -7,26 +7,26 @@ use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 
 /**
- * Class Root
+ * Class TestRoot
  * @package Dgame\Soap\Test\Object
  */
-final class Root implements AssemblableInterface
+final class TestRoot implements AssemblableInterface
 {
     /**
-     * @var Person[]
+     * @var TestPerson[]
      */
     private $persons = [];
 
     /**
-     * @param Person $person
+     * @param TestPerson $person
      */
-    public function appendPerson(Person $person)
+    public function appendTestPerson(TestPerson $person)
     {
         $this->persons[] = $person;
     }
 
     /**
-     * @return Person[]
+     * @return TestPerson[]
      */
     public function getPersons(): array
     {

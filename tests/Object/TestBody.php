@@ -3,17 +3,17 @@
 namespace Dgame\Soap\Test\Object;
 
 /**
- * Class Body
+ * Class TestBody
  * @package Dgame\Soap\Test\Object
  */
-final class Body
+final class TestBody
 {
     /**
-     * @var Fault
+     * @var TestFault
      */
     private $fault;
     /**
-     * @var Result
+     * @var TestResult
      */
     private $result;
 
@@ -26,33 +26,33 @@ final class Body
     }
 
     /**
-     * @return Fault
+     * @return TestFault
      */
-    public function getFault(): Fault
+    public function getFault(): TestFault
     {
         return $this->fault;
     }
 
     /**
-     * @param Fault $fault
+     * @param TestFault $fault
      */
-    public function setFault(Fault $fault)
+    public function setTestFault(TestFault $fault)
     {
         $this->fault = $fault;
     }
 
     /**
-     * @return Result
+     * @return TestResult
      */
-    public function getResult(): Result
+    public function getResult(): TestResult
     {
         return $this->result;
     }
 
     /**
-     * @param Result $result
+     * @param TestResult $result
      */
-    public function setResult(Result $result)
+    public function setTestResult(TestResult $result)
     {
         $this->result = $result;
     }

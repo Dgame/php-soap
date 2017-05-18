@@ -4,19 +4,19 @@ namespace Dgame\Soap\Test;
 
 use Dgame\Soap\Hydrator\ClassMapper;
 use Dgame\Soap\Hydrator\Dom\Hydrator;
-use Dgame\Soap\Test\Object\Address;
-use Dgame\Soap\Test\Object\Body;
-use Dgame\Soap\Test\Object\Car;
-use Dgame\Soap\Test\Object\Envelope;
-use Dgame\Soap\Test\Object\Fault;
-use Dgame\Soap\Test\Object\Ort;
-use Dgame\Soap\Test\Object\OrtsTeil;
-use Dgame\Soap\Test\Object\Person;
-use Dgame\Soap\Test\Object\Phone;
-use Dgame\Soap\Test\Object\Result;
-use Dgame\Soap\Test\Object\Root;
-use Dgame\Soap\Test\Object\Stammdaten;
-use Dgame\Soap\Test\Object\Strassen;
+use Dgame\Soap\Test\Object\TestAddress;
+use Dgame\Soap\Test\Object\TestBody;
+use Dgame\Soap\Test\Object\TestCar;
+use Dgame\Soap\Test\Object\TestEnvelope;
+use Dgame\Soap\Test\Object\TestFault;
+use Dgame\Soap\Test\Object\TestOrt;
+use Dgame\Soap\Test\Object\TestOrtsTeil;
+use Dgame\Soap\Test\Object\TestPerson;
+use Dgame\Soap\Test\Object\TestPhone;
+use Dgame\Soap\Test\Object\TestResult;
+use Dgame\Soap\Test\Object\TestRoot;
+use Dgame\Soap\Test\Object\TestStammdaten;
+use Dgame\Soap\Test\Object\TestStrassen;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -32,11 +32,11 @@ final class HydrationTest extends TestCase
 
         $mapper = new ClassMapper(
             [
-                'Root'    => Root::class,
-                'Person'  => Person::class,
-                'Car'     => Car::class,
-                'Phone'   => Phone::class,
-                'Address' => Address::class
+                'Root'    => TestRoot::class,
+                'Person'  => TestPerson::class,
+                'Car'     => TestCar::class,
+                'Phone'   => TestPhone::class,
+                'Address' => TestAddress::class
             ]
         );
         $mapper->appendPattern('/^(?:soap\-?)?env(?:elope)?/iS', 'Root');
@@ -46,40 +46,40 @@ final class HydrationTest extends TestCase
 
         $this->assertCount(1, $objects);
 
-        /** @var Root $root */
+        /** @var TestRoot $root */
         $root = $objects[0];
 
         $this->assertNotNull($root);
-        $this->assertInstanceOf(Root::class, $root);
+        $this->assertInstanceOf(TestRoot::class, $root);
 
         $persons = $root->getPersons();
         $this->assertCount(2, $persons);
 
-        $this->assertInstanceOf(Person::class, $persons[0]);
+        $this->assertInstanceOf(TestPerson::class, $persons[0]);
         $this->assertEquals('Max Musterman', $persons[0]->getName());
-        $this->assertInstanceOf(Car::class, $persons[0]->getCar());
+        $this->assertInstanceOf(TestCar::class, $persons[0]->getCar());
         $this->assertEquals('BMW', $persons[0]->getCar()->getMarke());
         $this->assertNotEmpty($persons[0]->getCar()->kennung);
         $this->assertEquals('i8', $persons[0]->getCar()->kennung);
-        $this->assertInstanceOf(Phone::class, $persons[0]->getPhone());
+        $this->assertInstanceOf(TestPhone::class, $persons[0]->getPhone());
         $this->assertEquals('iPhone', $persons[0]->getPhone()->getName());
         $this->assertEquals(9, $persons[0]->getPhone()->getValue());
         $this->assertEquals('Hamburg', $persons[0]->getBirthplace());
-        $this->assertInstanceOf(Address::class, $persons[0]->getAddress());
+        $this->assertInstanceOf(TestAddress::class, $persons[0]->getAddress());
         $this->assertEquals('Hauptstraße 1', $persons[0]->getAddress()->getStreet());
         $this->assertEquals(245698, $persons[0]->getAddress()->getPlz());
 
-        $this->assertInstanceOf(Person::class, $persons[1]);
+        $this->assertInstanceOf(TestPerson::class, $persons[1]);
         $this->assertEquals('Dr. Dolittle', $persons[1]->getName());
-        $this->assertInstanceOf(Car::class, $persons[1]->getCar());
+        $this->assertInstanceOf(TestCar::class, $persons[1]->getCar());
         $this->assertEquals('Audi', $persons[1]->getCar()->getMarke());
         $this->assertNotEmpty($persons[0]->getCar()->kennung);
         $this->assertEquals('A3', $persons[1]->getCar()->kennung);
-        $this->assertInstanceOf(Phone::class, $persons[1]->getPhone());
+        $this->assertInstanceOf(TestPhone::class, $persons[1]->getPhone());
         $this->assertEquals('Sony', $persons[1]->getPhone()->getName());
         $this->assertEquals('Xperia Z3', $persons[1]->getPhone()->getValue());
         $this->assertEquals('München', $persons[1]->getBirthplace());
-        $this->assertInstanceOf(Address::class, $persons[1]->getAddress());
+        $this->assertInstanceOf(TestAddress::class, $persons[1]->getAddress());
         $this->assertEquals('Partkstraße', $persons[1]->getAddress()->getStreet());
         $this->assertEquals(365494, $persons[1]->getAddress()->getPlz());
     }
@@ -91,7 +91,7 @@ final class HydrationTest extends TestCase
 
         $mapper = new ClassMapper(
             [
-                'Car' => Car::class
+                'Car' => TestCar::class
             ]
         );
 
@@ -100,8 +100,8 @@ final class HydrationTest extends TestCase
 
         $this->assertCount(1, $objects);
         $this->assertArrayHasKey(0, $objects);
-        $this->assertInstanceOf(Car::class, $objects[0]);
-        /** @var Car $car */
+        $this->assertInstanceOf(TestCar::class, $objects[0]);
+        /** @var TestCar $car */
         $car = $objects[0];
         $this->assertEquals('Mercedes', $car->getMarke());
     }
@@ -113,7 +113,7 @@ final class HydrationTest extends TestCase
 
         $mapper = new ClassMapper(
             [
-                'Stammdaten' => Stammdaten::class
+                'Stammdaten' => TestStammdaten::class
             ]
         );
 
@@ -122,9 +122,9 @@ final class HydrationTest extends TestCase
 
         $this->assertCount(1, $objects);
         $this->assertArrayHasKey(0, $objects);
-        $this->assertInstanceOf(Stammdaten::class, $objects[0]);
+        $this->assertInstanceOf(TestStammdaten::class, $objects[0]);
 
-        /** @var Stammdaten $stammdaten */
+        /** @var TestStammdaten $stammdaten */
         $stammdaten = $objects[0];
 
         $this->assertEquals('Muster', $stammdaten->Name);
@@ -138,9 +138,9 @@ final class HydrationTest extends TestCase
 
         $mapper = new ClassMapper(
             [
-                'Envelope' => Envelope::class,
-                'Body'     => Body::class,
-                'Fault'    => Fault::class
+                'Envelope' => TestEnvelope::class,
+                'Body'     => TestBody::class,
+                'Fault'    => TestFault::class
             ]
         );
 
@@ -149,9 +149,9 @@ final class HydrationTest extends TestCase
 
         $this->assertCount(1, $objects);
         $this->assertArrayHasKey(0, $objects);
-        $this->assertInstanceOf(Envelope::class, $objects[0]);
+        $this->assertInstanceOf(TestEnvelope::class, $objects[0]);
 
-        /** @var Envelope $envelope */
+        /** @var TestEnvelope $envelope */
         $envelope = $objects[0];
 
         $this->assertTrue($envelope->getBody()->hasFault());
@@ -166,13 +166,13 @@ final class HydrationTest extends TestCase
 
         $mapper = new ClassMapper(
             [
-                'Envelope' => Envelope::class,
-                'Body'     => Body::class,
-                'Fault'    => Fault::class,
-                'Result'   => Result::class,
-                'Ort'      => Ort::class,
-                'Oteil'    => OrtsTeil::class,
-                'Strassen' => Strassen::class
+                'Envelope' => TestEnvelope::class,
+                'Body'     => TestBody::class,
+                'Fault'    => TestFault::class,
+                'Result'   => TestResult::class,
+                'Ort'      => TestOrt::class,
+                'Oteil'    => TestOrtsTeil::class,
+                'Strassen' => TestStrassen::class
             ]
         );
 
@@ -181,13 +181,13 @@ final class HydrationTest extends TestCase
 
         $this->assertCount(1, $objects);
         $this->assertArrayHasKey(0, $objects);
-        $this->assertInstanceOf(Envelope::class, $objects[0]);
+        $this->assertInstanceOf(TestEnvelope::class, $objects[0]);
 
-        /** @var Envelope $envelope */
+        /** @var TestEnvelope $envelope */
         $envelope = $objects[0];
 
         $this->assertFalse($envelope->getBody()->hasFault());
-        $this->assertInstanceOf(Result::class, $envelope->getBody()->getResult());
+        $this->assertInstanceOf(TestResult::class, $envelope->getBody()->getResult());
         $this->assertCount(1, $envelope->getBody()->getResult()->getOrte());
         $this->assertEquals('Hamburg', $envelope->getBody()->getResult()->getOrte()[0]->getName());
         $this->assertCount(4, $envelope->getBody()->getResult()->getOrte()[0]->getOrtsteile());

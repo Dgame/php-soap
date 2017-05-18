@@ -8,21 +8,21 @@ use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 
 /**
- * Class Person
+ * Class TestPerson
  * @package Dgame\Soap\Test\Object
  */
-final class Person implements AssemblableInterface
+final class TestPerson implements AssemblableInterface
 {
     /**
      * @var string
      */
     private $name;
     /**
-     * @var Car
+     * @var TestCar
      */
     private $car;
     /**
-     * @var Phone
+     * @var TestPhone
      */
     private $phone;
     /**
@@ -30,7 +30,7 @@ final class Person implements AssemblableInterface
      */
     private $birthplace;
     /**
-     * @var Address
+     * @var TestAddress
      */
     private $address;
 
@@ -43,17 +43,17 @@ final class Person implements AssemblableInterface
     }
 
     /**
-     * @param Car $car
+     * @param TestCar $car
      */
-    public function setCar(Car $car)
+    public function setTestCar(TestCar $car)
     {
         $this->car = $car;
     }
 
     /**
-     * @param Phone $phone
+     * @param TestPhone $phone
      */
-    public function setPhone(Phone $phone)
+    public function setTestPhone(TestPhone $phone)
     {
         $this->phone = $phone;
     }
@@ -67,9 +67,9 @@ final class Person implements AssemblableInterface
     }
 
     /**
-     * @param Address $address
+     * @param TestAddress $address
      */
-    public function setAddress(Address $address)
+    public function setTestAddress(TestAddress $address)
     {
         $this->address = $address;
     }
@@ -83,17 +83,17 @@ final class Person implements AssemblableInterface
     }
 
     /**
-     * @return Car
+     * @return TestCar
      */
-    public function getCar(): Car
+    public function getCar(): TestCar
     {
         return $this->car;
     }
 
     /**
-     * @return Phone
+     * @return TestPhone
      */
-    public function getPhone(): Phone
+    public function getPhone(): TestPhone
     {
         return $this->phone;
     }
@@ -107,9 +107,9 @@ final class Person implements AssemblableInterface
     }
 
     /**
-     * @return Address
+     * @return TestAddress
      */
-    public function getAddress(): Address
+    public function getAddress(): TestAddress
     {
         return $this->address;
     }

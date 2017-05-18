@@ -3,10 +3,10 @@
 namespace Dgame\Soap\Test\Object;
 
 /**
- * Class Fault
+ * Class TestFault
  * @package Dgame\Soap\Test\Object
  */
-final class Fault
+final class TestFault
 {
     /**
      * @var string

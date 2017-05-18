@@ -3,17 +3,17 @@
 namespace Dgame\Soap\Test\Object;
 
 /**
- * Class Ort
+ * Class TestOrt
  * @package Dgame\Soap\Test\Object
  */
-final class Ort
+final class TestOrt
 {
     /**
      * @var string
      */
     private $name;
     /**
-     * @var OrtsTeil[]
+     * @var TestOrtsTeil[]
      */
     private $ortsteile = [];
 
@@ -34,7 +34,7 @@ final class Ort
     }
 
     /**
-     * @return OrtsTeil[]
+     * @return TestOrtsTeil[]
      */
     public function getOrtsteile(): array
     {
@@ -42,9 +42,9 @@ final class Ort
     }
 
     /**
-     * @param OrtsTeil $ortsteil
+     * @param TestOrtsTeil $ortsteil
      */
-    public function appendOrtsTeil(OrtsTeil $ortsteil)
+    public function appendTestOrtsTeil(TestOrtsTeil $ortsteil)
     {
         $this->ortsteile[] = $ortsteil;
     }

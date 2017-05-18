@@ -7,10 +7,10 @@ use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 
 /**
- * Class Address
+ * Class TestAddress
  * @package Dgame\Soap\Test\Object
  */
-final class Address implements AssemblableInterface
+final class TestAddress implements AssemblableInterface
 {
     /**
      * @var string

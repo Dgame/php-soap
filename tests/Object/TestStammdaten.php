@@ -3,10 +3,10 @@
 namespace Dgame\Soap\Test\Object;
 
 /**
- * Class Stammdaten
+ * Class TestStammdaten
  * @package Dgame\Soap\Test\Object
  */
-final class Stammdaten
+final class TestStammdaten
 {
     /**
      * @var string
