@@ -112,6 +112,7 @@ $doc2 = $hydrator->assemble($root);
 
 $this->assertEqualXMLStructure($doc->documentElement, $doc2->documentElement);
 ```
+That's all you need.
 
 # Creation
 And ultimately you can also create XML from your existing objects. Therefore, the following example shows four different BiPRO-Request:
