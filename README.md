@@ -39,6 +39,8 @@ To find these objects, they should be named like the XML-Tags or you simply regi
  - Use a public property with name `name`
  - Use a public method: `setName`
  - Use a public method: `appendName`
+ 
+ This is accomplished with the [php-object](https://github.com/Dgame/php-object) package.
 
 But let's see the whole example of the hydration process:
 ```php
