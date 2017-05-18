@@ -67,27 +67,25 @@ final class Hydrator
 
     /**
      * @param AssemblableInterface $assemblable
-     * @param DOMNode|null         $node
      *
-     * @return DOMNode
+     * @return DOMDocument
      */
-    public function assemble(AssemblableInterface $assemblable, DOMNode $node = null): DOMNode
+    public function assemble(AssemblableInterface $assemblable): DOMDocument
     {
-        return $this->dehydrate($assemblable->assemble(), $node);
+        return $this->dehydrate($assemblable->assemble());
     }
 
     /**
-     * @param Element      $element
-     * @param DOMNode|null $node
+     * @param Element $element
      *
-     * @return DOMNode
+     * @return DOMDocument
      */
-    public function dehydrate(Element $element, DOMNode $node = null): DOMNode
+    public function dehydrate(Element $element): DOMDocument
     {
-        $assembler = new Assembler($node);
+        $assembler = new Assembler();
         $element->accept($assembler);
 
-        return $node;
+        return $assembler->getDocument();
     }
 
     /**
