@@ -7,7 +7,114 @@
 [![Build Status](https://travis-ci.org/Dgame/php-soap.svg?branch=master)](https://travis-ci.org/Dgame/php-soap)
 
 Hydrate XML-Documents to objects or build XML from objects.
-Following an example for 4 different BiPRO-Request:
+
+# Hydration
+To hydrate XML files, you just simply have to write corresponding objects with appropriate properties / methods.
+Let's consider this xml file as an example:
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<soap-env>
+    <person name="Max Musterman">
+        <car marke="BMW" kennung="i8"/>
+        <phone name="iPhone">9</phone>
+        <birth-place>Hamburg</birth-place>
+        <address>
+            <street>Hauptstraße 1</street>
+            <plz>245698</plz>
+        </address>
+    </person>
+    <person name="Dr. Dolittle">
+        <car marke="Audi" kennung="A3"/>
+        <phone name="Sony">Xperia Z3</phone>
+        <birth-place>München</birth-place>
+        <address>
+            <street>Partkstraße</street>
+            <plz>365494</plz>
+        </address>
+    </person>
+</soap-env>
+```
+To hydrate it, you need a `Root` or `Envelope` class, a `Person` class, a `Car` class, a `Phone` class and an `Address` class.
+To find these objects, they should be named like the XML-Tags or you simply register them on the _ClassMapper_. To put the data into the objects, the methods should be named like the XML-Tag where the data comes from, prefixed with `set` or `append`. For example, to put the name into the person, these three variants are tried to fill the object:
+ - Use a public property with name `name`
+ - Use a public method: `setName`
+ - Use a public method: `appendName`
+
+But let's see the whole example of the hydration process:
+```php
+$doc = new DOMDocument();
+$doc->loadXML(...);
+
+$mapper = new ClassMapper(
+    [
+        'Root'    => TestRoot::class,
+        'Person'  => TestPerson::class,
+        'Car'     => TestCar::class,
+        'Phone'   => TestPhone::class,
+        'Address' => TestAddress::class
+    ]
+);
+$mapper->appendPattern('/^(?:soap\-?)?env(?:elope)?/iS', 'Root');
+
+$hydrator = new Hydrator($mapper);
+$objects  = $hydrator->hydrateDocument($doc);
+```
+
+That's it. As you can see, with the line `$mapper->appendPattern('/^(?:soap\-?)?env(?:elope)?/iS', 'Root');` we apply a regex to match all variants of soap XML-Tags and determine that the `Root` class should be used. And now we can test the result:
+
+```php
+$this->assertCount(1, $objects);
+
+/** @var TestRoot $root */
+$root = $objects[0];
+
+$this->assertNotNull($root);
+$this->assertInstanceOf(TestRoot::class, $root);
+
+$persons = $root->getPersons();
+$this->assertCount(2, $persons);
+
+$this->assertInstanceOf(TestPerson::class, $persons[0]);
+$this->assertEquals('Max Musterman', $persons[0]->getName());
+$this->assertInstanceOf(TestCar::class, $persons[0]->getCar());
+$this->assertEquals('BMW', $persons[0]->getCar()->getMarke());
+$this->assertNotEmpty($persons[0]->getCar()->kennung);
+$this->assertEquals('i8', $persons[0]->getCar()->kennung);
+$this->assertInstanceOf(TestPhone::class, $persons[0]->getPhone());
+$this->assertEquals('iPhone', $persons[0]->getPhone()->getName());
+$this->assertEquals(9, $persons[0]->getPhone()->getValue());
+$this->assertEquals('Hamburg', $persons[0]->getBirthplace());
+$this->assertInstanceOf(TestAddress::class, $persons[0]->getAddress());
+$this->assertEquals('Hauptstraße 1', $persons[0]->getAddress()->getStreet());
+$this->assertEquals(245698, $persons[0]->getAddress()->getPlz());
+
+$this->assertInstanceOf(TestPerson::class, $persons[1]);
+$this->assertEquals('Dr. Dolittle', $persons[1]->getName());
+$this->assertInstanceOf(TestCar::class, $persons[1]->getCar());
+$this->assertEquals('Audi', $persons[1]->getCar()->getMarke());
+$this->assertNotEmpty($persons[0]->getCar()->kennung);
+$this->assertEquals('A3', $persons[1]->getCar()->kennung);
+$this->assertInstanceOf(TestPhone::class, $persons[1]->getPhone());
+$this->assertEquals('Sony', $persons[1]->getPhone()->getName());
+$this->assertEquals('Xperia Z3', $persons[1]->getPhone()->getValue());
+$this->assertEquals('München', $persons[1]->getBirthplace());
+$this->assertInstanceOf(TestAddress::class, $persons[1]->getAddress());
+$this->assertEquals('Partkstraße', $persons[1]->getAddress()->getStreet());
+$this->assertEquals(365494, $persons[1]->getAddress()->getPlz());
+```
+
+Pretty simple, isn't it?
+
+# Dehydration
+Of course you can dehydrate/(re)assemble hydrated elements:
+```php
+$doc2 = $hydrator->assemble($root);
+
+$this->assertEqualXMLStructure($doc->documentElement, $doc2->documentElement);
+```
+
+# Creation
+And ultimately you can also create XML from your existing objects. Therefore, the following example shows four different BiPRO-Request:
 
 ### RequestTokenService       
 ```php        
