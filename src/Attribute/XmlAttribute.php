@@ -60,6 +60,19 @@ class XmlAttribute extends Attribute implements PrefixableInterface
     }
 
     /**
+     * @return string
+     */
+    final public function getPrefixedName(): string
+    {
+        $name = $this->getName();
+        if ($this->hasPrefix()) {
+            return !empty($name) ? sprintf('%s:%s', $this->getPrefix(), $name) : $this->getPrefix();
+        }
+
+        return $name;
+    }
+
+    /**
      * @param VisitorInterface $visitor
      */
     public function accept(VisitorInterface $visitor)

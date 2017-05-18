@@ -8,35 +8,62 @@ use Dgame\Soap\Hydrator\VisitorInterface;
  * Class XmlNode
  * @package Dgame\Soap
  */
-final class XmlNode extends XmlElement
+class XmlNode extends XmlElement
 {
     /**
-     * @var Element[]
+     * @var XmlElement[]
      */
-    private $children = [];
+    private $elements = [];
+    /**
+     * @var bool
+     */
+    private $childPrefixInheritance = false;
 
     /**
-     * @param Element $element
+     * @param string $prefix
      */
-    public function appendChild(Element $element)
+    public function setPrefix(string $prefix)
     {
-        $this->children[] = $element;
+        parent::setPrefix($prefix);
+
+        foreach ($this->elements as $element) {
+            $this->syncPrefix($element);
+        }
     }
 
     /**
-     * @return Element[]|XmlNode[]
+     * @param XmlElement $element
      */
-    public function getChildren(): array
+    public function appendElement(XmlElement $element)
     {
-        return $this->children;
+        $this->elements[] = $element;
+        $this->syncPrefix($element);
+    }
+
+    /**
+     * @param XmlElement $element
+     */
+    private function syncPrefix(XmlElement $element)
+    {
+        if (!$element->hasPrefix() && $this->hasPrefix()) {
+            $element->setPrefix($this->getPrefix());
+        }
+    }
+
+    /**
+     * @return XmlElement[]|XmlNode[]
+     */
+    public function getElements(): array
+    {
+        return $this->elements;
     }
 
     /**
      * @return bool
      */
-    public function hasChildren(): bool
+    public function hasElements(): bool
     {
-        return !empty($this->children);
+        return !empty($this->elements);
     }
 
     /**
@@ -45,5 +72,29 @@ final class XmlNode extends XmlElement
     public function accept(VisitorInterface $visitor)
     {
         $visitor->visitXmlNode($this);
+    }
+
+    /**
+     * @return bool
+     */
+    final public function isChildPrefixInheritanceEnabled(): bool
+    {
+        return $this->childPrefixInheritance;
+    }
+
+    /**
+     *
+     */
+    final public function enableChildPrefixInheritance()
+    {
+        $this->childPrefixInheritance = true;
+    }
+
+    /**
+     *
+     */
+    final public function disableChildPrefixInheritance()
+    {
+        $this->childPrefixInheritance = false;
     }
 }

@@ -5,6 +5,7 @@ namespace Dgame\Soap\Test\Object;
 use Dgame\Soap\Attribute\Attribute;
 use Dgame\Soap\Element;
 use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
+use Dgame\Soap\XmlElement;
 
 /**
  * Class Phone
@@ -54,11 +55,11 @@ final class Phone implements AssemblableInterface
     }
 
     /**
-     * @return Element
+     * @return XmlElement
      */
-    public function assemble(): Element
+    public function assemble(): XmlElement
     {
-        $element = new Element('phone', $this->version);
+        $element = new XmlElement('phone', $this->version);
         $element->setAttribute(new Attribute('name', $this->name));
 
         return $element;

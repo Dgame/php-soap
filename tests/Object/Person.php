@@ -3,8 +3,8 @@
 namespace Dgame\Soap\Test\Object;
 
 use Dgame\Soap\Attribute\Attribute;
-use Dgame\Soap\Element;
 use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
+use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 
 /**
@@ -115,16 +115,16 @@ final class Person implements AssemblableInterface
     }
 
     /**
-     * @return Element
+     * @return XmlElement
      */
-    public function assemble(): Element
+    public function assemble(): XmlElement
     {
         $node = new XmlNode('person');
         $node->setAttribute(new Attribute('name', $this->name));
-        $node->appendChild($this->car->assemble());
-        $node->appendChild($this->phone->assemble());
-        $node->appendChild(new Element('birth-place', $this->birthplace));
-        $node->appendChild($this->address->assemble());
+        $node->appendElement($this->car->assemble());
+        $node->appendElement($this->phone->assemble());
+        $node->appendElement(new XmlElement('birth-place', $this->birthplace));
+        $node->appendElement($this->address->assemble());
 
         return $node;
     }

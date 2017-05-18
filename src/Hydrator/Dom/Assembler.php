@@ -30,12 +30,16 @@ final class Assembler implements VisitorInterface
     /**
      * Assembler constructor.
      *
-     * @param DOMNode $node
+     * @param DOMNode|null $node
      */
-    public function __construct(DOMNode $node)
+    public function __construct(DOMNode $node = null)
     {
-        $this->node     = $node;
-        $this->document = $node->ownerDocument ?? $this->node;
+        if ($node === null) {
+            $this->node = $this->document = new DOMDocument('1.0', 'utf-8');
+        } else {
+            $this->node     = $node;
+            $this->document = $node->ownerDocument ?? $this->node;
+        }
     }
 
     /**
@@ -48,12 +52,12 @@ final class Assembler implements VisitorInterface
 
     /**
      * @param Element $element
+     * @param DOMNode $node
      *
      * @return DOMNode
      */
-    private function assemble(Element $element): DOMNode
+    private function assemble(Element $element, DOMNode $node): DOMNode
     {
-        $node = $this->document->createElement($element->getName(), $element->hasValue() ? $element->getValue() : null);
         $this->node->appendChild($node);
         $this->node = $node;
 
@@ -69,7 +73,8 @@ final class Assembler implements VisitorInterface
      */
     public function visitElement(Element $element)
     {
-        $this->assemble($element);
+        $node = $this->document->createElement($element->getName(), $element->hasValue() ? $element->getValue() : null);
+        $this->assemble($element, $node);
     }
 
     /**
@@ -77,7 +82,8 @@ final class Assembler implements VisitorInterface
      */
     public function visitXmlElement(XmlElement $element)
     {
-        $node = $this->assemble($element);
+        $node = $this->document->createElement($element->getPrefixedName(), $element->hasValue() ? $element->getValue() : null);
+        $node = $this->assemble($element, $node);
         if ($element->hasPrefix()) {
             $node->prefix = $element->getPrefix();
         }
@@ -88,12 +94,9 @@ final class Assembler implements VisitorInterface
      */
     public function visitXmlNode(XmlNode $node)
     {
-        $element = $this->assemble($node);
-        if ($node->hasPrefix()) {
-            $element->prefix = $node->getPrefix();
-        }
+        $this->visitXmlElement($node);
 
-        foreach ($node->getChildren() as $child) {
+        foreach ($node->getElements() as $child) {
             $assembler = new self($this->node);
             $child->accept($assembler);
         }
@@ -112,9 +115,6 @@ final class Assembler implements VisitorInterface
      */
     public function visitXmlAttribute(XmlAttribute $attribute)
     {
-        $attr = $this->node->setAttribute($attribute->getName(), $attribute->hasValue() ? $attribute->getValue() : null);
-        if ($attribute->hasPrefix()) {
-            $attr->prefix = $attribute->getPrefix();
-        }
+        $this->node->setAttribute($attribute->getPrefixedName(), $attribute->hasValue() ? $attribute->getValue() : null);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Dgame\Soap;
 
+use Dgame\Soap\Attribute\Attribute;
+use Dgame\Soap\Attribute\XmlAttribute;
 use Dgame\Soap\Hydrator\VisitorInterface;
 
 /**
@@ -50,12 +52,25 @@ class XmlElement extends Element implements PrefixableInterface
     /**
      * @param string $prefix
      */
-    final public function setPrefix(string $prefix)
+    public function setPrefix(string $prefix)
     {
         $prefix = trim($prefix);
         if (strlen($prefix) !== 0) {
             $this->prefix = $prefix;
         }
+    }
+
+    /**
+     * @return string
+     */
+    final public function getPrefixedName(): string
+    {
+        $name = $this->getName();
+        if ($this->hasPrefix()) {
+            return !empty($name) ? sprintf('%s:%s', $this->getPrefix(), $name) : $this->getPrefix();
+        }
+
+        return $name;
     }
 
     /**

@@ -3,8 +3,8 @@
 namespace Dgame\Soap\Test\Object;
 
 use Dgame\Soap\Attribute\Attribute;
-use Dgame\Soap\Element;
 use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
+use Dgame\Soap\XmlElement;
 
 /**
  * Class Car
@@ -38,11 +38,11 @@ final class Car implements AssemblableInterface
     }
 
     /**
-     * @return Element
+     * @return XmlElement
      */
-    public function assemble(): Element
+    public function assemble(): XmlElement
     {
-        $element = new Element('car');
+        $element = new XmlElement('car');
         $element->setAttribute(new Attribute('marke', $this->marke));
         $element->setAttribute(new Attribute('kennung', $this->kennung));
 

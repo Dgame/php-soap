@@ -2,8 +2,8 @@
 
 namespace Dgame\Soap\Test\Object;
 
-use Dgame\Soap\Element;
 use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
+use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 
 /**
@@ -54,13 +54,13 @@ final class Address implements AssemblableInterface
     }
 
     /**
-     * @return Element
+     * @return XmlElement
      */
-    public function assemble(): Element
+    public function assemble(): XmlElement
     {
         $node = new XmlNode('address');
-        $node->appendChild(new Element('street', $this->street));
-        $node->appendChild(new Element('plz', $this->plz));
+        $node->appendElement(new XmlElement('street', $this->street));
+        $node->appendElement(new XmlElement('plz', $this->plz));
 
         return $node;
     }

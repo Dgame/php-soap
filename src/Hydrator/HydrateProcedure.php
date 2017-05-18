@@ -130,7 +130,7 @@ final class HydrateProcedure implements VisitorInterface
      */
     private function visitChildrenOf(XmlNode $node)
     {
-        foreach ($node->getChildren() as $child) {
+        foreach ($node->getElements() as $child) {
             $this->visitChild($child);
         }
     }

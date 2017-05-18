@@ -2,7 +2,7 @@
 
 namespace Dgame\Soap\Hydrator\Dom;
 
-use Dgame\Soap\Element;
+use Dgame\Soap\XmlElement;
 
 /**
  * Interface AssemblableInterface
@@ -11,7 +11,7 @@ use Dgame\Soap\Element;
 interface AssemblableInterface
 {
     /**
-     * @return Element
+     * @return XmlElement
      */
-    public function assemble(): Element;
+    public function assemble(): XmlElement;
 }

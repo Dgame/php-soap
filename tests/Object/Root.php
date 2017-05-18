@@ -2,8 +2,8 @@
 
 namespace Dgame\Soap\Test\Object;
 
-use Dgame\Soap\Element;
 use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
+use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 
 /**
@@ -34,13 +34,13 @@ final class Root implements AssemblableInterface
     }
 
     /**
-     * @return Element
+     * @return XmlElement
      */
-    public function assemble(): Element
+    public function assemble(): XmlElement
     {
         $node = new XmlNode('soap-env');
         foreach ($this->persons as $person) {
-            $node->appendChild($person->assemble());
+            $node->appendElement($person->assemble());
         }
 
         return $node;

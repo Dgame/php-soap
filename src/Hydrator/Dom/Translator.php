@@ -126,7 +126,7 @@ final class Translator
         foreach ($node->childNodes as $childNode) {
             $child = $this->translateNode($childNode);
             if ($child !== null) {
-                $parent->appendChild($child);
+                $parent->appendElement($child);
             } elseif ($childNode->nodeType === XML_TEXT_NODE) {
                 $parent->setValue($childNode->nodeValue);
             }

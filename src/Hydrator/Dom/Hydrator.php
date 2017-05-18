@@ -84,9 +84,7 @@ final class Hydrator
      */
     public function dehydrate(Element $element, DOMNode $node = null): DOMNode
     {
-        $node      = $node ?? new DOMDocument('1.0', 'utf-8');
         $assembler = new Assembler($node);
-
         $element->accept($assembler);
 
         return $node;
