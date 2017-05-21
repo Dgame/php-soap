@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<soap-env>
+    <person name="Max Musterman">
+        <car marke="BMW" kennung="i8"/>
+        <phone name="iPhone">9</phone>
+        <birth-place>Hamburg</birth-place>
+        <address>
+            <street>Hauptstraße 1</street>
+            <plz>245698</plz>
+        </address>
+    </person>
+</soap-env>

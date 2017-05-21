@@ -197,4 +197,23 @@ final class HydrationTest extends TestCase
             $this->assertNotEmpty($envelope->getBody()->getResult()->getOrte()[0]->getOrtsteile()[$i]->getStrassen());
         }
     }
+
+    public function testSnippet()
+    {
+        $doc = new DOMDocument();
+        $doc->load(__DIR__ . '/xml/test3.xml');
+
+        $mapper   = new ClassMapper(['Address' => TestAddress::class]);
+        $hydrator = new Hydrator($mapper);
+        $objects  = $hydrator->hydrateDocument($doc);
+
+        $this->assertNotEmpty($objects);
+        $this->assertCount(1, $objects);
+        $this->assertInstanceOf(TestAddress::class, $objects[0]);
+
+        /** @var TestAddress $address */
+        $address = $objects[0];
+        $this->assertEquals('Hauptstraße 1', $address->getStreet());
+        $this->assertEquals(245698, $address->getPlz());
+    }
 }
