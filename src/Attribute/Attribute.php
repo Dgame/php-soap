@@ -22,7 +22,7 @@ class Attribute implements AttributeVisitableInterface, AssignableInterface
     private $value;
 
     /**
-     * Element constructor.
+     * Attribute constructor.
      *
      * @param string      $name
      * @param string|null $value
