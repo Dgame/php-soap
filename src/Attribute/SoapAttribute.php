@@ -16,6 +16,6 @@ final class SoapAttribute extends XmlAttribute
      */
     public function __construct(string $name, string $value = null)
     {
-        parent::__construct($name, 'soap', $value);
+        parent::__construct($name, $value, 'soap');
     }
 }

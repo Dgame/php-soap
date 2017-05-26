@@ -5,6 +5,8 @@ namespace Dgame\Soap\Hydrator;
 use Dgame\Soap\Attribute\Attribute;
 use Dgame\Soap\Attribute\XmlAttribute;
 use Dgame\Soap\Element;
+use Dgame\Soap\Visitor\AttributeVisitorInterface;
+use Dgame\Soap\Visitor\ElementVisitorInterface;
 use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 
@@ -12,7 +14,7 @@ use Dgame\Soap\XmlNode;
  * Class HydrateProcedure
  * @package Dgame\Soap\Hydrator
  */
-final class HydrateProcedure implements VisitorInterface
+final class HydrateProcedure implements ElementVisitorInterface, AttributeVisitorInterface
 {
     /**
      * @var Hydrate

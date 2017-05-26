@@ -20,14 +20,16 @@ class XmlAttribute extends Attribute implements PrefixableInterface
      * XmlAttribute constructor.
      *
      * @param string      $name
-     * @param string|null $prefix
      * @param string|null $value
+     * @param string|null $prefix
      */
-    public function __construct(string $name, string $prefix = null, string $value = null)
+    public function __construct(string $name, string $value = null, string $prefix = null)
     {
         parent::__construct($name, $value);
 
-        $this->prefix = $prefix;
+        if ($prefix !== null) {
+            $this->prefix = $prefix;
+        }
     }
 
     /**
@@ -51,7 +53,7 @@ class XmlAttribute extends Attribute implements PrefixableInterface
      */
     final public function setPrefix(string $prefix)
     {
-        $this->prefix = $prefix;
+        $this->prefix = trim($prefix);
     }
 
     /**

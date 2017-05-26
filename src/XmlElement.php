@@ -21,24 +21,16 @@ class XmlElement extends Element implements PrefixableInterface
      * XmlElement constructor.
      *
      * @param string      $name
-     * @param string|null $prefix
      * @param string|null $value
+     * @param string|null $prefix
      */
-    public function __construct(string $name, string $prefix = null, string $value = null)
+    public function __construct(string $name, string $value = null, string $prefix = null)
     {
         parent::__construct($name, $value);
 
-        $this->prefix = $prefix;
-    }
-
-    /**
-     * @param Attribute $attribute
-     */
-    public function setAttribute(Attribute $attribute)
-    {
-        parent::setAttribute($attribute);
-
-        $attribute->accept(new AttributePrefixInheritanceVisitor($this));
+        if ($prefix !== null) {
+            $this->setPrefix($prefix);
+        }
     }
 
     /**
@@ -62,7 +54,7 @@ class XmlElement extends Element implements PrefixableInterface
      */
     public function setPrefix(string $prefix)
     {
-        $this->prefix = $prefix;
+        $this->prefix = trim($prefix);
     }
 
     /**

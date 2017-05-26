@@ -53,7 +53,7 @@ class Element implements ElementVisitableInterface, AssignableInterface
      */
     final public function hasValue(): bool
     {
-        return !empty($this->value);
+        return $this->value !== null;
     }
 
     /**
@@ -61,7 +61,10 @@ class Element implements ElementVisitableInterface, AssignableInterface
      */
     final public function setValue(string $value)
     {
-        $this->value = trim($value);
+        $value = trim($value);
+        if (strlen($value) !== 0) {
+            $this->value = $value;
+        }
     }
 
     /**
@@ -75,7 +78,7 @@ class Element implements ElementVisitableInterface, AssignableInterface
     /**
      * @param Attribute $attribute
      */
-    public function setAttribute(Attribute $attribute)
+    final public function setAttribute(Attribute $attribute)
     {
         $this->attributes[] = $attribute;
     }

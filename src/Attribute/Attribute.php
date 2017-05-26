@@ -29,8 +29,11 @@ class Attribute implements AttributeVisitableInterface, AssignableInterface
      */
     public function __construct(string $name, string $value = null)
     {
-        $this->name  = $name;
-        $this->value = $value;
+        $this->name = $name;
+
+        if ($value !== null) {
+            $this->setValue($value);
+        }
     }
 
     /**
@@ -46,7 +49,7 @@ class Attribute implements AttributeVisitableInterface, AssignableInterface
      */
     final public function hasValue(): bool
     {
-        return !empty($this->value);
+        return $this->value !== null;
     }
 
     /**
@@ -54,7 +57,10 @@ class Attribute implements AttributeVisitableInterface, AssignableInterface
      */
     final public function setValue(string $value)
     {
-        $this->value = $value;
+        $value = trim($value);
+        if (strlen($value) !== 0) {
+            $this->value = $value;
+        }
     }
 
     /**

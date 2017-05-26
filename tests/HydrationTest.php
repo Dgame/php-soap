@@ -42,16 +42,13 @@ final class HydrationTest extends TestCase
         $mapper->appendPattern('/^(?:soap\-?)?env(?:elope)?/iS', 'Root');
 
         $hydrator = new Hydrator($mapper);
-        $objects  = $hydrator->hydrateDocument($doc);
-
-        $this->assertCount(1, $objects);
-
         /** @var TestRoot $root */
-        $root = $objects[0];
+        $root = $hydrator->hydrateDocument($doc);
 
         $this->assertNotNull($root);
         $this->assertInstanceOf(TestRoot::class, $root);
 
+        /** @var TestPerson[] $persons */
         $persons = $root->getPersons();
         $this->assertCount(2, $persons);
 
@@ -96,13 +93,10 @@ final class HydrationTest extends TestCase
         );
 
         $hydrator = new Hydrator($mapper);
-        $objects  = $hydrator->hydrateDocument($doc);
-
-        $this->assertCount(1, $objects);
-        $this->assertArrayHasKey(0, $objects);
-        $this->assertInstanceOf(TestCar::class, $objects[0]);
         /** @var TestCar $car */
-        $car = $objects[0];
+        $car = $hydrator->hydrateDocument($doc);
+
+        $this->assertInstanceOf(TestCar::class, $car);
         $this->assertEquals('Mercedes', $car->getMarke());
     }
 
@@ -118,15 +112,10 @@ final class HydrationTest extends TestCase
         );
 
         $hydrator = new Hydrator($mapper);
-        $objects  = $hydrator->hydrateDocument($doc);
-
-        $this->assertCount(1, $objects);
-        $this->assertArrayHasKey(0, $objects);
-        $this->assertInstanceOf(TestStammdaten::class, $objects[0]);
-
         /** @var TestStammdaten $stammdaten */
-        $stammdaten = $objects[0];
+        $stammdaten = $hydrator->hydrateDocument($doc);
 
+        $this->assertInstanceOf(TestStammdaten::class, $stammdaten);
         $this->assertEquals('Muster', $stammdaten->Name);
         $this->assertEquals('Max', $stammdaten->Vorname);
     }
@@ -145,15 +134,10 @@ final class HydrationTest extends TestCase
         );
 
         $hydrator = new Hydrator($mapper);
-        $objects  = $hydrator->hydrateDocument($doc);
-
-        $this->assertCount(1, $objects);
-        $this->assertArrayHasKey(0, $objects);
-        $this->assertInstanceOf(TestEnvelope::class, $objects[0]);
-
         /** @var TestEnvelope $envelope */
-        $envelope = $objects[0];
+        $envelope = $hydrator->hydrateDocument($doc);
 
+        $this->assertInstanceOf(TestEnvelope::class, $envelope);
         $this->assertTrue($envelope->getBody()->hasFault());
         $this->assertEquals('Fehler!', $envelope->getBody()->getFault()->getFaultcode());
         $this->assertEquals('Es ist ein Fehler aufgetreten', $envelope->getBody()->getFault()->getFaultstring());
@@ -177,15 +161,10 @@ final class HydrationTest extends TestCase
         );
 
         $hydrator = new Hydrator($mapper);
-        $objects  = $hydrator->hydrateDocument($doc);
-
-        $this->assertCount(1, $objects);
-        $this->assertArrayHasKey(0, $objects);
-        $this->assertInstanceOf(TestEnvelope::class, $objects[0]);
-
         /** @var TestEnvelope $envelope */
-        $envelope = $objects[0];
+        $envelope = $hydrator->hydrateDocument($doc);
 
+        $this->assertInstanceOf(TestEnvelope::class, $envelope);
         $this->assertFalse($envelope->getBody()->hasFault());
         $this->assertInstanceOf(TestResult::class, $envelope->getBody()->getResult());
         $this->assertCount(1, $envelope->getBody()->getResult()->getOrte());
@@ -196,44 +175,5 @@ final class HydrationTest extends TestCase
         for ($i = 0; $i < 4; $i++) {
             $this->assertNotEmpty($envelope->getBody()->getResult()->getOrte()[0]->getOrtsteile()[$i]->getStrassen());
         }
-    }
-
-    public function testSnippet()
-    {
-        $this->markTestSkipped();
-
-        $doc = new DOMDocument();
-        $doc->load(__DIR__ . '/xml/test3.xml');
-
-        $mapper   = new ClassMapper(
-            [
-                'Car'     => TestCar::class,
-                'Phone'   => TestPhone::class,
-                'Address' => TestAddress::class
-            ]
-        );
-        $hydrator = new Hydrator($mapper);
-        $objects  = $hydrator->hydrateDocument($doc);
-
-        $this->assertNotEmpty($objects);
-        $this->assertCount(3, $objects);
-        $this->assertInstanceOf(TestCar::class, $objects[0]);
-        $this->assertInstanceOf(TestPhone::class, $objects[1]);
-        $this->assertInstanceOf(TestAddress::class, $objects[2]);
-
-        /** @var TestCar $car */
-        $car = $objects[0];
-        $this->assertEquals('BMW', $car->getMarke());
-        $this->assertEquals('i8', $car->kennung);
-
-        /** @var TestPhone $phone */
-        $phone = $objects[1];
-        $this->assertEquals('iPhone', $phone->getName());
-        $this->assertEquals(9, $phone->getValue());
-
-        /** @var TestAddress $address */
-        $address = $objects[2];
-        $this->assertEquals('Partkstraße', $address->getStreet());
-        $this->assertEquals(365494, $address->getPlz());
     }
 }

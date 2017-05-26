@@ -16,6 +16,6 @@ final class XmlnsAttribute extends XmlAttribute
      */
     public function __construct(string $name, string $value = null)
     {
-        parent::__construct($name, 'xmlns', $value);
+        parent::__construct($name, $value, 'xmlns');
     }
 }

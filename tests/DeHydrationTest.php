@@ -37,12 +37,7 @@ final class DeHydrationTest extends TestCase
         $mapper->appendPattern('/^(?:soap\-?)?env(?:elope)?/iS', 'Root');
 
         $hydrator = new Hydrator($mapper);
-        $objects  = $hydrator->hydrateDocument($doc);
-
-        $this->assertCount(1, $objects);
-
-        /** @var TestRoot $root */
-        $root = $objects[0];
+        $root     = $hydrator->hydrateDocument($doc);
 
         $this->assertNotNull($root);
         $this->assertInstanceOf(TestRoot::class, $root);

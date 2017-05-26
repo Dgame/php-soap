@@ -44,6 +44,9 @@ final class BiproTest extends TestCase
         $envelope->appendElement($header);
         $envelope->appendElement($body);
 
+//        print_r($envelope);
+//        exit;
+
         $assembler = new Assembler();
         $envelope->accept($assembler);
 

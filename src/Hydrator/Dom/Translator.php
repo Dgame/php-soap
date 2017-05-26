@@ -26,9 +26,9 @@ final class Translator
     /**
      * @param DOMDocument $document
      *
-     * @return XmlElement|XmlNode|null
+     * @return XmlNode|null
      */
-    public function translateDocument(DOMDocument $document)//: array
+    public function translateDocument(DOMDocument $document)
     {
         return $this->translateNode($document->documentElement);
     }
@@ -68,7 +68,7 @@ final class Translator
      */
     private function createElement(DOMNode $node): XmlElement
     {
-        $element = new XmlElement($node->localName, $node->prefix, $node->nodeValue);
+        $element = new XmlElement($node->localName, $node->nodeValue, $node->prefix);
         $this->setAttributes($node, $element);
 
         return $element;
@@ -81,7 +81,7 @@ final class Translator
      */
     private function createNode(DOMNode $node): XmlNode
     {
-        $element = new XmlNode($node->localName, $node->prefix);
+        $element = new XmlNode($node->localName, null, $node->prefix);
         $this->setAttributes($node, $element);
         $this->appendChildNodes($node, $element);
 
@@ -106,7 +106,7 @@ final class Translator
      */
     private function createAttribute(DOMAttr $attr): XmlAttribute
     {
-        return new XmlAttribute($attr->name, $attr->prefix, $attr->value);
+        return new XmlAttribute($attr->name, $attr->value, $attr->prefix);
     }
 
     /**

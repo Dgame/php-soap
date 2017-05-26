@@ -5,8 +5,8 @@ namespace Dgame\Soap\Hydrator\Dom;
 use Dgame\Soap\Dom\Translator;
 use Dgame\Soap\Element;
 use Dgame\Soap\Hydrator\ClassMapper;
-use Dgame\Soap\Hydrator\Hydrate;
 use Dgame\Soap\Hydrator\HydrateProcedure;
+use Dgame\Soap\XmlElement;
 use DOMDocument;
 use DOMNode;
 
@@ -34,35 +34,46 @@ final class Hydrator
     /**
      * @param DOMDocument $document
      *
-     * @return array
+     * @return null|object
      */
-    public function hydrateDocument(DOMDocument $document): array
+    public function hydrateDocument(DOMDocument $document)
     {
-        $elements = Translator::new()->translateDocument($document);
-        $output   = [];
-        foreach ($elements as $element) {
-            $procedure = $this->hydrate($element);
-            if ($procedure->isValid()) {
-                $output[] = $procedure->getHydrate()->getObject();
-            }
+        $element = Translator::new()->translateDocument($document);
+        if ($element !== null) {
+            return $this->hydrateElement($element);
         }
 
-        return $output;
+        return null;
     }
 
     /**
      * @param DOMNode $node
      *
-     * @return HydrateProcedure
+     * @return null|object
      */
-    public function hydrateNode(DOMNode $node): HydrateProcedure
+    public function hydrateNode(DOMNode $node)
     {
         $element = Translator::new()->translateNode($node);
-        if ($element === null) {
-            return new HydrateProcedure($this->mapper);
+        if ($element !== null) {
+            return $this->hydrateElement($element);
         }
 
-        return $this->hydrate($element);
+        return null;
+    }
+
+    /**
+     * @param XmlElement $element
+     *
+     * @return null|object
+     */
+    private function hydrateElement(XmlElement $element)
+    {
+        $procedure = $this->hydrate($element);
+        if ($procedure->isValid()) {
+            return $procedure->getHydrate()->getObject();
+        }
+
+        return null;
     }
 
     /**
