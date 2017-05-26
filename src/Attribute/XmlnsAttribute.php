@@ -4,7 +4,7 @@ namespace Dgame\Soap\Attribute;
 
 /**
  * Class XmlnsAttribute
- * @package Dgame\Soap\Dom
+ * @package Dgame\Soap\Attribute
  */
 final class XmlnsAttribute extends XmlAttribute
 {
@@ -16,6 +16,6 @@ final class XmlnsAttribute extends XmlAttribute
      */
     public function __construct(string $name, string $value = null)
     {
-        parent::__construct($name, $value, 'xmlns');
+        parent::__construct($name, 'xmlns', $value);
     }
 }

@@ -5,7 +5,8 @@ namespace Dgame\Soap\Hydrator\Dom;
 use Dgame\Soap\Attribute\Attribute;
 use Dgame\Soap\Attribute\XmlAttribute;
 use Dgame\Soap\Element;
-use Dgame\Soap\Hydrator\VisitorInterface;
+use Dgame\Soap\Visitor\AttributeVisitorInterface;
+use Dgame\Soap\Visitor\ElementVisitorInterface;
 use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 use DOMDocument;
@@ -16,7 +17,7 @@ use DOMNode;
  * Class Assembler
  * @package Dgame\Soap\Hydrator\Dom
  */
-final class Assembler implements VisitorInterface
+final class Assembler implements ElementVisitorInterface, AttributeVisitorInterface
 {
     /**
      * @var DOMDocument

@@ -200,20 +200,40 @@ final class HydrationTest extends TestCase
 
     public function testSnippet()
     {
+        $this->markTestSkipped();
+
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/xml/test3.xml');
 
-        $mapper   = new ClassMapper(['Address' => TestAddress::class]);
+        $mapper   = new ClassMapper(
+            [
+                'Car'     => TestCar::class,
+                'Phone'   => TestPhone::class,
+                'Address' => TestAddress::class
+            ]
+        );
         $hydrator = new Hydrator($mapper);
         $objects  = $hydrator->hydrateDocument($doc);
 
         $this->assertNotEmpty($objects);
-        $this->assertCount(1, $objects);
-        $this->assertInstanceOf(TestAddress::class, $objects[0]);
+        $this->assertCount(3, $objects);
+        $this->assertInstanceOf(TestCar::class, $objects[0]);
+        $this->assertInstanceOf(TestPhone::class, $objects[1]);
+        $this->assertInstanceOf(TestAddress::class, $objects[2]);
+
+        /** @var TestCar $car */
+        $car = $objects[0];
+        $this->assertEquals('BMW', $car->getMarke());
+        $this->assertEquals('i8', $car->kennung);
+
+        /** @var TestPhone $phone */
+        $phone = $objects[1];
+        $this->assertEquals('iPhone', $phone->getName());
+        $this->assertEquals(9, $phone->getValue());
 
         /** @var TestAddress $address */
-        $address = $objects[0];
-        $this->assertEquals('Hauptstraße 1', $address->getStreet());
-        $this->assertEquals(245698, $address->getPlz());
+        $address = $objects[2];
+        $this->assertEquals('Partkstraße', $address->getStreet());
+        $this->assertEquals(365494, $address->getPlz());
     }
 }

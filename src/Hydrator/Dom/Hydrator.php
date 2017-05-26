@@ -5,6 +5,7 @@ namespace Dgame\Soap\Hydrator\Dom;
 use Dgame\Soap\Dom\Translator;
 use Dgame\Soap\Element;
 use Dgame\Soap\Hydrator\ClassMapper;
+use Dgame\Soap\Hydrator\Hydrate;
 use Dgame\Soap\Hydrator\HydrateProcedure;
 use DOMDocument;
 use DOMNode;
@@ -38,8 +39,7 @@ final class Hydrator
     public function hydrateDocument(DOMDocument $document): array
     {
         $elements = Translator::new()->translateDocument($document);
-
-        $output = [];
+        $output   = [];
         foreach ($elements as $element) {
             $procedure = $this->hydrate($element);
             if ($procedure->isValid()) {

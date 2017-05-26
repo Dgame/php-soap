@@ -2,8 +2,8 @@
 
 namespace Dgame\Soap\Attribute;
 
-use Dgame\Soap\Hydrator\VisitorInterface;
 use Dgame\Soap\PrefixableInterface;
+use Dgame\Soap\Visitor\AttributeVisitorInterface;
 
 /**
  * Class XmlAttribute
@@ -20,16 +20,22 @@ class XmlAttribute extends Attribute implements PrefixableInterface
      * XmlAttribute constructor.
      *
      * @param string      $name
-     * @param string|null $value
      * @param string|null $prefix
+     * @param string|null $value
      */
-    public function __construct(string $name, string $value = null, string $prefix = null)
+    public function __construct(string $name, string $prefix = null, string $value = null)
     {
         parent::__construct($name, $value);
 
-        if ($prefix !== null) {
-            $this->setPrefix($prefix);
-        }
+        $this->prefix = $prefix;
+    }
+
+    /**
+     * @return bool
+     */
+    final public function hasPrefix(): bool
+    {
+        return !empty($this->prefix);
     }
 
     /**
@@ -45,18 +51,7 @@ class XmlAttribute extends Attribute implements PrefixableInterface
      */
     final public function setPrefix(string $prefix)
     {
-        $prefix = trim($prefix);
-        if (strlen($prefix) !== 0) {
-            $this->prefix = $prefix;
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    final public function hasPrefix(): bool
-    {
-        return $this->prefix !== null;
+        $this->prefix = $prefix;
     }
 
     /**
@@ -64,18 +59,17 @@ class XmlAttribute extends Attribute implements PrefixableInterface
      */
     final public function getPrefixedName(): string
     {
-        $name = $this->getName();
         if ($this->hasPrefix()) {
-            return !empty($name) ? sprintf('%s:%s', $this->getPrefix(), $name) : $this->getPrefix();
+            return sprintf('%s:%s', $this->getPrefix(), $this->getName());
         }
 
-        return $name;
+        return $this->getName();
     }
 
     /**
-     * @param VisitorInterface $visitor
+     * @param AttributeVisitorInterface $visitor
      */
-    public function accept(VisitorInterface $visitor)
+    public function accept(AttributeVisitorInterface $visitor)
     {
         $visitor->visitXmlAttribute($this);
     }

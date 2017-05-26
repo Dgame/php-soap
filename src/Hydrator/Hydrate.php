@@ -23,20 +23,26 @@ final class Hydrate extends ObjectFacade
 
     /**
      * @param Hydrate $hydrat
+     *
+     * @return bool
      */
-    public function append(self $hydrat)
+    public function append(self $hydrat): bool
     {
-        $this->setValue($hydrat->getClassName(), $hydrat->getObject());
+        return $this->setValue($hydrat->getClassName(), $hydrat->getObject());
     }
 
     /**
      * @param AssignableInterface $assignable
+     *
+     * @return bool
      */
-    public function assign(AssignableInterface $assignable)
+    public function assign(AssignableInterface $assignable): bool
     {
         if ($assignable->hasValue()) {
-            $this->setValue($assignable->getName(), $assignable->getValue());
+            return $this->setValue($assignable->getName(), $assignable->getValue());
         }
+
+        return false;
     }
 
     /**

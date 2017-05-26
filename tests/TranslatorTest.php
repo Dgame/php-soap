@@ -98,14 +98,13 @@ final class TranslatorTest extends TestCase
         $doc->load(__DIR__ . '/xml/test1.xml');
 
         $translator = new Translator();
-        $elements   = $translator->translateDocument($doc);
+        $envelope   = $translator->translateDocument($doc);
 
-        $this->assertCount(1, $elements);
-        $this->assertEquals('soap-env', $elements[0]->getName());
-        $this->assertCount(2, $elements[0]->getElements());
+        $this->assertEquals('soap-env', $envelope->getName());
+        $this->assertCount(2, $envelope->getElements());
 
-        $child1 = $elements[0]->getElements()[0];
-        $child2 = $elements[0]->getElements()[1];
+        $child1 = $envelope->getElements()[0];
+        $child2 = $envelope->getElements()[1];
 
         $this->assertInstanceOf(XmlNode::class, $child1);
         $this->assertInstanceOf(XmlNode::class, $child2);
