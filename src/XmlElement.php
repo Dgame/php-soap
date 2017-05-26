@@ -2,8 +2,6 @@
 
 namespace Dgame\Soap;
 
-use Dgame\Soap\Attribute\Attribute;
-use Dgame\Soap\Visitor\AttributePrefixInheritanceVisitor;
 use Dgame\Soap\Visitor\ElementVisitorInterface;
 
 /**
