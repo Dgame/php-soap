@@ -46,14 +46,14 @@ final class ClassMapper
     }
 
     /**
-     * @param string $class
+     * @param string $name
      *
      * @return Hydrate|null
      */
-    public function new(string $class)
+    public function new(string $name)
     {
-        if (($class = $this->findClassName($class)) !== null) {
-            return Hydrate::new($class);
+        if (($class = $this->findClassName($name)) !== null) {
+            return Hydrate::new($name, $class);
         }
 
         return null;
@@ -87,9 +87,47 @@ final class ClassMapper
      */
     private function getClassName(string $class)
     {
-        $class = ucfirst($class);
-        $class = array_key_exists($class, $this->classmap) ? $this->classmap[$class] : $class;
+        foreach ($this->searchClassName($class) as $name) {
+            if ($this->existsClass($name)) {
+                return $name;
+            }
+        }
 
-        return class_exists($class) ? $class : null;
+        return null;
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return \Generator
+     */
+    private function searchClassName(string $class)
+    {
+        $names = [ucfirst($class), lcfirst($class)];
+        foreach ($names as $name) {
+            if ($this->hasClassInClassmap($name)) {
+                yield $this->classmap[$name];
+            }
+        }
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return bool
+     */
+    private function hasClassInClassmap(string $class): bool
+    {
+        return array_key_exists($class, $this->classmap);
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return bool
+     */
+    private function existsClass(string $class): bool
+    {
+        return class_exists($class);
     }
 }

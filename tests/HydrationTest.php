@@ -9,6 +9,7 @@ use Dgame\Soap\Test\Object\TestBody;
 use Dgame\Soap\Test\Object\TestCar;
 use Dgame\Soap\Test\Object\TestEnvelope;
 use Dgame\Soap\Test\Object\TestFault;
+use Dgame\Soap\Test\Object\TestHobby;
 use Dgame\Soap\Test\Object\TestOrt;
 use Dgame\Soap\Test\Object\TestOrtsTeil;
 use Dgame\Soap\Test\Object\TestPerson;
@@ -98,6 +99,66 @@ final class HydrationTest extends TestCase
 
         $this->assertInstanceOf(TestCar::class, $car);
         $this->assertEquals('Mercedes', $car->getMarke());
+    }
+
+    public function testWithLowerCaseClassMap()
+    {
+        //        $this->markTestSkipped();
+        $doc = new DOMDocument();
+        $doc->loadXml('<root><Car marke="Mercedes" /></root>');
+
+        $mapper = new ClassMapper(
+            [
+                'car' => TestCar::class
+            ]
+        );
+
+        $hydrator = new Hydrator($mapper);
+        /** @var TestCar $car */
+        $car = $hydrator->hydrateDocument($doc);
+
+        $this->assertInstanceOf(TestCar::class, $car);
+        $this->assertEquals('Mercedes', $car->getMarke());
+    }
+
+    public function testWithFacadeMethod()
+    {
+        $doc = new DOMDocument();
+        $doc->loadXml('<root><Person><birthday>14.08.1991</birthday></Person></root>');
+
+        $mapper = new ClassMapper(
+            [
+                'person' => TestPerson::class
+            ]
+        );
+
+        $hydrator = new Hydrator($mapper);
+        /** @var TestPerson $person */
+        $person = $hydrator->hydrateDocument($doc);
+
+        $this->assertInstanceOf(TestPerson::class, $person);
+        $this->assertEquals('14.08.1991', $person->getBirthday()->format('d.m.Y'));
+    }
+
+    public function testWithTagName()
+    {
+        $doc = new DOMDocument();
+        $doc->loadXml('<root><Person><hobby>Radeln</hobby></Person></root>');
+
+        $mapper = new ClassMapper(
+            [
+                'person' => TestPerson::class,
+                'hobby'  => TestHobby::class
+            ]
+        );
+
+        $hydrator = new Hydrator($mapper);
+        /** @var TestPerson $person */
+        $person = $hydrator->hydrateDocument($doc);
+
+        $this->assertInstanceOf(TestPerson::class, $person);
+        $this->assertInstanceOf(TestHobby::class, $person->hobby);
+        $this->assertEquals('Radeln', $person->hobby->value);
     }
 
     public function testPropertyAssignment()

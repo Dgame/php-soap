@@ -2,6 +2,7 @@
 
 namespace Dgame\Soap\Test\Object;
 
+use DateTime;
 use Dgame\Soap\Attribute\Attribute;
 use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
 use Dgame\Soap\XmlElement;
@@ -33,6 +34,14 @@ final class TestPerson implements AssemblableInterface
      * @var TestAddress
      */
     private $address;
+    /**
+     * @var DateTime
+     */
+    private $birthday;
+    /**
+     * @var TestHobby
+     */
+    public $hobby;
 
     /**
      * @param string $name
@@ -112,6 +121,22 @@ final class TestPerson implements AssemblableInterface
     public function getAddress(): TestAddress
     {
         return $this->address;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getBirthday(): DateTime
+    {
+        return $this->birthday;
+    }
+
+    /**
+     * @param string $birthday
+     */
+    public function setBirthday(string $birthday)
+    {
+        $this->birthday = new DateTime($birthday);
     }
 
     /**
