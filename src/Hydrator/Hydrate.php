@@ -47,7 +47,13 @@ final class Hydrate extends ObjectFacade
      */
     public function append(self $hydrate): bool
     {
-        return $this->setValueWithVariantNames([$hydrate->getName(), $hydrate->getClassName()], $hydrate->getObject());
+        foreach ([$hydrate->getName(), $hydrate->getClassName()] as $name) {
+            if ($this->setValue($name, $hydrate->getObject())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -58,43 +64,10 @@ final class Hydrate extends ObjectFacade
     public function assign(AssignableInterface $assignable): bool
     {
         if ($assignable->hasValue()) {
-            return $this->setValueWithVariantNames([$assignable->getName()], $assignable->getValue());
+            return $this->setValue($assignable->getName(), $assignable->getValue());
         }
 
         return false;
-    }
-
-    /**
-     * @param array $names
-     * @param       $value
-     *
-     * @return bool
-     */
-    private function setValueWithVariantNames(array $names, $value)
-    {
-        foreach (self::getAppendNames($names) as $name) {
-            if ($this->setValue($name, $value)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param array $names
-     *
-     * @return array
-     */
-    private static function getAppendNames(array $names): array
-    {
-        $output = [];
-        foreach ($names as $name) {
-            $output[] = lcfirst($name);
-            $output[] = ucfirst($name);
-        }
-
-        return $output;
     }
 
     /**

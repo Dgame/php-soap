@@ -2,6 +2,8 @@
 
 namespace Dgame\Soap\Hydrator;
 
+use Dgame\Variants\Variants;
+
 /**
  * Class ClassMapper
  * @package Dgame\Soap\Hydrator
@@ -103,8 +105,7 @@ final class ClassMapper
      */
     private function searchClassName(string $class)
     {
-        $names = [ucfirst($class), lcfirst($class)];
-        foreach ($names as $name) {
+        foreach (Variants::ofArguments($class)->withCamelSnakeCase() as $name) {
             if ($this->hasClassInClassmap($name)) {
                 yield $this->classmap[$name];
             }
