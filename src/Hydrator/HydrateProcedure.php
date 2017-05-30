@@ -24,6 +24,10 @@ final class HydrateProcedure implements ElementVisitorInterface, AttributeVisito
      * @var ClassMapper
      */
     private $mapper;
+    /**
+     * @var array
+     */
+    private $warnings = [];
 
     /**
      * Hydrat constructor.
@@ -33,6 +37,22 @@ final class HydrateProcedure implements ElementVisitorInterface, AttributeVisito
     public function __construct(ClassMapper $mapper)
     {
         $this->mapper = $mapper;
+    }
+
+    /**
+     * @return array
+     */
+    public function getWarnings(): array
+    {
+        return $this->warnings;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasWarnings(): bool
+    {
+        return !empty($this->warnings);
     }
 
     /**
@@ -110,6 +130,8 @@ final class HydrateProcedure implements ElementVisitorInterface, AttributeVisito
         $this->hydrate = $this->mapper->new($element->getName());
         if ($this->isValid()) {
             $this->visitAttributesOf($element);
+        } else {
+            $this->warnings[] = 'Class not found: ' . $element->getName();
         }
     }
 
@@ -147,8 +169,8 @@ final class HydrateProcedure implements ElementVisitorInterface, AttributeVisito
 
         if ($this->isValid()) {
             $this->appendOrAssign($procedure, $element);
-        } else {
-            $this->skipTo($procedure);
+        } elseif (!$this->skipTo($procedure)) {
+            $this->warnings[] = 'Could not hydrate: ' . $element->getName();
         }
     }
 
@@ -159,19 +181,45 @@ final class HydrateProcedure implements ElementVisitorInterface, AttributeVisito
     private function appendOrAssign(self $procedure, Element $element)
     {
         if ($procedure->isValid()) {
-            $this->hydrate->append($procedure->getHydrate());
+            $this->append($procedure->getHydrate());
         } else {
-            $this->hydrate->assign($element);
+            $this->assign($element);
         }
     }
 
     /**
      * @param HydrateProcedure $procedure
+     *
+     * @return bool
      */
-    private function skipTo(self $procedure)
+    private function skipTo(self $procedure): bool
     {
-        if ($procedure->isValid()) {
-            $this->hydrate = $procedure->getHydrate();
+        if (!$procedure->isValid()) {
+            return false;
+        }
+
+        $this->hydrate = $procedure->getHydrate();
+
+        return true;
+    }
+
+    /**
+     * @param Hydrate $hydrate
+     */
+    private function append(Hydrate $hydrate)
+    {
+        if (!$this->hydrate->append($hydrate)) {
+            $this->warnings[] = 'Could not append: ' . $hydrate->getName();
+        }
+    }
+
+    /**
+     * @param Element $element
+     */
+    private function assign(Element $element)
+    {
+        if (!$this->hydrate->assign($element)) {
+            $this->warnings[] = 'Could not assign Element: ' . $element->getName();
         }
     }
 }

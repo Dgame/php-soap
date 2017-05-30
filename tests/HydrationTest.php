@@ -19,6 +19,9 @@ use Dgame\Soap\Test\Object\TestRoot;
 use Dgame\Soap\Test\Object\TestStammdaten;
 use Dgame\Soap\Test\Object\TestStrassen;
 use DOMDocument;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Logger;
+use Monolog\Registry;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -236,5 +239,38 @@ final class HydrationTest extends TestCase
         for ($i = 0; $i < 4; $i++) {
             $this->assertNotEmpty($envelope->getBody()->getResult()->getOrte()[0]->getOrtsteile()[$i]->getStrassen());
         }
+    }
+
+    public function testFailedPropertyAssignment()
+    {
+        $doc = new DOMDocument();
+        $doc->load(__DIR__ . '/xml/test2.xml');
+
+        $mapper   = new ClassMapper(['mandant' => TestPerson::class]);
+        $hydrator = new Hydrator($mapper);
+        $hydrator->hydrateDocument($doc);
+
+        $this->assertTrue($hydrator->hasWarnings());
+        $this->assertNotEmpty($hydrator->getWarnings());
+        $this->assertEquals(
+            [
+                ['Could not assign Element: Stammdaten']
+            ],
+            $hydrator->getWarnings()
+        );
+
+        $mapper   = new ClassMapper();
+        $hydrator = new Hydrator($mapper);
+        $hydrator->hydrateDocument($doc);
+
+        $this->assertTrue($hydrator->hasWarnings());
+        $this->assertNotEmpty($hydrator->getWarnings());
+        $this->assertEquals(
+            [
+                ['Class not found: Mandant', 'Could not hydrate: Stammdaten'],
+                'Could not hydrate: Mandant'
+            ],
+            $hydrator->getWarnings()
+        );
     }
 }

@@ -20,6 +20,10 @@ final class Hydrator
      * @var ClassMapper
      */
     private $mapper;
+    /**
+     * @var array
+     */
+    private $warnings = [];
 
     /**
      * Hydrator constructor.
@@ -29,6 +33,22 @@ final class Hydrator
     public function __construct(ClassMapper $mapper)
     {
         $this->mapper = $mapper;
+    }
+
+    /**
+     * @return array
+     */
+    public function getWarnings(): array
+    {
+        return $this->warnings;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasWarnings(): bool
+    {
+        return !empty($this->warnings);
     }
 
     /**
@@ -42,6 +62,8 @@ final class Hydrator
         if ($element !== null) {
             return $this->hydrateElement($element);
         }
+
+        $this->warnings[] = 'Could not hydrate document';
 
         return null;
     }
@@ -58,6 +80,8 @@ final class Hydrator
             return $this->hydrateElement($element);
         }
 
+        $this->warnings[] = 'Could not translate: ' . $node->nodeName;
+
         return null;
     }
 
@@ -72,6 +96,8 @@ final class Hydrator
         if ($procedure->isValid()) {
             return $procedure->getHydrate()->getObject();
         }
+
+        $this->warnings[] = 'Could not hydrate: ' . $element->getName();
 
         return null;
     }
@@ -108,6 +134,10 @@ final class Hydrator
     {
         $procedure = new HydrateProcedure($this->mapper);
         $element->accept($procedure);
+
+        if ($procedure->hasWarnings()) {
+            $this->warnings[] = $procedure->getWarnings();
+        }
 
         return $procedure;
     }

@@ -2,6 +2,7 @@
 
 namespace Dgame\Soap\Component;
 
+use function Dgame\Iterator\separate;
 use Dgame\Soap\XmlNode;
 
 /**
@@ -16,7 +17,6 @@ class NamedNode extends XmlNode
      */
     public function __construct(string $prefix = null)
     {
-        $name = string(static::class)->lastSegment('\\');
-        parent::__construct($name, null, $prefix);
+        parent::__construct(separate(static::class, '\\')->last(), null, $prefix);
     }
 }
