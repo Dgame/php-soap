@@ -19,9 +19,6 @@ use Dgame\Soap\Test\Object\TestRoot;
 use Dgame\Soap\Test\Object\TestStammdaten;
 use Dgame\Soap\Test\Object\TestStrassen;
 use DOMDocument;
-use Monolog\Handler\RotatingFileHandler;
-use Monolog\Logger;
-use Monolog\Registry;
 use PHPUnit\Framework\TestCase;
 
 /**

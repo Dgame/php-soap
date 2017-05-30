@@ -2,8 +2,8 @@
 
 namespace Dgame\Soap\Component;
 
-use function Dgame\Iterator\separate;
 use Dgame\Soap\XmlNode;
+use function Dgame\Iterator\separate;
 
 /**
  * Class NamedNode
