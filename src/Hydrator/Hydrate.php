@@ -6,9 +6,7 @@ use Dgame\Object\ObjectFacade;
 use Dgame\Soap\Element;
 use Dgame\Variants\Variants;
 use Monolog\Handler\NullHandler;
-use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
-use Monolog\Processor\PsrLogMessageProcessor;
 use Monolog\Registry;
 
 /**
