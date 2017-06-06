@@ -2,7 +2,6 @@
 
 namespace Dgame\Soap\Attribute;
 
-use Dgame\Soap\AssignableInterface;
 use Dgame\Soap\Visitor\AttributeVisitableInterface;
 use Dgame\Soap\Visitor\AttributeVisitorInterface;
 
@@ -10,7 +9,7 @@ use Dgame\Soap\Visitor\AttributeVisitorInterface;
  * Class Attribute
  * @package Dgame\Soap\Attribute
  */
-class Attribute implements AttributeVisitableInterface, AssignableInterface
+class Attribute implements AttributeVisitableInterface
 {
     /**
      * @var string
@@ -31,9 +30,7 @@ class Attribute implements AttributeVisitableInterface, AssignableInterface
     {
         $this->name = $name;
 
-        if ($value !== null) {
-            $this->setValue($value);
-        }
+        $this->setValue($value ?? '');
     }
 
     /**
@@ -45,14 +42,6 @@ class Attribute implements AttributeVisitableInterface, AssignableInterface
     }
 
     /**
-     * @return bool
-     */
-    final public function hasValue(): bool
-    {
-        return $this->value !== null;
-    }
-
-    /**
      * @param string $value
      */
     final public function setValue(string $value)
@@ -61,6 +50,14 @@ class Attribute implements AttributeVisitableInterface, AssignableInterface
         if (strlen($value) !== 0) {
             $this->value = $value;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    final public function hasValue(): bool
+    {
+        return $this->value !== null;
     }
 
     /**

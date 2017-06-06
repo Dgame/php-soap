@@ -19,6 +19,10 @@ use Dgame\Soap\Test\Object\TestRoot;
 use Dgame\Soap\Test\Object\TestStammdaten;
 use Dgame\Soap\Test\Object\TestStrassen;
 use DOMDocument;
+use Monolog\Handler\TestHandler;
+use Monolog\Logger;
+use Monolog\Processor\PsrLogMessageProcessor;
+use Monolog\Registry;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -44,7 +48,7 @@ final class HydrationTest extends TestCase
 
         $hydrator = new Hydrator($mapper);
         /** @var TestRoot $root */
-        $root = $hydrator->hydrateDocument($doc);
+        $root = $hydrator->hydrate($doc);
 
         $this->assertNotNull($root);
         $this->assertInstanceOf(TestRoot::class, $root);
@@ -95,7 +99,7 @@ final class HydrationTest extends TestCase
 
         $hydrator = new Hydrator($mapper);
         /** @var TestCar $car */
-        $car = $hydrator->hydrateDocument($doc);
+        $car = $hydrator->hydrate($doc);
 
         $this->assertInstanceOf(TestCar::class, $car);
         $this->assertEquals('Mercedes', $car->getMarke());
@@ -115,7 +119,7 @@ final class HydrationTest extends TestCase
 
         $hydrator = new Hydrator($mapper);
         /** @var TestCar $car */
-        $car = $hydrator->hydrateDocument($doc);
+        $car = $hydrator->hydrate($doc);
 
         $this->assertInstanceOf(TestCar::class, $car);
         $this->assertEquals('Mercedes', $car->getMarke());
@@ -134,7 +138,7 @@ final class HydrationTest extends TestCase
 
         $hydrator = new Hydrator($mapper);
         /** @var TestPerson $person */
-        $person = $hydrator->hydrateDocument($doc);
+        $person = $hydrator->hydrate($doc);
 
         $this->assertInstanceOf(TestPerson::class, $person);
         $this->assertEquals('14.08.1991', $person->getBirthday()->format('d.m.Y'));
@@ -154,7 +158,7 @@ final class HydrationTest extends TestCase
 
         $hydrator = new Hydrator($mapper);
         /** @var TestPerson $person */
-        $person = $hydrator->hydrateDocument($doc);
+        $person = $hydrator->hydrate($doc);
 
         $this->assertInstanceOf(TestPerson::class, $person);
         $this->assertInstanceOf(TestHobby::class, $person->hobby);
@@ -174,7 +178,7 @@ final class HydrationTest extends TestCase
 
         $hydrator = new Hydrator($mapper);
         /** @var TestStammdaten $stammdaten */
-        $stammdaten = $hydrator->hydrateDocument($doc);
+        $stammdaten = $hydrator->hydrate($doc);
 
         $this->assertInstanceOf(TestStammdaten::class, $stammdaten);
         $this->assertEquals('Muster', $stammdaten->Name);
@@ -196,7 +200,7 @@ final class HydrationTest extends TestCase
 
         $hydrator = new Hydrator($mapper);
         /** @var TestEnvelope $envelope */
-        $envelope = $hydrator->hydrateDocument($doc);
+        $envelope = $hydrator->hydrate($doc);
 
         $this->assertInstanceOf(TestEnvelope::class, $envelope);
         $this->assertTrue($envelope->getBody()->hasFault());
@@ -223,7 +227,7 @@ final class HydrationTest extends TestCase
 
         $hydrator = new Hydrator($mapper);
         /** @var TestEnvelope $envelope */
-        $envelope = $hydrator->hydrateDocument($doc);
+        $envelope = $hydrator->hydrate($doc);
 
         $this->assertInstanceOf(TestEnvelope::class, $envelope);
         $this->assertFalse($envelope->getBody()->hasFault());
@@ -243,31 +247,33 @@ final class HydrationTest extends TestCase
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/xml/test2.xml');
 
+        $handler = new TestHandler();
+        $log     = new Logger(Hydrator::class);
+        $log->pushHandler($handler);
+        $log->pushProcessor(new PsrLogMessageProcessor());
+
+        Registry::removeLogger(Hydrator::class);
+        Registry::addLogger($log);
+
         $mapper   = new ClassMapper(['mandant' => TestPerson::class]);
         $hydrator = new Hydrator($mapper);
-        $hydrator->hydrateDocument($doc);
+        $hydrator->hydrate($doc);
 
-        $this->assertTrue($hydrator->hasWarnings());
-        $this->assertNotEmpty($hydrator->getWarnings());
-        $this->assertEquals(
-            [
-                ['Could not assign Element: Stammdaten']
-            ],
-            $hydrator->getWarnings()
-        );
+        $this->assertTrue($handler->hasWarningRecords());
+        $this->assertTrue($handler->hasWarning('Could neither hydrate or assign Stammdaten'));
+        $this->assertTrue($handler->hasWarning('Could neither hydrate or assign Name'));
+        $this->assertTrue($handler->hasWarning('Could neither hydrate or assign Vorname'));
+
+        $handler->clear();
 
         $mapper   = new ClassMapper();
         $hydrator = new Hydrator($mapper);
-        $hydrator->hydrateDocument($doc);
+        $hydrator->hydrate($doc);
 
-        $this->assertTrue($hydrator->hasWarnings());
-        $this->assertNotEmpty($hydrator->getWarnings());
-        $this->assertEquals(
-            [
-                ['Class not found: Mandant', 'Could not hydrate: Stammdaten'],
-                'Could not hydrate: Mandant'
-            ],
-            $hydrator->getWarnings()
-        );
+        $this->assertTrue($handler->hasWarningRecords());
+        $this->assertTrue($handler->hasWarning('Could neither hydrate or assign Mandant'));
+        $this->assertTrue($handler->hasWarning('Could neither hydrate or assign Stammdaten'));
+        $this->assertTrue($handler->hasWarning('Could neither hydrate or assign Name'));
+        $this->assertTrue($handler->hasWarning('Could neither hydrate or assign Vorname'));
     }
 }

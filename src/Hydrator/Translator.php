@@ -24,6 +24,21 @@ final class Translator
     }
 
     /**
+     * @param DOMNode $node
+     *
+     * @return XmlElement|XmlNode|null
+     */
+    public function translate(DOMNode $node)
+    {
+        if ($node->nodeType === XML_DOCUMENT_NODE) {
+            /** @var DOMDocument $node */
+            return $this->translateDocument($node);
+        }
+
+        return $this->translateNode($node);
+    }
+
+    /**
      * @param DOMDocument $document
      *
      * @return XmlNode|null

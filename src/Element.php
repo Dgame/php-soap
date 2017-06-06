@@ -3,14 +3,13 @@
 namespace Dgame\Soap;
 
 use Dgame\Soap\Attribute\Attribute;
-use Dgame\Soap\Visitor\ElementVisitableInterface;
 use Dgame\Soap\Visitor\ElementVisitorInterface;
 
 /**
  * Class Element
  * @package Dgame\Soap
  */
-class Element implements ElementVisitableInterface, AssignableInterface
+class Element
 {
     /**
      * @var string
@@ -35,9 +34,7 @@ class Element implements ElementVisitableInterface, AssignableInterface
     {
         $this->name = $name;
 
-        if ($value !== null) {
-            $this->setValue($value);
-        }
+        $this->setValue($value ?? '');
     }
 
     /**
@@ -49,14 +46,6 @@ class Element implements ElementVisitableInterface, AssignableInterface
     }
 
     /**
-     * @return bool
-     */
-    final public function hasValue(): bool
-    {
-        return $this->value !== null;
-    }
-
-    /**
      * @param string $value
      */
     final public function setValue(string $value)
@@ -65,6 +54,14 @@ class Element implements ElementVisitableInterface, AssignableInterface
         if (strlen($value) !== 0) {
             $this->value = $value;
         }
+    }
+
+    /**
+     * @return bool
+     */
+    final public function hasValue(): bool
+    {
+        return $this->value !== null;
     }
 
     /**

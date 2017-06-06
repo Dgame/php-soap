@@ -3,7 +3,6 @@
 namespace Dgame\Soap\Hydrator;
 
 use Dgame\Soap\Element;
-use Dgame\Soap\XmlElement;
 use DOMDocument;
 use DOMNode;
 
@@ -17,10 +16,6 @@ final class Hydrator
      * @var ClassMapper
      */
     private $mapper;
-    /**
-     * @var array
-     */
-    private $warnings = [];
 
     /**
      * Hydrator constructor.
@@ -33,68 +28,27 @@ final class Hydrator
     }
 
     /**
-     * @return array
+     * @return ClassMapper
      */
-    public function getWarnings(): array
+    public function getClassMapper(): ClassMapper
     {
-        return $this->warnings;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasWarnings(): bool
-    {
-        return !empty($this->warnings);
-    }
-
-    /**
-     * @param DOMDocument $document
-     *
-     * @return null|object
-     */
-    public function hydrateDocument(DOMDocument $document)
-    {
-        $element = Translator::new()->translateDocument($document);
-        if ($element !== null) {
-            return $this->hydrateElement($element);
-        }
-
-        $this->warnings[] = 'Could not hydrate document';
-
-        return null;
+        return $this->mapper;
     }
 
     /**
      * @param DOMNode $node
      *
-     * @return null|object
+     * @return object|null
      */
-    public function hydrateNode(DOMNode $node)
+    public function hydrate(DOMNode $node)
     {
-        $element = Translator::new()->translateNode($node);
+        $element = Translator::new()->translate($node);
         if ($element !== null) {
-            return $this->hydrateElement($element);
+            $hydration = new ElementHydration($this->mapper);
+            $element->accept($hydration);
+
+            return $hydration->isHydrated() ? $hydration->getHydrate()->getFacade()->getObject() : null;
         }
-
-        $this->warnings[] = 'Could not translate: ' . $node->nodeName;
-
-        return null;
-    }
-
-    /**
-     * @param XmlElement $element
-     *
-     * @return null|object
-     */
-    private function hydrateElement(XmlElement $element)
-    {
-        $procedure = $this->hydrate($element);
-        if ($procedure->isValid()) {
-            return $procedure->getHydrate()->getObject();
-        }
-
-        $this->warnings[] = 'Could not hydrate: ' . $element->getName();
 
         return null;
     }
@@ -120,22 +74,5 @@ final class Hydrator
         $element->accept($assembler);
 
         return $assembler->getDocument();
-    }
-
-    /**
-     * @param Element $element
-     *
-     * @return HydrateProcedure
-     */
-    private function hydrate(Element $element): HydrateProcedure
-    {
-        $procedure = new HydrateProcedure($this->mapper);
-        $element->accept($procedure);
-
-        if ($procedure->hasWarnings()) {
-            $this->warnings[] = $procedure->getWarnings();
-        }
-
-        return $procedure;
     }
 }

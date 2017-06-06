@@ -50,12 +50,15 @@ final class ClassMapper
     /**
      * @param string $name
      *
-     * @return Hydrate|null
+     * @return object|null
      */
     public function new(string $name)
     {
-        if (($class = $this->findClassName($name)) !== null) {
-            return Hydrate::new($name, $class);
+        foreach (Variants::ofArguments($name)->withCamelSnakeCase() as $class) {
+            $class = $this->findClass($class);
+            if ($class !== null) {
+                return new $class();
+            }
         }
 
         return null;
@@ -66,16 +69,29 @@ final class ClassMapper
      *
      * @return null|string
      */
-    private function findClassName(string $class)
+    private function findClass(string $class)
     {
-        $name = $this->getClassName($class);
-        if ($name !== null) {
-            return $name;
+        $class = $this->resolveClass($class);
+        if ($this->existsClass($class)) {
+            return $class;
         }
 
+        return $this->searchForClassPattern($class);
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return null|string
+     */
+    private function searchForClassPattern(string $class)
+    {
         foreach ($this->pattern as $pattern => $name) {
             if (preg_match($pattern, $class) === 1) {
-                return $this->getClassName($name);
+                $class = $this->resolveClass($name);
+                if ($this->existsClass($class)) {
+                    return $class;
+                }
             }
         }
 
@@ -85,31 +101,11 @@ final class ClassMapper
     /**
      * @param string $class
      *
-     * @return null|string
+     * @return string
      */
-    private function getClassName(string $class)
+    private function resolveClass(string $class): string
     {
-        foreach ($this->resolveClassName($class) as $name) {
-            if ($this->existsClass($name)) {
-                return $name;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $class
-     *
-     * @return \Generator
-     */
-    private function resolveClassName(string $class)
-    {
-        foreach (Variants::ofArguments($class)->withCamelSnakeCase() as $name) {
-            if ($this->hasClassInClassmap($name)) {
-                yield $this->classmap[$name];
-            }
-        }
+        return $this->hasClassInClassmap($class) ? $this->classmap[$class] : $class;
     }
 
     /**

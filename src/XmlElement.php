@@ -8,10 +8,10 @@ use Dgame\Soap\Visitor\ElementVisitorInterface;
  * Class XmlElement
  * @package Dgame\Soap
  */
-class XmlElement extends Element implements PrefixableInterface
+class XmlElement extends Element
 {
     /**
-     * @var null|string
+     * @var string
      */
     private $prefix;
 
@@ -26,33 +26,7 @@ class XmlElement extends Element implements PrefixableInterface
     {
         parent::__construct($name, $value);
 
-        if ($prefix !== null) {
-            $this->setPrefix($prefix);
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    final public function hasPrefix(): bool
-    {
-        return !empty($this->prefix);
-    }
-
-    /**
-     * @return string
-     */
-    final public function getPrefix(): string
-    {
-        return $this->prefix;
-    }
-
-    /**
-     * @param string $prefix
-     */
-    public function setPrefix(string $prefix)
-    {
-        $this->prefix = trim($prefix);
+        $this->setPrefix($prefix ?? '');
     }
 
     /**
@@ -61,10 +35,37 @@ class XmlElement extends Element implements PrefixableInterface
     final public function getPrefixedName(): string
     {
         if ($this->hasPrefix()) {
-            return sprintf('%s:%s', $this->getPrefix(), $this->getName());
+            return sprintf('%s:%s', $this->prefix, $this->getName());
         }
 
         return $this->getName();
+    }
+
+    /**
+     * @param string $prefix
+     */
+    public function setPrefix(string $prefix)
+    {
+        $prefix = trim($prefix);
+        if (strlen($prefix) !== 0) {
+            $this->prefix = $prefix;
+        }
+    }
+
+    /**
+     * @return bool
+     */
+    final public function hasPrefix(): bool
+    {
+        return $this->prefix !== null;
+    }
+
+    /**
+     * @return string
+     */
+    final public function getPrefix(): string
+    {
+        return $this->prefix;
     }
 
     /**

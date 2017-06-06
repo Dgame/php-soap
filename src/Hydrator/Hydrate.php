@@ -3,86 +3,119 @@
 namespace Dgame\Soap\Hydrator;
 
 use Dgame\Object\ObjectFacade;
-use Dgame\Soap\AssignableInterface;
+use Dgame\Soap\Element;
+use Dgame\Variants\Variants;
+use Monolog\Handler\NullHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use Monolog\Processor\PsrLogMessageProcessor;
+use Monolog\Registry;
 
 /**
  * Class Hydrate
  * @package Dgame\Soap\Hydrator
  */
-final class Hydrate extends ObjectFacade
+final class Hydrate
 {
     /**
-     * @var string
+     * @var ObjectFacade
      */
-    private $name;
+    private $facade;
+    /**
+     * @var Element
+     */
+    private $element;
 
     /**
      * Hydrate constructor.
      *
-     * @param string $name
-     * @param string $class
+     * @param ClassMapper $mapper
+     * @param Element     $element
      */
-    public function __construct(string $name, string $class)
+    public function __construct(ClassMapper $mapper, Element $element)
     {
-        parent::__construct(new $class());
+        $object = $mapper->new($element->getName());
+        if ($object !== null) {
+            $this->facade = new ObjectFacade($object);
+        }
 
-        $this->name = $name;
+        $this->element = $element;
+
+        self::verifyLoggerPresence();
+    }
+
+    /**
+     *
+     */
+    private static function verifyLoggerPresence()
+    {
+        if (!Registry::hasLogger(Hydrator::class)) {
+            $log = new Logger(Hydrator::class);
+            $log->pushHandler(new NullHandler());
+            Registry::addLogger($log);
+        }
+    }
+
+    /**
+     * @return ObjectFacade
+     */
+    public function getFacade(): ObjectFacade
+    {
+        if (!$this->hasFacade()) {
+            Registry::getInstance(Hydrator::class)->error('Invalid Hydrate in use');
+        }
+
+        return $this->facade;
+    }
+
+    /**
+     * @return Element
+     */
+    public function getElement(): Element
+    {
+        return $this->element;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasFacade(): bool
+    {
+        return $this->facade !== null;
     }
 
     /**
      * @param string $name
-     * @param string $class
-     *
-     * @return Hydrate
+     * @param        $value
      */
-    public static function new(string $name, string $class): self
+    public function assign(string $name, $value)
     {
-        return new self($name, $class);
+        if (!$this->getFacade()->setValue($name, $value)) {
+            Registry::getInstance(Hydrator::class)->warning(
+                'Could not assign value {value} of {name}',
+                ['value' => var_export($value, true), 'name' => $name]
+            );
+        }
     }
 
     /**
      * @param Hydrate $hydrate
-     *
-     * @return bool
      */
-    public function append(self $hydrate): bool
+    public function append(self $hydrate)
     {
-        foreach ([$hydrate->getName(), $hydrate->getClassName()] as $name) {
-            if ($this->setValue($name, $hydrate->getObject())) {
-                return true;
+        $facade  = $hydrate->getFacade();
+        $class   = $facade->getReflection()->getShortName();
+        $element = $hydrate->getElement()->getName();
+
+        foreach (Variants::ofArguments($class, $element)->withCamelSnakeCase() as $name) {
+            if ($this->getFacade()->setValue($name, $facade->getObject())) {
+                return;
             }
         }
 
-        return false;
-    }
-
-    /**
-     * @param AssignableInterface $assignable
-     *
-     * @return bool
-     */
-    public function assign(AssignableInterface $assignable): bool
-    {
-        if ($assignable->hasValue()) {
-            return $this->setValue($assignable->getName(), $assignable->getValue());
-        }
-
-        return false;
-    }
-
-    /**
-     * @return string
-     */
-    public function getClassName(): string
-    {
-        return $this->getReflection()->getShortName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
+        Registry::getInstance(Hydrator::class)->warning(
+            'Could not append object {name}',
+            ['name' => $element]
+        );
     }
 }
