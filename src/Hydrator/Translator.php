@@ -1,6 +1,6 @@
 <?php
 
-namespace Dgame\Soap\Dom;
+namespace Dgame\Soap\Hydrator;
 
 use Dgame\Soap\Attribute\XmlAttribute;
 use Dgame\Soap\XmlElement;
@@ -10,8 +10,8 @@ use DOMDocument;
 use DOMNode;
 
 /**
- * Class DomTranslator
- * @package Dgame\Soap
+ * Class Translator
+ * @package Dgame\Soap\Hydrator
  */
 final class Translator
 {

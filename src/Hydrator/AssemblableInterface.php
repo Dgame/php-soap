@@ -1,12 +1,12 @@
 <?php
 
-namespace Dgame\Soap\Hydrator\Dom;
+namespace Dgame\Soap\Hydrator;
 
 use Dgame\Soap\XmlElement;
 
 /**
  * Interface AssemblableInterface
- * @package Dgame\Soap\Hydrator\Dom
+ * @package Dgame\Soap\Hydrator
  */
 interface AssemblableInterface
 {

@@ -1,18 +1,15 @@
 <?php
 
-namespace Dgame\Soap\Hydrator\Dom;
+namespace Dgame\Soap\Hydrator;
 
-use Dgame\Soap\Dom\Translator;
 use Dgame\Soap\Element;
-use Dgame\Soap\Hydrator\ClassMapper;
-use Dgame\Soap\Hydrator\HydrateProcedure;
 use Dgame\Soap\XmlElement;
 use DOMDocument;
 use DOMNode;
 
 /**
  * Class Hydrator
- * @package Dgame\Soap\Hydrator\Dom
+ * @package Dgame\Soap\Hydrator
  */
 final class Hydrator
 {

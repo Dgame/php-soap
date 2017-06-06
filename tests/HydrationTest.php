@@ -3,7 +3,7 @@
 namespace Dgame\Soap\Test;
 
 use Dgame\Soap\Hydrator\ClassMapper;
-use Dgame\Soap\Hydrator\Dom\Hydrator;
+use Dgame\Soap\Hydrator\Hydrator;
 use Dgame\Soap\Test\Object\TestAddress;
 use Dgame\Soap\Test\Object\TestBody;
 use Dgame\Soap\Test\Object\TestCar;

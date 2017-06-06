@@ -14,7 +14,7 @@ use Dgame\Soap\Component\RequestSecurityToken;
 use Dgame\Soap\Component\Security;
 use Dgame\Soap\Component\SecurityContextToken;
 use Dgame\Soap\Component\UsernameToken;
-use Dgame\Soap\Hydrator\Dom\Assembler;
+use Dgame\Soap\Hydrator\Assembler;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 

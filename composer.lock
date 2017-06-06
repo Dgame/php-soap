@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a394ef33b34e1e274087f1972e5fe773",
+    "content-hash": "1a39fe34d73df9a7578ca3361287da1a",
     "packages": [
         {
             "name": "dgame/php-ensurance",
@@ -162,16 +162,16 @@
         },
         {
             "name": "dgame/php-type",
-            "version": "v0.5.0",
+            "version": "v0.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Dgame/php-type.git",
-                "reference": "ba0750c00da4cb2e9d8613f4414deb8b508f2e9e"
+                "reference": "1ec761ca2d3018a69170f8b608c3f8c700abeddf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Dgame/php-type/zipball/ba0750c00da4cb2e9d8613f4414deb8b508f2e9e",
-                "reference": "ba0750c00da4cb2e9d8613f4414deb8b508f2e9e",
+                "url": "https://api.github.com/repos/Dgame/php-type/zipball/1ec761ca2d3018a69170f8b608c3f8c700abeddf",
+                "reference": "1ec761ca2d3018a69170f8b608c3f8c700abeddf",
                 "shasum": ""
             },
             "require": {
@@ -206,7 +206,7 @@
             ],
             "description": "php type",
             "homepage": "https://github.com/php-type",
-            "time": "2017-05-28T09:52:02+00:00"
+            "time": "2017-05-31T18:55:10+00:00"
         },
         {
             "name": "dgame/php-variants",
@@ -1522,16 +1522,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.3.0",
+            "version": "v3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "885db865f6b2b918404a1fae28f9ac640f71f994"
+                "reference": "9752a30000a8ca9f4b34b5227d15d0101b96b063"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/885db865f6b2b918404a1fae28f9ac640f71f994",
-                "reference": "885db865f6b2b918404a1fae28f9ac640f71f994",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/9752a30000a8ca9f4b34b5227d15d0101b96b063",
+                "reference": "9752a30000a8ca9f4b34b5227d15d0101b96b063",
                 "shasum": ""
             },
             "require": {
@@ -1573,7 +1573,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-05-28T10:56:20+00:00"
+            "time": "2017-06-02T22:05:06+00:00"
         },
         {
             "name": "webmozart/assert",

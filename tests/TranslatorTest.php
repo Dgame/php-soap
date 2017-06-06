@@ -2,7 +2,7 @@
 
 namespace Dgame\Soap\Test;
 
-use Dgame\Soap\Dom\Translator;
+use Dgame\Soap\Hydrator\Translator;
 use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 use DOMDocument;

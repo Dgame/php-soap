@@ -3,7 +3,7 @@
 namespace Dgame\Soap\Test\Object;
 
 use Dgame\Soap\Attribute\Attribute;
-use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
+use Dgame\Soap\Hydrator\AssemblableInterface;
 use Dgame\Soap\XmlElement;
 
 /**

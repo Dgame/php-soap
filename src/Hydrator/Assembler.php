@@ -1,6 +1,6 @@
 <?php
 
-namespace Dgame\Soap\Hydrator\Dom;
+namespace Dgame\Soap\Hydrator;
 
 use Dgame\Soap\Attribute\Attribute;
 use Dgame\Soap\Attribute\XmlAttribute;
@@ -15,7 +15,7 @@ use DOMNode;
 
 /**
  * Class Assembler
- * @package Dgame\Soap\Hydrator\Dom
+ * @package Dgame\Soap\Hydrator
  */
 final class Assembler implements ElementVisitorInterface, AttributeVisitorInterface
 {

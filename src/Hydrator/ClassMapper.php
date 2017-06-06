@@ -89,7 +89,7 @@ final class ClassMapper
      */
     private function getClassName(string $class)
     {
-        foreach ($this->searchClassName($class) as $name) {
+        foreach ($this->resolveClassName($class) as $name) {
             if ($this->existsClass($name)) {
                 return $name;
             }
@@ -103,7 +103,7 @@ final class ClassMapper
      *
      * @return \Generator
      */
-    private function searchClassName(string $class)
+    private function resolveClassName(string $class)
     {
         foreach (Variants::ofArguments($class)->withCamelSnakeCase() as $name) {
             if ($this->hasClassInClassmap($name)) {

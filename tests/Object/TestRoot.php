@@ -2,7 +2,7 @@
 
 namespace Dgame\Soap\Test\Object;
 
-use Dgame\Soap\Hydrator\Dom\AssemblableInterface;
+use Dgame\Soap\Hydrator\AssemblableInterface;
 use Dgame\Soap\XmlElement;
 use Dgame\Soap\XmlNode;
 
