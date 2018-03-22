@@ -107,7 +107,7 @@ final class Translator
      * @param DOMNode    $node
      * @param XmlElement $element
      */
-    private function setAttributes(DOMNode $node, XmlElement $element)
+    private function setAttributes(DOMNode $node, XmlElement $element): void
     {
         foreach ($node->attributes as $attribute) {
             $element->setAttribute($this->createAttribute($attribute));
@@ -128,7 +128,7 @@ final class Translator
      * @param DOMNode $node
      * @param XmlNode $parent
      */
-    private function appendChildNodes(DOMNode $node, XmlNode $parent)
+    private function appendChildNodes(DOMNode $node, XmlNode $parent): void
     {
         foreach ($node->childNodes as $childNode) {
             $child = $this->translateNode($childNode);

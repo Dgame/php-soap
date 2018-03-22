@@ -24,7 +24,7 @@ final class TestCar implements AssemblableInterface
     /**
      * @param string $marke
      */
-    public function setMarke(string $marke)
+    public function setMarke(string $marke): void
     {
         $this->marke = $marke;
     }

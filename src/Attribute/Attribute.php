@@ -44,7 +44,7 @@ class Attribute implements AttributeVisitableInterface
     /**
      * @param string $value
      */
-    final public function setValue(string $value)
+    final public function setValue(string $value): void
     {
         $value = trim($value);
         if (strlen($value) !== 0) {
@@ -71,7 +71,7 @@ class Attribute implements AttributeVisitableInterface
     /**
      * @param AttributeVisitorInterface $visitor
      */
-    public function accept(AttributeVisitorInterface $visitor)
+    public function accept(AttributeVisitorInterface $visitor): void
     {
         $visitor->visitAttribute($this);
     }

@@ -44,7 +44,7 @@ class XmlAttribute extends Attribute
     /**
      * @param string $prefix
      */
-    final public function setPrefix(string $prefix)
+    final public function setPrefix(string $prefix): void
     {
         $prefix = trim($prefix);
         if (strlen($prefix) !== 0) {
@@ -71,7 +71,7 @@ class XmlAttribute extends Attribute
     /**
      * @param AttributeVisitorInterface $visitor
      */
-    public function accept(AttributeVisitorInterface $visitor)
+    public function accept(AttributeVisitorInterface $visitor): void
     {
         $visitor->visitXmlAttribute($this);
     }

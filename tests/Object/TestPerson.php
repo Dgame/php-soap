@@ -46,7 +46,7 @@ final class TestPerson implements AssemblableInterface
     /**
      * @param string $name
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -54,7 +54,7 @@ final class TestPerson implements AssemblableInterface
     /**
      * @param TestCar $car
      */
-    public function setTestCar(TestCar $car)
+    public function setTestCar(TestCar $car): void
     {
         $this->car = $car;
     }
@@ -62,7 +62,7 @@ final class TestPerson implements AssemblableInterface
     /**
      * @param TestPhone $phone
      */
-    public function setTestPhone(TestPhone $phone)
+    public function setTestPhone(TestPhone $phone): void
     {
         $this->phone = $phone;
     }
@@ -70,7 +70,7 @@ final class TestPerson implements AssemblableInterface
     /**
      * @param string $birthplace
      */
-    public function setBirthPlace(string $birthplace)
+    public function setBirthPlace(string $birthplace): void
     {
         $this->birthplace = $birthplace;
     }
@@ -78,7 +78,7 @@ final class TestPerson implements AssemblableInterface
     /**
      * @param TestAddress $address
      */
-    public function setTestAddress(TestAddress $address)
+    public function setTestAddress(TestAddress $address): void
     {
         $this->address = $address;
     }
@@ -134,7 +134,7 @@ final class TestPerson implements AssemblableInterface
     /**
      * @param string $birthday
      */
-    public function setBirthday(string $birthday)
+    public function setBirthday(string $birthday): void
     {
         $this->birthday = new DateTime($birthday);
     }

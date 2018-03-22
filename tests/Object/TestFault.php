@@ -28,7 +28,7 @@ final class TestFault
     /**
      * @param string $faultcode
      */
-    public function setFaultcode(string $faultcode)
+    public function setFaultcode(string $faultcode): void
     {
         $this->faultcode = $faultcode;
     }
@@ -44,7 +44,7 @@ final class TestFault
     /**
      * @param string $faultstring
      */
-    public function setFaultstring(string $faultstring)
+    public function setFaultstring(string $faultstring): void
     {
         $this->faultstring = $faultstring;
     }

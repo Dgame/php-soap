@@ -16,7 +16,7 @@ final class TestStrassen
     /**
      * @param string $name
      */
-    public function appendName(string $name)
+    public function appendName(string $name): void
     {
         $this->strassen[] = $name;
     }

@@ -30,14 +30,14 @@ final class ElementPrefixInheritanceVisitor implements ElementVisitorInterface
     /**
      * @param Element $element
      */
-    public function visitElement(Element $element)
+    public function visitElement(Element $element): void
     {
     }
 
     /**
      * @param XmlElement $element
      */
-    public function visitXmlElement(XmlElement $element)
+    public function visitXmlElement(XmlElement $element): void
     {
         $this->inheritPrefix($element);
     }
@@ -45,7 +45,7 @@ final class ElementPrefixInheritanceVisitor implements ElementVisitorInterface
     /**
      * @param XmlNode $node
      */
-    public function visitXmlNode(XmlNode $node)
+    public function visitXmlNode(XmlNode $node): void
     {
         $this->inheritPrefix($node);
     }
@@ -53,7 +53,7 @@ final class ElementPrefixInheritanceVisitor implements ElementVisitorInterface
     /**
      * @param XmlElement $element
      */
-    private function inheritPrefix(XmlElement $element)
+    private function inheritPrefix(XmlElement $element): void
     {
         if (!$element->hasPrefix() && $this->node->hasPrefix()) {
             $element->setPrefix($this->node->getPrefix());

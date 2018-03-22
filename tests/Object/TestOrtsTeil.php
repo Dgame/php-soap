@@ -28,7 +28,7 @@ final class TestOrtsTeil
     /**
      * @param string $name
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -44,7 +44,7 @@ final class TestOrtsTeil
     /**
      * @param TestStrassen $strassen
      */
-    public function setTestStrassen(TestStrassen $strassen)
+    public function setTestStrassen(TestStrassen $strassen): void
     {
         $this->strassen = $strassen;
     }

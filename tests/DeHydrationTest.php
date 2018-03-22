@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class DeHydrationTest extends TestCase
 {
-    public function testDehydration()
+    public function testDehydration(): void
     {
         $doc                     = new DOMDocument('1.0', 'utf-8');
         $doc->formatOutput       = false;

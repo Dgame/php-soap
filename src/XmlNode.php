@@ -16,7 +16,7 @@ class XmlNode extends XmlElement
      */
     private $elements = [];
 
-    public function setPrefix(string $prefix)
+    public function setPrefix(string $prefix): void
     {
         parent::setPrefix($prefix);
 
@@ -29,7 +29,7 @@ class XmlNode extends XmlElement
     /**
      * @param Element $element
      */
-    final public function appendElement(Element $element)
+    final public function appendElement(Element $element): void
     {
         $this->elements[] = $element;
         $element->accept(new ElementPrefixInheritanceVisitor($this));
@@ -54,7 +54,7 @@ class XmlNode extends XmlElement
     /**
      * @param ElementVisitorInterface $visitor
      */
-    public function accept(ElementVisitorInterface $visitor)
+    public function accept(ElementVisitorInterface $visitor): void
     {
         $visitor->visitXmlNode($this);
     }

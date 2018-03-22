@@ -24,7 +24,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class BiproTest extends TestCase
 {
-    public function testRequestTokenService()
+    public function testRequestTokenService(): void
     {
         $envelope = new Envelope();
 
@@ -56,7 +56,7 @@ final class BiproTest extends TestCase
         $this->assertEqualXMLStructure($assembler->getDocument()->documentElement, $doc->documentElement);
     }
 
-    public function testBiproListShipment()
+    public function testBiproListShipment(): void
     {
         $envelope = new Envelope();
 
@@ -86,7 +86,7 @@ final class BiproTest extends TestCase
         $this->assertEqualXMLStructure($assembler->getDocument()->documentElement, $doc->documentElement);
     }
 
-    public function testBiproGetShipment()
+    public function testBiproGetShipment(): void
     {
         $envelope = new Envelope();
 
@@ -118,7 +118,7 @@ final class BiproTest extends TestCase
         $this->assertEqualXMLStructure($assembler->getDocument()->documentElement, $doc->documentElement);
     }
 
-    public function testBiproAckShipment()
+    public function testBiproAckShipment(): void
     {
         $envelope = new Envelope();
 

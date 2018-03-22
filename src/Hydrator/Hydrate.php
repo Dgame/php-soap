@@ -45,7 +45,7 @@ final class Hydrate
     /**
      *
      */
-    private static function verifyLoggerPresence()
+    private static function verifyLoggerPresence(): void
     {
         if (!Registry::hasLogger(Hydrator::class)) {
             $log = new Logger(Hydrator::class);
@@ -86,7 +86,7 @@ final class Hydrate
      * @param string $name
      * @param        $value
      */
-    public function assign(string $name, $value)
+    public function assign(string $name, $value): void
     {
         if (!$this->getFacade()->setValue($name, $value)) {
             Registry::getInstance(Hydrator::class)->warning(
@@ -99,7 +99,7 @@ final class Hydrate
     /**
      * @param Hydrate $hydrate
      */
-    public function append(self $hydrate)
+    public function append(self $hydrate): void
     {
         $facade  = $hydrate->getFacade();
         $class   = $facade->getReflection()->getShortName();

@@ -24,7 +24,7 @@ final class TestAddress implements AssemblableInterface
     /**
      * @param string $street
      */
-    public function setStreet(string $street)
+    public function setStreet(string $street): void
     {
         $this->street = $street;
     }
@@ -32,7 +32,7 @@ final class TestAddress implements AssemblableInterface
     /**
      * @param int $plz
      */
-    public function setPlz(int $plz)
+    public function setPlz(int $plz): void
     {
         $this->plz = $plz;
     }

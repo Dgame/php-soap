@@ -24,7 +24,7 @@ final class TestEnvelope
     /**
      * @param TestBody $body
      */
-    public function setTestBody(TestBody $body)
+    public function setTestBody(TestBody $body): void
     {
         $this->body = $body;
     }

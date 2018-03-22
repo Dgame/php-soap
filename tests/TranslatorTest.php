@@ -14,7 +14,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class TranslatorTest extends TestCase
 {
-    public function testXmlElementTranslation()
+    public function testXmlElementTranslation(): void
     {
         $doc        = new DOMDocument('1.0');
         $translator = new Translator();
@@ -58,7 +58,7 @@ final class TranslatorTest extends TestCase
         $this->assertEquals(0, $node->getAttributes()[0]->getValue());
     }
 
-    public function testXmlNodeTranslation()
+    public function testXmlNodeTranslation(): void
     {
         $doc        = new DOMDocument('1.0');
         $translator = new Translator();
@@ -92,7 +92,7 @@ final class TranslatorTest extends TestCase
         $this->assertEquals(42, $node->getElements()[1]->getValue());
     }
 
-    public function testDocumentTranslation()
+    public function testDocumentTranslation(): void
     {
         $doc = new DOMDocument('1.0');
         $doc->load(__DIR__ . '/xml/test1.xml');

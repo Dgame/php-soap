@@ -48,7 +48,7 @@ class Element
     /**
      * @param string $value
      */
-    final public function setValue(string $value)
+    final public function setValue(string $value): void
     {
         $value = trim($value);
         if (strlen($value) !== 0) {
@@ -75,7 +75,7 @@ class Element
     /**
      * @param Attribute $attribute
      */
-    final public function setAttribute(Attribute $attribute)
+    final public function setAttribute(Attribute $attribute): void
     {
         $this->attributes[] = $attribute;
     }
@@ -99,7 +99,7 @@ class Element
     /**
      * @param ElementVisitorInterface $visitor
      */
-    public function accept(ElementVisitorInterface $visitor)
+    public function accept(ElementVisitorInterface $visitor): void
     {
         $visitor->visitElement($this);
     }

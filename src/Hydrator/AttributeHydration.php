@@ -37,7 +37,7 @@ final class AttributeHydration
     /**
      * @param Element $element
      */
-    public function hydrate(Element $element)
+    public function hydrate(Element $element): void
     {
         $this->assignValue($element);
         $this->assignAttributes($element);
@@ -46,7 +46,7 @@ final class AttributeHydration
     /**
      * @param Element $element
      */
-    private function assignValue(Element $element)
+    private function assignValue(Element $element): void
     {
         if ($element->hasValue()) {
             $this->hydrate->assign('value', $element->getValue());
@@ -56,7 +56,7 @@ final class AttributeHydration
     /**
      * @param Element $element
      */
-    private function assignAttributes(Element $element)
+    private function assignAttributes(Element $element): void
     {
         foreach ($element->getAttributes() as $attribute) {
             $this->assignAttribute($attribute);
@@ -66,7 +66,7 @@ final class AttributeHydration
     /**
      * @param Attribute $attribute
      */
-    private function assignAttribute(Attribute $attribute)
+    private function assignAttribute(Attribute $attribute): void
     {
         if ($attribute->hasValue()) {
             $this->hydrate->assign($attribute->getName(), $attribute->getValue());

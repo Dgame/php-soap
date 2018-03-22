@@ -52,7 +52,7 @@ final class ElementHydration implements ElementVisitorInterface
     /**
      * @param Element $element
      */
-    public function visitElement(Element $element)
+    public function visitElement(Element $element): void
     {
         if (!$this->hydrate($element)) {
             $this->assign($element);
@@ -62,7 +62,7 @@ final class ElementHydration implements ElementVisitorInterface
     /**
      * @param XmlElement $element
      */
-    public function visitXmlElement(XmlElement $element)
+    public function visitXmlElement(XmlElement $element): void
     {
         if (!$this->hydrate($element)) {
             $this->assign($element);
@@ -72,7 +72,7 @@ final class ElementHydration implements ElementVisitorInterface
     /**
      * @param XmlNode $node
      */
-    public function visitXmlNode(XmlNode $node)
+    public function visitXmlNode(XmlNode $node): void
     {
         if (!$this->hydrate($node)) {
             $this->assign($node);
@@ -86,7 +86,7 @@ final class ElementHydration implements ElementVisitorInterface
     /**
      * @param Element $element
      */
-    private function hydrateChild(Element $element)
+    private function hydrateChild(Element $element): void
     {
         $hydration = new self($this->mapper);
         $element->accept($hydration);
@@ -101,7 +101,7 @@ final class ElementHydration implements ElementVisitorInterface
     /**
      * @param Element $element
      */
-    private function assign(Element $element)
+    private function assign(Element $element): void
     {
         if ($this->isHydrated() && $element->hasValue()) {
             $this->hydrate->assign($element->getName(), $element->getValue());
@@ -136,7 +136,7 @@ final class ElementHydration implements ElementVisitorInterface
     /**
      * @param Hydrate $hydrate
      */
-    private function append(Hydrate $hydrate)
+    private function append(Hydrate $hydrate): void
     {
         if ($this->isHydrated()) {
             $this->hydrate->append($hydrate);

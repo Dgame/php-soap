@@ -44,7 +44,7 @@ class XmlElement extends Element
     /**
      * @param string $prefix
      */
-    public function setPrefix(string $prefix)
+    public function setPrefix(string $prefix): void
     {
         $prefix = trim($prefix);
         if (strlen($prefix) !== 0) {
@@ -71,7 +71,7 @@ class XmlElement extends Element
     /**
      * @param ElementVisitorInterface $visitor
      */
-    public function accept(ElementVisitorInterface $visitor)
+    public function accept(ElementVisitorInterface $visitor): void
     {
         $visitor->visitXmlElement($this);
     }

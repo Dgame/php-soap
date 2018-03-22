@@ -72,7 +72,7 @@ final class Assembler implements ElementVisitorInterface, AttributeVisitorInterf
     /**
      * @param Element $element
      */
-    public function visitElement(Element $element)
+    public function visitElement(Element $element): void
     {
         $node = $this->document->createElement($element->getName(), $element->hasValue() ? $element->getValue() : null);
         $this->assemble($element, $node);
@@ -81,7 +81,7 @@ final class Assembler implements ElementVisitorInterface, AttributeVisitorInterf
     /**
      * @param XmlElement $element
      */
-    public function visitXmlElement(XmlElement $element)
+    public function visitXmlElement(XmlElement $element): void
     {
         $node = $this->document->createElement($element->getPrefixedName(), $element->hasValue() ? $element->getValue() : null);
         $node = $this->assemble($element, $node);
@@ -93,7 +93,7 @@ final class Assembler implements ElementVisitorInterface, AttributeVisitorInterf
     /**
      * @param XmlNode $node
      */
-    public function visitXmlNode(XmlNode $node)
+    public function visitXmlNode(XmlNode $node): void
     {
         $this->visitXmlElement($node);
 
@@ -106,7 +106,7 @@ final class Assembler implements ElementVisitorInterface, AttributeVisitorInterf
     /**
      * @param Attribute $attribute
      */
-    public function visitAttribute(Attribute $attribute)
+    public function visitAttribute(Attribute $attribute): void
     {
         $this->node->setAttribute($attribute->getName(), $attribute->hasValue() ? $attribute->getValue() : null);
     }
@@ -114,7 +114,7 @@ final class Assembler implements ElementVisitorInterface, AttributeVisitorInterf
     /**
      * @param XmlAttribute $attribute
      */
-    public function visitXmlAttribute(XmlAttribute $attribute)
+    public function visitXmlAttribute(XmlAttribute $attribute): void
     {
         $this->node->setAttribute($attribute->getPrefixedName(), $attribute->hasValue() ? $attribute->getValue() : null);
     }

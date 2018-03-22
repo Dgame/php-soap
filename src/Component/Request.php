@@ -25,7 +25,7 @@ final class Request extends NamedNode
     /**
      * @param bool $confirm
      */
-    public function setConfirm(bool $confirm)
+    public function setConfirm(bool $confirm): void
     {
         $this->search('BestaetigeLieferungen')->setValue($confirm ? 'true' : 'false');
     }
@@ -33,7 +33,7 @@ final class Request extends NamedNode
     /**
      * @param int $id
      */
-    public function setId(int $id)
+    public function setId(int $id): void
     {
         $this->search('ID')->setValue(1);
     }
@@ -41,7 +41,7 @@ final class Request extends NamedNode
     /**
      * @param int $id
      */
-    public function setConsumerId(int $id)
+    public function setConsumerId(int $id): void
     {
         $this->search('ConsumerID')->setValue(1);
     }

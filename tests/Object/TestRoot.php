@@ -20,7 +20,7 @@ final class TestRoot implements AssemblableInterface
     /**
      * @param TestPerson $person
      */
-    public function appendTestPerson(TestPerson $person)
+    public function appendTestPerson(TestPerson $person): void
     {
         $this->persons[] = $person;
     }

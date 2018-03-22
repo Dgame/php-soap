@@ -33,7 +33,7 @@ final class ClassMapper
      * @param string $name
      * @param string $class
      */
-    public function appendClass(string $name, string $class)
+    public function appendClass(string $name, string $class): void
     {
         $this->classmap[$name] = $class;
     }
@@ -42,7 +42,7 @@ final class ClassMapper
      * @param string $pattern
      * @param string $class
      */
-    public function appendPattern(string $pattern, string $class)
+    public function appendPattern(string $pattern, string $class): void
     {
         $this->pattern[$pattern] = $class;
     }

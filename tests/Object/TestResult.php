@@ -16,7 +16,7 @@ final class TestResult
     /**
      * @param TestOrt $ort
      */
-    public function appendTestOrt(TestOrt $ort)
+    public function appendTestOrt(TestOrt $ort): void
     {
         $this->orte[] = $ort;
     }

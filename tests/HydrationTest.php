@@ -30,7 +30,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class HydrationTest extends TestCase
 {
-    public function testObjects()
+    public function testObjects(): void
     {
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/xml/test1.xml');
@@ -86,7 +86,7 @@ final class HydrationTest extends TestCase
         $this->assertEquals(365494, $persons[1]->getAddress()->getPlz());
     }
 
-    public function testWithoutFirstObject()
+    public function testWithoutFirstObject(): void
     {
         $doc = new DOMDocument();
         $doc->loadXml('<root><Car marke="Mercedes" /></root>');
@@ -105,7 +105,7 @@ final class HydrationTest extends TestCase
         $this->assertEquals('Mercedes', $car->getMarke());
     }
 
-    public function testWithLowerCaseClassMap()
+    public function testWithLowerCaseClassMap(): void
     {
         //        $this->markTestSkipped();
         $doc = new DOMDocument();
@@ -125,7 +125,7 @@ final class HydrationTest extends TestCase
         $this->assertEquals('Mercedes', $car->getMarke());
     }
 
-    public function testWithFacadeMethod()
+    public function testWithFacadeMethod(): void
     {
         $doc = new DOMDocument();
         $doc->loadXml('<root><Person><birthday>14.08.1991</birthday></Person></root>');
@@ -144,7 +144,7 @@ final class HydrationTest extends TestCase
         $this->assertEquals('14.08.1991', $person->getBirthday()->format('d.m.Y'));
     }
 
-    public function testWithTagName()
+    public function testWithTagName(): void
     {
         $doc = new DOMDocument();
         $doc->loadXml('<root><Person><hobby>Radeln</hobby></Person></root>');
@@ -165,7 +165,7 @@ final class HydrationTest extends TestCase
         $this->assertEquals('Radeln', $person->hobby->value);
     }
 
-    public function testPropertyAssignment()
+    public function testPropertyAssignment(): void
     {
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/xml/test2.xml');
@@ -185,7 +185,7 @@ final class HydrationTest extends TestCase
         $this->assertEquals('Max', $stammdaten->Vorname);
     }
 
-    public function testFault()
+    public function testFault(): void
     {
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/xml/fault.xml');
@@ -208,7 +208,7 @@ final class HydrationTest extends TestCase
         $this->assertEquals('Es ist ein Fehler aufgetreten', $envelope->getBody()->getFault()->getFaultstring());
     }
 
-    public function testList()
+    public function testList(): void
     {
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/xml/list.xml');
@@ -242,7 +242,7 @@ final class HydrationTest extends TestCase
         }
     }
 
-    public function testFailedPropertyAssignment()
+    public function testFailedPropertyAssignment(): void
     {
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/xml/test2.xml');

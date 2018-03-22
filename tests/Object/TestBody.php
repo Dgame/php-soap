@@ -36,7 +36,7 @@ final class TestBody
     /**
      * @param TestFault $fault
      */
-    public function setTestFault(TestFault $fault)
+    public function setTestFault(TestFault $fault): void
     {
         $this->fault = $fault;
     }
@@ -52,7 +52,7 @@ final class TestBody
     /**
      * @param TestResult $result
      */
-    public function setTestResult(TestResult $result)
+    public function setTestResult(TestResult $result): void
     {
         $this->result = $result;
     }
