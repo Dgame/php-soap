@@ -15,7 +15,7 @@ final class RequestSecurityToken extends NamedNode
     {
         parent::__construct('ns2');
 
-        $this->setAttribute(new XmlnsAttribute('', 'http://schemas.xmlsoap.org/ws/2004/08/addressing'));
+        //$this->setAttribute(new XmlnsAttribute('', 'http://schemas.xmlsoap.org/ws/2004/08/addressing'));
 
         $namespaces = [
             'ns2' => 'http://schemas.xmlsoap.org/ws/2005/02/trust',
