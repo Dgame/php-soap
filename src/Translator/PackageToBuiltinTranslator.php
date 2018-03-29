@@ -2,9 +2,6 @@
 
 namespace Dgame\Soap\Translator;
 
-use DOMDocument;
-use DOMElement;
-use DOMNode;
 use Dgame\Soap\Attribute\AttributeInterface;
 use Dgame\Soap\Attribute\XmlAttributeInterface;
 use Dgame\Soap\Attribute\XmlnsAttribute;
@@ -15,6 +12,9 @@ use Dgame\Soap\PrefixedInterface;
 use Dgame\Soap\Visitor\AttributeVisitorInterface;
 use Dgame\Soap\Visitor\ElementVisitorInterface;
 use Dgame\Soap\Visitor\XmlNamespaceFinder;
+use DOMDocument;
+use DOMElement;
+use DOMNode;
 
 /**
  * Class PackageToBuiltinTranslator

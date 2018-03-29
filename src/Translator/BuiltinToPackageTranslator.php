@@ -2,10 +2,6 @@
 
 namespace Dgame\Soap\Translator;
 
-use DOMAttr;
-use DOMDocument;
-use DOMNamedNodeMap;
-use DOMNode;
 use Dgame\Soap\Attribute\XmlAttribute;
 use Dgame\Soap\Attribute\XmlnsAttribute;
 use Dgame\Soap\Element\XmlDocument;
@@ -13,6 +9,10 @@ use Dgame\Soap\Element\XmlElement;
 use Dgame\Soap\Element\XmlElementInterface;
 use Dgame\Soap\Element\XmlNode;
 use Dgame\Soap\Element\XmlNodeInterface;
+use DOMAttr;
+use DOMDocument;
+use DOMNamedNodeMap;
+use DOMNode;
 
 /**
  * Class BuiltinToPackageTranslator
