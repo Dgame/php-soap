@@ -2,28 +2,28 @@
 
 namespace Dgame\Soap\Visitor;
 
-use Dgame\Soap\Element;
-use Dgame\Soap\XmlElement;
-use Dgame\Soap\XmlNode;
+use Dgame\Soap\Element\ElementInterface;
+use Dgame\Soap\Element\XmlElementInterface;
+use Dgame\Soap\Element\XmlNodeInterface;
 
 /**
  * Interface ElementVisitorInterface
- * @package Dgame\Soap\Visitor
+ * @package Soap\Visitor
  */
 interface ElementVisitorInterface
 {
     /**
-     * @param Element $element
+     * @param ElementInterface $element
      */
-    public function visitElement(Element $element);
+    public function visitElement(ElementInterface $element): void;
 
     /**
-     * @param XmlElement $element
+     * @param XmlElementInterface $element
      */
-    public function visitXmlElement(XmlElement $element);
+    public function visitXmlElement(XmlElementInterface $element): void;
 
     /**
-     * @param XmlNode $node
+     * @param XmlNodeInterface $node
      */
-    public function visitXmlNode(XmlNode $node);
+    public function visitXmlNode(XmlNodeInterface $node): void;
 }

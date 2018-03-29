@@ -2,70 +2,28 @@
 
 namespace Dgame\Soap\Attribute;
 
-use Dgame\Soap\Visitor\AttributeVisitableInterface;
+use Dgame\Soap\NameTrait;
+use Dgame\Soap\ValueTrait;
 use Dgame\Soap\Visitor\AttributeVisitorInterface;
 
 /**
  * Class Attribute
- * @package Dgame\Soap\Attribute
+ * @package Soap\Attribute
  */
-class Attribute implements AttributeVisitableInterface
+class Attribute implements AttributeInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
-    /**
-     * @var string
-     */
-    private $value;
+    use NameTrait, ValueTrait;
 
     /**
      * Attribute constructor.
      *
-     * @param string      $name
-     * @param string|null $value
+     * @param string $name
+     * @param null   $value
      */
-    public function __construct(string $name, string $value = null)
+    public function __construct(string $name, $value = null)
     {
-        $this->name = $name;
-
-        $this->setValue($value ?? '');
-    }
-
-    /**
-     * @return string
-     */
-    final public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $value
-     */
-    final public function setValue(string $value): void
-    {
-        $value = trim($value);
-        if (strlen($value) !== 0) {
-            $this->value = $value;
-        }
-    }
-
-    /**
-     * @return bool
-     */
-    final public function hasValue(): bool
-    {
-        return $this->value !== null;
-    }
-
-    /**
-     * @return string
-     */
-    final public function getValue(): string
-    {
-        return $this->value;
+        $this->name = trim($name);
+        $this->setValue($value);
     }
 
     /**

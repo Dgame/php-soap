@@ -16,13 +16,12 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
-        "dgame/php-object": ">=0.4.0",
-        "dgame/php-iterator": ">=0.3.0",
+        "php": "^7.1",
+        "dgame/php-object": "~0.4.0",
         "monolog/monolog": "^1.22"
     },
     "require-dev": {
-        "phpunit/phpunit": "5.*.*"
+        "phpunit/phpunit": "^6.4"
     },
     "autoload": {
         "classmap": [

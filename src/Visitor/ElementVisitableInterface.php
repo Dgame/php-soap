@@ -4,12 +4,12 @@ namespace Dgame\Soap\Visitor;
 
 /**
  * Interface ElementVisitableInterface
- * @package Dgame\Soap\Visitor
+ * @package Soap\Visitor
  */
 interface ElementVisitableInterface
 {
     /**
      * @param ElementVisitorInterface $visitor
      */
-    public function accept(ElementVisitorInterface $visitor);
+    public function accept(ElementVisitorInterface $visitor): void;
 }

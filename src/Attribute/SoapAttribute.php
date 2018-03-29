@@ -4,18 +4,20 @@ namespace Dgame\Soap\Attribute;
 
 /**
  * Class SoapAttribute
- * @package Dgame\Soap\Attribute
+ * @package Soap\Attribute
  */
 final class SoapAttribute extends XmlAttribute
 {
     /**
      * SoapAttribute constructor.
      *
-     * @param string      $name
-     * @param string|null $value
+     * @param string $name
+     * @param string $value
      */
-    public function __construct(string $name, string $value = null)
+    public function __construct(string $name, string $value)
     {
-        parent::__construct($name, $value, 'soap');
+        parent::__construct($name, $value);
+
+        $this->setPrefix('soap');
     }
 }
