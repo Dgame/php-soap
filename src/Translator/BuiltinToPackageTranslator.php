@@ -4,7 +4,6 @@ namespace Dgame\Soap\Translator;
 
 use Dgame\Soap\Attribute\XmlAttribute;
 use Dgame\Soap\Attribute\XmlnsAttribute;
-use Dgame\Soap\Element\XmlDocument;
 use Dgame\Soap\Element\XmlElement;
 use Dgame\Soap\Element\XmlElementInterface;
 use Dgame\Soap\Element\XmlNode;
@@ -23,9 +22,9 @@ final class BuiltinToPackageTranslator
     /**
      * @param DOMNode $node
      *
-     * @return XmlElementInterface
+     * @return XmlElementInterface|null
      */
-    public function translate(DOMNode $node): XmlElementInterface
+    public function translate(DOMNode $node): ?XmlElementInterface
     {
         if ($node->nodeType === XML_DOCUMENT_NODE) {
             /** @var DOMDocument $node */
@@ -38,9 +37,9 @@ final class BuiltinToPackageTranslator
     /**
      * @param DOMDocument $document
      *
-     * @return XmlElementInterface
+     * @return XmlElementInterface|null
      */
-    private function translateDocument(DOMDocument $document): XmlElementInterface
+    private function translateDocument(DOMDocument $document): ?XmlElementInterface
     {
         return $this->translateNode($document->documentElement);
     }
@@ -48,12 +47,12 @@ final class BuiltinToPackageTranslator
     /**
      * @param DOMNode $node
      *
-     * @return XmlElementInterface
+     * @return XmlElementInterface|null
      */
-    private function translateNode(DOMNode $node): XmlElementInterface
+    private function translateNode(DOMNode $node): ?XmlElementInterface
     {
         if ($node->nodeType !== XML_ELEMENT_NODE) {
-            return new XmlDocument();
+            return null;
         }
 
         if ($this->isElement($node)) {
@@ -194,7 +193,7 @@ final class BuiltinToPackageTranslator
     {
         $this->setAttributes($node->attributes, $element);
 
-        if (!empty($node->namespaceURI) && !$this->hasParentSameNamespace($node)) {
+        if ($element->hasPrefix() && !empty($node->namespaceURI) && !$this->hasParentSameNamespace($node)) {
             $element->setAttribute(new XmlnsAttribute($element->getPrefix(), $node->namespaceURI));
         }
     }
@@ -207,12 +206,12 @@ final class BuiltinToPackageTranslator
     private function hasParentSameNamespace(DOMNode $node): bool
     {
         $parent = $node->parentNode;
-        do {
+        while ($parent !== null) {
             if ($parent->namespaceURI === $node->namespaceURI) {
                 return true;
             }
             $parent = $parent->parentNode;
-        } while ($parent !== null);
+        }
 
         return false;
     }

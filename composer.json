@@ -17,7 +17,6 @@
     ],
     "require": {
         "php": "^7.1",
-        "dgame/php-object": "~0.4.0",
         "monolog/monolog": "^1.22"
     },
     "require-dev": {
