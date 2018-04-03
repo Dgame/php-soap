@@ -58,7 +58,7 @@ $strategy->setCallback('envelope.body.fault', function (ElementInterface $elemen
 
     return $fault;
 });
-$strategy->setCallback('envelope.body.fault.faultcode', function (ElementInterface $element, Fault $fault) {
+$strategy->setCallback('envelope.body.fault.faultcode', function (ElementInterface $element, Fault $fault): void {
     $fault->appendElement($element);
 });
 $hydator = new Hydrator($strategy);
