@@ -47,11 +47,12 @@ final class Hydrator implements ElementVisitorInterface, AttributeVisitorInterfa
     {
         $footprints = [];
         foreach ($this->footprints as $footprint) {
-            $footprint    = $this->strategy->processFootprint($footprint);
-            $footprints[] = strtolower($footprint);
+            $footprints[] = $this->strategy->processFootprint($footprint);
         }
 
-        return implode('.', array_reverse($footprints));
+        $footprints = implode('.', array_reverse($footprints));
+
+        return $this->strategy->processFootprint($footprints);
     }
 
     /**
@@ -73,7 +74,7 @@ final class Hydrator implements ElementVisitorInterface, AttributeVisitorInterfa
     {
         $this->footprints->push($attribute->getName());
         $footprints = $this->getFootprints();
-        var_dump($footprints);
+        //        var_dump($footprints);
         $this->strategy->setAttribute($footprints, $attribute);
     }
 
@@ -84,7 +85,7 @@ final class Hydrator implements ElementVisitorInterface, AttributeVisitorInterfa
     {
         $this->footprints->push($element->getName());
         $footprints = $this->getFootprints();
-        var_dump($footprints);
+        //        var_dump($footprints);
         $this->strategy->pushElement($footprints, $element);
     }
 
