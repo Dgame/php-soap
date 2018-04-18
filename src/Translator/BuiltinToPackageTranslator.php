@@ -113,7 +113,7 @@ final class BuiltinToPackageTranslator
      */
     private function createAttribute(DOMAttr $attr): XmlAttribute
     {
-        list($prefix, $name) = $this->extractDefinition($attr);
+        ['prefix' => $prefix, 'name' => $name] = $this->extractDefinition($attr);
 
         $attribute = new XmlAttribute($name, $attr->value);
         $attribute->setPrefix($prefix);
