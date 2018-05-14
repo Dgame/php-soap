@@ -48,7 +48,8 @@ $xml      = $document->saveXML();
 print 'XML #2:' . PHP_EOL;
 var_dump($xml);
 
-class MyFault {
+class MyFault
+{
     public $faultcode;
     public $faultstring;
 }
