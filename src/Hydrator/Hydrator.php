@@ -138,7 +138,7 @@ final class Hydrator implements ElementVisitorInterface, AttributeVisitorInterfa
     {
         $this->pushElement($element);
         $this->traverseAttributes($element);
-        $this->popElement();
+        //        $this->popElement();
     }
 
     /**
@@ -147,8 +147,9 @@ final class Hydrator implements ElementVisitorInterface, AttributeVisitorInterfa
     public function visitXmlElement(XmlElementInterface $element): void
     {
         $this->pushElement($element);
+
         $this->traverseAttributes($element);
-        $this->popElement();
+        //                $this->popElement();
     }
 
     /**

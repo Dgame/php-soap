@@ -48,29 +48,37 @@ $xml      = $document->saveXML();
 print 'XML #2:' . PHP_EOL;
 var_dump($xml);
 
-$strategy = new DefaultHydratorStrategy();
-$strategy->setCallback('envelope', function () {
-    return new Envelope();
-});
-$strategy->setCallback('envelope.body.fault', function (ElementInterface $element, Envelope $envelope) {
-    $fault = new Fault('fault');
-    $envelope->appendElement($fault);
+class MyFault {
+    public $faultcode;
+    public $faultstring;
+}
 
-    return $fault;
+$strategy = new DefaultHydratorStrategy();
+//$strategy->setCallback('Envelope', function () {
+//    return new Envelope();
+//});
+$strategy->setCallback('Envelope.Body.Fault', function () {
+    return new MyFault();
 });
-$strategy->setCallback('envelope.body.fault.faultcode', function (ElementInterface $element, Fault $fault): void {
-    $fault->appendElement($element);
+$strategy->setCallback('Envelope.Body.Fault.faultcode', function (ElementInterface $element, MyFault $fault): void {
+    $fault->faultcode = $element->getValue();
+});
+$strategy->setCallback('Envelope.Body.Fault.faultstring', function (ElementInterface $element, MyFault $fault): void {
+    $fault->faultstring = $element->getValue();
 });
 $hydator = new Hydrator($strategy);
-$element->accept($hydator);
+//$element->accept($hydator);
 
 $doc = new DOMDocument('1.0', 'utf-8');
 $doc->load('test.xml');
 
-print '----' . PHP_EOL;
+//print '----' . PHP_EOL;
 $hydator->hydrate($doc);
 
 $element = $strategy->top();
+
+var_dump($element);
+exit;
 
 $document = $p2b->translate($element);
 $xml      = $document->saveXML();
