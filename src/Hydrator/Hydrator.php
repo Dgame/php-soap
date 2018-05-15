@@ -50,12 +50,11 @@ final class Hydrator implements ElementVisitorInterface, AttributeVisitorInterfa
     private function getFootprints(): string
     {
         $footprints = [];
-        foreach ($this->footprints as $footprint) {
-            $footprint    = $this->strategy->processFootprint($footprint);
-            $footprints[] = $footprint;
+        for ($i = $this->footprints->count() - 1; $i >= 0; $i--) {
+            $footprints[] = $this->footprints[$i];
         }
 
-        return implode('.', array_reverse($footprints));
+        return $this->strategy->processFootprint(implode('.', $footprints));
     }
 
     /**

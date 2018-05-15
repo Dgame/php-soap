@@ -107,9 +107,9 @@ final class DefaultHydratorStrategy implements HydratorStrategyInterface
     public function pushElement(string $footprints, ElementInterface $element): bool
     {
         if ($this->hasFootprintsCallback($footprints)) {
-            $object = $this->getFootprintsCallback($footprints)($element, $this->peek());
-            if (is_object($object)) {
-                $this->elements->push($object);
+            $result = $this->getFootprintsCallback($footprints)($element, $this->peek());
+            if (is_object($result)) {
+                $this->elements->push($result);
 
                 return true;
             }

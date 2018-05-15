@@ -113,7 +113,7 @@ final class BuiltinToPackageTranslator
      */
     private function createAttribute(DOMAttr $attr): XmlAttribute
     {
-        list($prefix, $name) = $this->extractDefinition($attr);
+        ['prefix' => $prefix, 'name' => $name] = $this->extractDefinition($attr);
 
         $attribute = new XmlAttribute($name, $attr->value);
         $attribute->setPrefix($prefix);
@@ -147,10 +147,12 @@ final class BuiltinToPackageTranslator
         $prefix = $node->prefix;
         $name   = $node->localName;
         if (empty($prefix) && strpos($name, ':') !== false) {
-            return explode(':', $name);
+            $values = explode(':', $name);
+
+            return array_combine(['prefix', 'name'], array_slice($values, 0, 2));
         }
 
-        return [$prefix, $name];
+        return ['prefix' => $prefix, 'name' => $name];
     }
 
     /**
@@ -160,7 +162,7 @@ final class BuiltinToPackageTranslator
      */
     private function createXmlElementFrom(DOMNode $node): XmlElementInterface
     {
-        list($prefix, $name) = $this->extractDefinition($node);
+        ['prefix' => $prefix, 'name' => $name] = $this->extractDefinition($node);
 
         $element = new XmlElement($name, $node->nodeValue);
         $element->setPrefix($prefix);
@@ -176,7 +178,7 @@ final class BuiltinToPackageTranslator
      */
     private function createXmlNodeFrom(DOMNode $node): XmlNodeInterface
     {
-        list($prefix, $name) = $this->extractDefinition($node);
+        ['prefix' => $prefix, 'name' => $name] = $this->extractDefinition($node);
 
         $element = new XmlNode($name, null);
         $element->setPrefix($prefix);
