@@ -20,13 +20,15 @@ interface HydratorStrategyInterface
     /**
      * @param string           $footprints
      * @param ElementInterface $element
+     *
+     * @return bool
      */
-    public function pushElement(string $footprints, ElementInterface $element): void;
+    public function pushElement(string $footprints, ElementInterface $element): bool;
 
     /**
-     *
+     * @return bool
      */
-    public function popElement(): void;
+    public function popElement(): bool;
 
     /**
      * @param string $footprint

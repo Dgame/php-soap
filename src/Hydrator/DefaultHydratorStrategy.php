@@ -101,25 +101,35 @@ final class DefaultHydratorStrategy implements HydratorStrategyInterface
     /**
      * @param string           $footprints
      * @param ElementInterface $element
+     *
+     * @return bool
      */
-    public function pushElement(string $footprints, ElementInterface $element): void
+    public function pushElement(string $footprints, ElementInterface $element): bool
     {
         if ($this->hasFootprintsCallback($footprints)) {
             $object = $this->getFootprintsCallback($footprints)($element, $this->peek());
             if (is_object($object)) {
                 $this->elements->push($object);
+
+                return true;
             }
         }
+
+        return false;
     }
 
     /**
-     *
+     * @return bool
      */
-    public function popElement(): void
+    public function popElement(): bool
     {
-        if (!$this->elements->isEmpty()) {
-            $this->top = $this->elements->pop();
+        if ($this->elements->isEmpty()) {
+            return false;
         }
+
+        $this->top = $this->elements->pop();
+
+        return true;
     }
 
     /**

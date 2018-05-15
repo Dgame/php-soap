@@ -28,6 +28,10 @@ final class Hydrator implements ElementVisitorInterface, AttributeVisitorInterfa
      * @var SplStack
      */
     private $footprints;
+    /**
+     * @var bool
+     */
+    public $debug = false;
 
     /**
      * Hydrator constructor.
@@ -48,7 +52,7 @@ final class Hydrator implements ElementVisitorInterface, AttributeVisitorInterfa
         $footprints = [];
         foreach ($this->footprints as $footprint) {
             $footprint    = $this->strategy->processFootprint($footprint);
-            $footprints[] = strtolower($footprint);
+            $footprints[] = $footprint;
         }
 
         return implode('.', array_reverse($footprints));
@@ -73,28 +77,43 @@ final class Hydrator implements ElementVisitorInterface, AttributeVisitorInterfa
     {
         $this->footprints->push($attribute->getName());
         $footprints = $this->getFootprints();
-        var_dump($footprints);
+        $this->debug($footprints);
         $this->strategy->setAttribute($footprints, $attribute);
     }
 
     /**
      * @param ElementInterface $element
+     *
+     * @return bool
      */
-    private function pushElement(ElementInterface $element): void
+    private function pushElement(ElementInterface $element): bool
     {
         $this->footprints->push($element->getName());
         $footprints = $this->getFootprints();
-        var_dump($footprints);
-        $this->strategy->pushElement($footprints, $element);
+        $this->debug($footprints);
+
+        return $this->strategy->pushElement($footprints, $element);
     }
 
     /**
-     *
+     * @param string $message
      */
-    private function popElement(): void
+    private function debug(string $message): void
+    {
+        if ($this->debug) {
+            var_dump($message);
+        }
+    }
+
+    /**
+     * @param bool $pushed
+     */
+    private function popElement(bool $pushed): void
     {
         $this->footprints->pop();
-        $this->strategy->popElement();
+        if ($pushed) {
+            $this->strategy->popElement();
+        }
     }
 
     /**
@@ -137,9 +156,9 @@ final class Hydrator implements ElementVisitorInterface, AttributeVisitorInterfa
      */
     public function visitElement(ElementInterface $element): void
     {
-        $this->pushElement($element);
+        $pushed = $this->pushElement($element);
         $this->traverseAttributes($element);
-        $this->popElement();
+        $this->popElement($pushed);
     }
 
     /**
@@ -147,9 +166,9 @@ final class Hydrator implements ElementVisitorInterface, AttributeVisitorInterfa
      */
     public function visitXmlElement(XmlElementInterface $element): void
     {
-        $this->pushElement($element);
+        $pushed = $this->pushElement($element);
         $this->traverseAttributes($element);
-        $this->popElement();
+        $this->popElement($pushed);
     }
 
     /**
@@ -157,12 +176,12 @@ final class Hydrator implements ElementVisitorInterface, AttributeVisitorInterfa
      */
     public function visitXmlNode(XmlNodeInterface $node): void
     {
-        $this->pushElement($node);
+        $pushed = $this->pushElement($node);
         $this->traverseAttributes($node);
         foreach ($node->getElements() as $element) {
             $element->accept($this);
         }
-        $this->popElement();
+        $this->popElement($pushed);
     }
 
     /**
