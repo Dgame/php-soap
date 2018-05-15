@@ -84,7 +84,7 @@ class XmlNode extends XmlElement implements XmlNodeInterface
     {
         $element = $this->getElementByName($name);
         if ($element === null) {
-            $element = $create === null ? new XmlElement($name) : $create($name);
+            $element = $create === null ? new Element($name) : $create($name);
             $this->appendElement($element);
         }
 
