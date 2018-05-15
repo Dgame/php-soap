@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
  */
 final class NodeElementAccessTest extends TestCase
 {
-    public function testHasElementWithName()
+    public function testHasElementWithName(): void
     {
         $node = new XmlNode('Foo');
         $this->assertFalse($node->hasElementWithName('Bar'));
@@ -28,7 +28,7 @@ final class NodeElementAccessTest extends TestCase
         $this->assertNotNull($element);
     }
 
-    public function testGetElementByName()
+    public function testGetElementByName(): void
     {
         $node = new XmlNode('Foo');
         $this->assertNull($node->getElementByName('Bar'));
@@ -40,7 +40,7 @@ final class NodeElementAccessTest extends TestCase
         $this->assertNotNull($node->getElementByName('Quatz'));
     }
 
-    public function testGetOrSetElementByName()
+    public function testGetOrSetElementByName(): void
     {
         $node = new XmlNode('Foo');
         $this->assertNotNull($node->getOrSetElementByName('Bar'));

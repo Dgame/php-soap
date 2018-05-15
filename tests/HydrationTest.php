@@ -15,10 +15,10 @@ use stdClass;
  */
 final class HydrationTest extends TestCase
 {
-    public function testSingleHydration()
+    public function testSingleHydration(): void
     {
         $doc = new DOMDocument('1.0', 'utf-8');
-        $this->assertTrue($doc->load(__DIR__  . '/resources/test.xml'));
+        $this->assertTrue($doc->load(__DIR__ . '/resources/test.xml'));
 
         $strategy = new DefaultHydratorStrategy();
         $strategy->setCallback('Envelope.Body.Fault.faultstring', function (ElementInterface $element) {
@@ -32,10 +32,10 @@ final class HydrationTest extends TestCase
         $this->assertEquals('Es ist ein Fehler aufgetreten', $strategy->top()->fault);
     }
 
-    public function testMultiHydration()
+    public function testMultiHydration(): void
     {
         $doc = new DOMDocument('1.0', 'utf-8');
-        $this->assertTrue($doc->load(__DIR__  . '/resources/test.xml'));
+        $this->assertTrue($doc->load(__DIR__ . '/resources/test.xml'));
 
         $strategy = new DefaultHydratorStrategy();
         $strategy->setCallback('Envelope', function () {
@@ -46,10 +46,10 @@ final class HydrationTest extends TestCase
 
             return $envelope->fault;
         });
-        $strategy->setCallback('Envelope.Body.Fault.faultcode', function (ElementInterface $element, stdClass $fault) {
+        $strategy->setCallback('Envelope.Body.Fault.faultcode', function (ElementInterface $element, stdClass $fault): void {
             $fault->faultcode = $element->getValue();
         });
-        $strategy->setCallback('Envelope.Body.Fault.faultstring', function (ElementInterface $element, stdClass $fault) {
+        $strategy->setCallback('Envelope.Body.Fault.faultstring', function (ElementInterface $element, stdClass $fault): void {
             $fault->faultstring = $element->getValue();
         });
         $hydator = new Hydrator($strategy);
