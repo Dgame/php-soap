@@ -48,46 +48,19 @@ class XmlNode extends XmlElement implements XmlNodeInterface
     }
 
     /**
-     * @param string                $name
-     * @param ElementInterface|null $element
+     * @param string $name
      *
-     * @return bool
+     * @return array
      */
-    public function hasElementWithName(string $name, ElementInterface &$element = null): bool
+    public function getElementsByName(string $name): array
     {
-        foreach ($this->getElements() as $element) {
+        $elements = [];
+        foreach ($this->elements as $element) {
             if ($element->getName() === $name) {
-                return true;
+                $elements[] = $element;
             }
         }
 
-        return false;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return ElementInterface|null
-     */
-    public function getElementByName(string $name): ?ElementInterface
-    {
-        return $this->hasElementWithName($name, $element) ? $element : null;
-    }
-
-    /**
-     * @param string        $name
-     * @param callable|null $create
-     *
-     * @return ElementInterface
-     */
-    public function getOrSetElementByName(string $name, callable $create = null): ElementInterface
-    {
-        $element = $this->getElementByName($name);
-        if ($element === null) {
-            $element = $create === null ? new Element($name) : $create($name);
-            $this->appendElement($element);
-        }
-
-        return $element;
+        return $elements;
     }
 }

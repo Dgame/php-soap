@@ -24,25 +24,9 @@ interface XmlNodeInterface extends XmlElementInterface
     public function getElements(): array;
 
     /**
-     * @param string                $name
-     * @param ElementInterface|null $element
-     *
-     * @return bool
-     */
-    public function hasElementWithName(string $name, ElementInterface &$element = null): bool;
-
-    /**
      * @param string $name
      *
-     * @return ElementInterface|null
+     * @return array
      */
-    public function getElementByName(string $name): ?ElementInterface;
-
-    /**
-     * @param string        $name
-     * @param callable|null $create
-     *
-     * @return ElementInterface
-     */
-    public function getOrSetElementByName(string $name, callable $create = null): ElementInterface;
+    public function getElementsByName(string $name): array;
 }
