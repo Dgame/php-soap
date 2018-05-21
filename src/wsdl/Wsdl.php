@@ -12,6 +12,10 @@ use function Dgame\Ensurance\enforce;
  */
 final class Wsdl
 {
+    public const W3_SCHEMA        = 'http://www.w3.org/2001/XMLSchema';
+    public const WSDL_SOAP_SCHEMA = 'http://schemas.xmlsoap.org/wsdl/soap/';
+    public const WSDL_SCHEMA      = 'http://schemas.xmlsoap.org/wsdl/';
+
     /**
      * @var DOMDocument
      */
@@ -66,7 +70,7 @@ final class Wsdl
     private function getBinding(): DOMElement
     {
         if ($this->binding === null) {
-            $bindings = $this->document->getElementsByTagNameNS('http://schemas.xmlsoap.org/wsdl/', 'binding');
+            $bindings = $this->document->getElementsByTagNameNS(self::WSDL_SCHEMA, 'binding');
             enforce($bindings->length !== 0)->orThrow('There are no bindings');
             enforce($bindings->length === 1)->orThrow('There are multiple bindings');
 
@@ -86,7 +90,7 @@ final class Wsdl
         }
 
         $binding    = $this->getBinding();
-        $operations = $binding->getElementsByTagNameNS('http://schemas.xmlsoap.org/wsdl/', 'operation');
+        $operations = $binding->getElementsByTagNameNS(self::WSDL_SCHEMA, 'operation');
         for ($i = 0, $c = $operations->length; $i < $c; $i++) {
             $operation = $operations->item($i);
 
@@ -106,7 +110,7 @@ final class Wsdl
         }
 
         $binding = $this->getBinding();
-        $actions = $binding->getElementsByTagNameNS('http://schemas.xmlsoap.org/wsdl/soap/', 'operation');
+        $actions = $binding->getElementsByTagNameNS(self::WSDL_SOAP_SCHEMA, 'operation');
         for ($i = 0, $c = $actions->length; $i < $c; $i++) {
             $action = $actions->item($i);
 
@@ -121,7 +125,7 @@ final class Wsdl
      */
     public function getSchema(): Xsd
     {
-        $schema = $this->document->getElementsByTagNameNS('http://www.w3.org/2001/XMLSchema', 'schema');
+        $schema = $this->document->getElementsByTagNameNS(self::W3_SCHEMA, 'schema');
         enforce($schema->length !== 0)->orThrow('There is no Schema');
         enforce($schema->length === 1)->orThrow('There are multiple Schemas');
 
