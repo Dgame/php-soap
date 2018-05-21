@@ -5,6 +5,7 @@ namespace Dgame\Soap\Wsdl;
 use DOMDocument;
 use DOMElement;
 use function Dgame\Ensurance\enforce;
+use function Dgame\Ensurance\ensure;
 
 /**
  * Class Wsdl
@@ -54,6 +55,42 @@ final class Wsdl
     public function isValid(): bool
     {
         return $this->valid;
+    }
+
+    /**
+     * @param string $pattern
+     *
+     * @return array
+     */
+    public function getOperationsByPattern(string $pattern): array
+    {
+        $operations = [];
+        foreach ($this->getOperations() as $operation) {
+            if (preg_match($pattern, $operation) === 1) {
+                $operations[] = $operation;
+            }
+        }
+
+        return $operations;
+    }
+
+    /**
+     * @param string $pattern
+     *
+     * @return string
+     */
+    public function getOperationByPattern(string $pattern): string
+    {
+       $operations = $this->getOperationsByPattern($pattern);
+
+        ensure($operations)->isArray()
+                           ->isLongerThan(0)
+                           ->orThrow('No operation found by pattern %s', $pattern);
+        ensure($operations)->isArray()
+                           ->hasLengthOf(1)
+                           ->orThrow('Ambiguous operation pattern %xs. Found multiple occurrences', $pattern);
+
+        return array_pop($operations);
     }
 
     /**
