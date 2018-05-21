@@ -22,7 +22,7 @@ final class BindingHydratorStrategy implements HydratorStrategyInterface
     ];
 
     /**
-     * @var array
+     * @var Closure[]
      */
     private $closures = [];
     /**
@@ -78,13 +78,13 @@ final class BindingHydratorStrategy implements HydratorStrategyInterface
 
     /**
      * @param string        $location
-     * @param callable      $closure
+     * @param Closure       $closure
      * @param callable|null $factory
      *
      * @return stdClass
      * @throws \ReflectionException
      */
-    public function bind(string $location, callable $closure, callable $factory = null)
+    public function bind(string $location, Closure $closure, callable $factory = null)
     {
         $location = preg_quote($location, '/');
         foreach (self::REPLACEMENTS as $key => $value) {
@@ -94,7 +94,7 @@ final class BindingHydratorStrategy implements HydratorStrategyInterface
         $object = $factory !== null ? $factory() : new stdClass();
         ensure($object)->isObject()->orThrow('%s is not an object', $object);
 
-        $this->closures[$location] = Closure::bind($closure, $object);
+        $this->closures[$location] = $closure->bindTo($object);
 
         return $object;
     }
