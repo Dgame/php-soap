@@ -61,7 +61,7 @@ final class BindingHydratorStrategy implements HydratorStrategyInterface
     /**
      * @param bool $caseSensitivev
      */
-    public function setCaseSensitivev(bool $caseSensitivev)
+    public function setCaseSensitivev(bool $caseSensitivev): void
     {
         $this->caseSensitivev = $caseSensitivev;
     }

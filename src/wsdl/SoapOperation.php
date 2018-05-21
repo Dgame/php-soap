@@ -64,7 +64,7 @@ final class SoapOperation
         $prefix = $extension->getPrefix();
         $uri    = $this->xsd->getUriByPrefix($prefix);
 
-        array_walk($elements, function (SoapElement $element) use ($uri) {
+        array_walk($elements, function (SoapElement $element) use ($uri): void {
             $element->setUri($uri);
         });
 
@@ -127,7 +127,7 @@ final class SoapOperation
         }
 
         [$prefix, $type] = explode(':', $type);
-        $types = $this->xsd->getXsdByPrefix($prefix);
+        $types           = $this->xsd->getXsdByPrefix($prefix);
 
         return $types->getSimpleTypeByName($type)->getRestrictions();
     }

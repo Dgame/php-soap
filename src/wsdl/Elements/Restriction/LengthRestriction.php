@@ -28,7 +28,7 @@ final class LengthRestriction implements RestrictionInterface
      */
     public static function exact(int $length): self
     {
-        $restriction = new self();
+        $restriction         = new self();
         $restriction->length = $length;
 
         return $restriction;
@@ -42,7 +42,7 @@ final class LengthRestriction implements RestrictionInterface
      */
     public static function within(int $min, int $max): self
     {
-        $restriction = new self();
+        $restriction      = new self();
         $restriction->min = $min;
         $restriction->max = $max;
 

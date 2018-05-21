@@ -106,7 +106,7 @@ final class SoapElement
     /**
      * @param string $uri
      */
-    public function setUri(string $uri)
+    public function setUri(string $uri): void
     {
         $this->uri = $uri;
     }

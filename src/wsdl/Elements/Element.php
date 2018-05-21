@@ -2,8 +2,8 @@
 
 namespace Dgame\Soap\Wsdl\Elements;
 
-use function Dgame\Ensurance\enforce;
 use DOMElement;
+use function Dgame\Ensurance\enforce;
 
 /**
  * Class Element

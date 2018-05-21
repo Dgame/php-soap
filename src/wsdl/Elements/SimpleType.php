@@ -28,7 +28,7 @@ final class SimpleType
      */
     public function __construct(DOMElement $element)
     {
-        $this->name = $element->getAttribute('name');
+        $this->name    = $element->getAttribute('name');
         $this->element = $element;
     }
 
