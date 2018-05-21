@@ -81,7 +81,7 @@ final class Wsdl
      */
     public function getOperationByPattern(string $pattern): string
     {
-       $operations = $this->getOperationsByPattern($pattern);
+        $operations = $this->getOperationsByPattern($pattern);
 
         ensure($operations)->isArray()
                            ->isLongerThan(0)
