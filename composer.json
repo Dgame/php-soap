@@ -17,6 +17,7 @@
     ],
     "require": {
         "php": "^7.1",
+        "dgame/php-ensurance": "^1.0 || ^2.0",
         "monolog/monolog": "^1.22"
     },
     "require-dev": {

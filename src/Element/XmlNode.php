@@ -48,6 +48,22 @@ class XmlNode extends XmlElement implements XmlNodeInterface
     }
 
     /**
+     * @param string   $name
+     * @param callable $closure
+     *
+     * @return int
+     */
+    public function applyTo(string $name, callable $closure): int
+    {
+        $elements = $this->getElementsByName($name);
+        foreach ($elements as $element) {
+            $closure($element);
+        }
+
+        return count($elements);
+    }
+
+    /**
      * @param string $name
      *
      * @return array

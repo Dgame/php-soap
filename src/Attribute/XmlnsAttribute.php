@@ -24,6 +24,18 @@ class XmlnsAttribute extends XmlAttribute
     }
 
     /**
+     * @param string $uri
+     *
+     * @return XmlnsAttribute
+     */
+    public static function fromUri(string $uri): self
+    {
+        $name = basename($uri);
+
+        return new self($name, $uri);
+    }
+
+    /**
      * @param AttributeVisitorInterface $visitor
      */
     public function accept(AttributeVisitorInterface $visitor): void
