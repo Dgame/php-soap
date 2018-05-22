@@ -3,7 +3,11 @@
 namespace Dgame\Soap\Wsdl;
 
 use Dgame\Soap\Wsdl\Elements\ComplexType;
+use Dgame\Soap\Wsdl\Elements\Element;
 use Dgame\Soap\Wsdl\Elements\Extension;
+use Dgame\Soap\Wsdl\Elements\Restriction\RestrictionInterface;
+use Dgame\Soap\Wsdl\Elements\SimpleType;
+use function Dgame\Ensurance\enforce;
 
 /**
  * Class SoapOperation
@@ -19,6 +23,10 @@ final class SoapOperation
      * @var string
      */
     private $operation;
+    /**
+     * @var SoapElement[]
+     */
+    private $elements = [];
 
     /**
      * SoapOperation constructor.
@@ -49,16 +57,47 @@ final class SoapOperation
     }
 
     /**
-     * @return array
+     * @return SoapElement[]
      */
     public function getElements(): array
     {
-        $extension = $this->loadExtension();
-        $parent    = $this->loadParent($extension);
+        if (!empty($this->elements)) {
+            return $this->elements;
+        }
+
+        $this->elements = [];
+
+        $element = $this->xsd->getOneElementByName($this->operation);
+        $complex = $element->getComplexType();
+
+        enforce($complex !== null)->orThrow('Can only collect elements from a ComplexType');
+
+        if ($complex->hasExtensions()) {
+            $extension      = $complex->getFirstExtension();
+            $this->elements = $this->loadParentElements($extension);
+        }
+
+        $this->elements = array_merge($this->collectElementsFrom($complex), $this->elements);
+
+        return $this->elements;
+    }
+
+    /**
+     * @param Extension $extension
+     *
+     * @return SoapElement[]
+     */
+    private function loadParentElements(Extension $extension): array
+    {
+        $name    = $extension->getPrefixedName();
+        $parent  = $this->xsd->findElementByNameInDeep($name);
+        $complex = $parent->getComplexType();
+
+        enforce($complex !== null)->orThrow('Can only collect elements from a ComplexType');
 
         $elements = array_merge(
             $this->collectExtensionElements($extension),
-            $this->collectParentElements($parent)
+            $this->collectElementsFrom($complex)
         );
 
         $prefix = $extension->getPrefix();
@@ -78,47 +117,72 @@ final class SoapOperation
      */
     private function collectExtensionElements(Extension $extension): array
     {
+        return $this->collectElements($extension->getElements());
+    }
+
+    /**
+     * @param ComplexType $complex
+     *
+     * @return SoapElement[]
+     */
+    private function collectElementsFrom(ComplexType $complex): array
+    {
         $elements = [];
-        foreach ($extension->getElements() as $element) {
-            $min  = $element->getAttribute('minOccurs');
-            $max  = $element->getAttribute('maxOccurs');
-            $name = $element->getAttribute('name');
-            $type = $element->getAttribute('type');
+        if ($complex->hasExtensions()) {
+            $extension = $complex->getFirstExtension();
+            $elements  = array_merge($elements, $this->loadParentElements($extension));
+        }
 
-            $restrictions = $this->loadRestrictions($type);
+        $childs = $complex->getElements();
 
-            $elements[$name] = new SoapElement($name, (int) $min, (int) $max, $restrictions);
+        return array_merge($this->collectElements($childs), $elements);
+    }
+
+    /**
+     * @param Element[] $childs
+     *
+     * @return SoapElement[]
+     */
+    private function collectElements(array $childs): array
+    {
+        $elements = [];
+        foreach ($childs as $child) {
+            $name = $child->getAttribute('name');
+
+            $elements[$name] = $this->createChildElement($child);
         }
 
         return $elements;
     }
 
     /**
-     * @param ComplexType $parent
+     * @param Element $child
      *
-     * @return SoapElement[]
+     * @return SoapElement
      */
-    private function collectParentElements(ComplexType $parent): array
+    private function createChildElement(Element $child): SoapElement
     {
-        $elements = [];
-        foreach ($parent->getElements() as $element) {
-            $min  = $element->getAttribute('minOccurs');
-            $max  = $element->getAttribute('maxOccurs');
-            $name = $element->getAttribute('name');
-            $type = $element->getAttribute('type');
+        $min  = $child->getAttribute('minOccurs');
+        $max  = $child->getAttribute('maxOccurs');
+        $name = $child->getAttribute('name');
+        $type = $child->getAttribute('type');
 
-            $restrictions = $this->loadRestrictions($type);
+        $restrictions = $this->loadRestrictions($type);
+        $element      = $this->xsd->findElementByNameInDeep($type);
+        if ($element !== null && $element->isComplexType($complex)) {
+            $node = new SoapNode($name, (int) $min, (int) $max, $restrictions);
+            $node->setChildElements($this->collectElementsFrom($complex));
 
-            $elements[$name] = new SoapElement($name, (int) $min, (int) $max, $restrictions);
+            return $node;
         }
 
-        return $elements;
+        return new SoapElement($name, (int) $min, (int) $max, $restrictions);
     }
 
     /**
      * @param string $type
      *
-     * @return array
+     * @return RestrictionInterface[]
      */
     private function loadRestrictions(string $type): array
     {
@@ -126,35 +190,12 @@ final class SoapOperation
             return [];
         }
 
-        [$prefix, $type] = explode(':', $type);
-        $types           = $this->xsd->getXsdByPrefix($prefix);
+        $element = $this->xsd->findElementByNameInDeep($type);
+        /** @var SimpleType $simple */
+        if ($element !== null && $element->isSimpleType($simple)) {
+            return $simple->getRestrictions();
+        }
 
-        return $types->getSimpleTypeByName($type)->getRestrictions();
-    }
-
-    /**
-     * @return Extension
-     */
-    private function loadExtension(): Extension
-    {
-        $outer   = $this->xsd->getElementByName($this->operation);
-        $inner   = $outer->getOneElementByName('element');
-        $type    = $inner->getAttribute('type');
-        $complex = $this->xsd->getComplexTypeByName($type);
-
-        return $complex->getExtension();
-    }
-
-    /**
-     * @param Extension $extension
-     *
-     * @return ComplexType
-     */
-    private function loadParent(Extension $extension): ComplexType
-    {
-        $base   = $extension->getBase();
-        $prefix = $extension->getPrefix();
-
-        return $this->xsd->getXsdByPrefix($prefix)->getComplexTypeByName($base);
+        return [];
     }
 }

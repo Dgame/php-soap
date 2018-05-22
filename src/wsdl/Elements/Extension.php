@@ -37,9 +37,17 @@ final class Extension
     }
 
     /**
+     * @return string
+     */
+    public function getPrefixedName(): string
+    {
+        return sprintf('%s:%s', $this->prefix, $this->base);
+    }
+
+    /**
      * @return DOMElement
      */
-    public function getElement(): DOMElement
+    public function getDomElement(): DOMElement
     {
         return $this->element;
     }
@@ -67,7 +75,7 @@ final class Extension
     {
         $elements = [];
 
-        $nodes = $this->getElement()->getElementsByTagName('element');
+        $nodes = $this->getDomElement()->getElementsByTagName('element');
         for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
             $node = $nodes->item($i);
 

@@ -10,16 +10,12 @@ use DOMElement;
  * Class SimpleType
  * @package Dgame\Soap\Wsdl\Elements
  */
-final class SimpleType
+class SimpleType extends Element
 {
     /**
      * @var string
      */
     private $name;
-    /**
-     * @var DOMElement
-     */
-    private $element;
 
     /**
      * SimpleType constructor.
@@ -28,42 +24,37 @@ final class SimpleType
      */
     public function __construct(DOMElement $element)
     {
-        $this->name    = $element->getAttribute('name');
-        $this->element = $element;
+        parent::__construct($element);
+
+        $this->name = $element->getAttribute('name');
+    }
+
+    /**
+     * @param SimpleType|null $simple
+     *
+     * @return bool
+     */
+    public function isSimpleType(SimpleType &$simple = null): bool
+    {
+        $simple = $this;
+
+        return true;
     }
 
     /**
      * @return string
      */
-    public function getName(): string
+    final public function getName(): string
     {
         return $this->name;
     }
 
     /**
-     * @return DOMElement
-     */
-    public function getElement(): DOMElement
-    {
-        return $this->element;
-    }
-
-    /**
-     * @return RestrictionInterface
-     */
-    public function getFirstRestriction(): RestrictionInterface
-    {
-        $restrictions = $this->getRestrictions();
-
-        return reset($restrictions);
-    }
-
-    /**
      * @return RestrictionInterface[]
      */
-    public function getRestrictions(): array
+    final public function getRestrictions(): array
     {
-        $nodes = $this->element->getElementsByTagName('restriction');
+        $nodes = $this->getDomElement()->getElementsByTagName('restriction');
 
         $restrictions = [];
         for ($i = 0, $c = $nodes->length; $i < $c; $i++) {

@@ -9,13 +9,16 @@ use DOMDocument;
 use DOMElement;
 use DOMXPath;
 use function Dgame\Ensurance\enforce;
+use function Dgame\Ensurance\ensure;
 
 /**
  * Class Xsd
  * @package Dgame\Soap\Wsdl
  */
-final class Xsd
+class Xsd
 {
+    protected const W3_SCHEMA = 'http://www.w3.org/2001/XMLSchema';
+
     /**
      * @var string
      */
@@ -25,7 +28,7 @@ final class Xsd
      */
     private $document;
     /**
-     * @var
+     * @var DOMXPath
      */
     private $xpath;
     /**
@@ -47,14 +50,36 @@ final class Xsd
         $this->location = $uri;
         $this->document = new DOMDocument('1.0', 'utf-8');
         $this->valid    = $this->document->load($uri);
+
+        if ($this->valid) {
+            $this->resolveIncludes();
+        }
     }
 
     /**
-     * @return string
+     *
      */
-    public function getLocation(): string
+    private function resolveIncludes(): void
     {
-        return $this->location;
+        $nodes = $this->document->getElementsByTagNameNS(self::W3_SCHEMA, 'include');
+        for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
+            $include = $nodes->item($i);
+            if ($include === null) {
+                continue;
+            }
+
+            $location = $include->getAttribute('schemaLocation');
+            $location = pathinfo($this->location, PATHINFO_DIRNAME) . '/' . $location;
+
+            $xsd = new self($location);
+            if ($xsd->isValid()) {
+                foreach ($xsd->getDocument()->documentElement->childNodes as $child) {
+                    $node = $this->document->importNode($child, true);
+                    $include->parentNode->appendChild($node);
+                }
+            }
+            $include->parentNode->removeChild($include);
+        }
     }
 
     /**
@@ -66,9 +91,17 @@ final class Xsd
     }
 
     /**
+     * @return string
+     */
+    public function getLocation(): string
+    {
+        return $this->location;
+    }
+
+    /**
      * @return DOMElement
      */
-    public function getElement(): DOMElement
+    public function getDomElement(): DOMElement
     {
         return $this->document->documentElement;
     }
@@ -161,13 +194,26 @@ final class Xsd
      * @param string $prefix
      * @param string $namespace
      *
+     * @return bool
+     */
+    public function hasUriWithPrefix(string $prefix, string $namespace = 'xmlns'): bool
+    {
+        $attr = sprintf('%s:%s', $namespace, $prefix);
+
+        return $this->getDomElement()->hasAttribute($attr);
+    }
+
+    /**
+     * @param string $prefix
+     * @param string $namespace
+     *
      * @return string
      */
     public function getUriByPrefix(string $prefix, string $namespace = 'xmlns'): string
     {
         $attr = sprintf('%s:%s', $namespace, $prefix);
 
-        return $this->getElement()->hasAttribute($attr) ? $this->getElement()->getAttribute($attr) : '';
+        return $this->getDomElement()->hasAttribute($attr) ? $this->getDomElement()->getAttribute($attr) : '';
     }
 
     /**
@@ -188,6 +234,7 @@ final class Xsd
     public function getXsdByPrefix(string $prefix): self
     {
         $uri = $this->getUriByPrefix($prefix);
+        ensure($uri)->isNotEmpty()->orThrow('Empty Xsd-Uri');
 
         return $this->getXsdByUri($uri);
     }
@@ -204,8 +251,25 @@ final class Xsd
         $nodes = $this->getXPath()->query(sprintf('//xsd:element[@name="%s"]', $name));
         for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
             $node = $nodes->item($i);
+            $name = $node->getAttribute('name');
 
-            $elements[$node->getAttribute('name')] = new Element($node);
+            $elements[$name] = new Element($node);
+        }
+
+        $nodes = $this->getXPath()->query(sprintf('//xsd:simpleType[@name="%s"]', $name));
+        for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
+            $node = $nodes->item($i);
+            $name = $node->getAttribute('name');
+
+            $elements[$name] = new SimpleType($node);
+        }
+
+        $nodes = $this->getXPath()->query(sprintf('//xsd:complexType[@name="%s"]', $name));
+        for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
+            $node = $nodes->item($i);
+            $name = $node->getAttribute('name');
+
+            $elements[$name] = new ComplexType($node);
         }
 
         return $elements;
@@ -214,15 +278,13 @@ final class Xsd
     /**
      * @param string $name
      *
-     * @return SimpleType
+     * @return bool
      */
-    public function getSimpleTypeByName(string $name): SimpleType
+    public function hasOneElementWithName(string $name): bool
     {
-        $nodes = $this->getXPath()->query(sprintf('//xsd:simpleType[@name="%s"]', $name));
-        enforce($nodes->length !== 0)->orThrow('There is no simple type with name %s', $name);
-        enforce($nodes->length === 1)->orThrow('There are multiple simple types with name %s', $name);
+        $elements = $this->getAllElementsByName($name);
 
-        return new SimpleType($nodes->item(0));
+        return count($elements) === 1;
     }
 
     /**
@@ -230,26 +292,39 @@ final class Xsd
      *
      * @return Element
      */
-    public function getElementByName(string $name): Element
+    public function getOneElementByName(string $name): Element
     {
-        $nodes = $this->getXPath()->query(sprintf('//xsd:element[@name="%s"]', $name));
-        enforce($nodes->length !== 0)->orThrow('There is no element with name %s', $name);
-        enforce($nodes->length === 1)->orThrow('There are multiple elements with name %s', $name);
+        $elements = $this->getAllElementsByName($name);
 
-        return new Element($nodes->item(0));
+        ensure($elements)->isArray()->isLongerThan(0)->orThrow('There is no element with name %s', $name);
+        ensure($elements)->isArray()->hasLengthOf(1)->orThrow('There are multiple elements with name %s', $name);
+
+        return array_pop($elements);
     }
 
     /**
      * @param string $name
      *
-     * @return ComplexType
+     * @return Element|null
      */
-    public function getComplexTypeByName(string $name): ComplexType
+    public function findElementByNameInDeep(string $name): ?Element
     {
-        $nodes = $this->getXPath()->query(sprintf('//xsd:complexType[@name="%s"]', $name));
-        enforce($nodes->length !== 0)->orThrow('There is no complex type with name %s', $name);
-        enforce($nodes->length === 1)->orThrow('There are multiple complex types with name %s', $name);
+        if (strpos($name, ':') === false) {
+            return $this->hasOneElementWithName($name) ? $this->getOneElementByName($name) : null;
+        }
 
-        return new ComplexType($nodes->item(0));
+        [$prefix, $name] = explode(':', $name);
+
+        if ($this->hasOneElementWithName($name)) {
+            return $this->getOneElementByName($name);
+        }
+
+        if (!$this->hasUriWithPrefix($prefix)) {
+            return null;
+        }
+
+        $xsd = $this->getXsdByPrefix($prefix);
+
+        return $xsd->hasOneElementWithName($name) ? $xsd->getOneElementByName($name) : null;
     }
 }

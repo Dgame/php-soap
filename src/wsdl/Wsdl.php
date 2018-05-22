@@ -13,9 +13,8 @@ use function Dgame\Ensurance\ensure;
  */
 final class Wsdl
 {
-    public const W3_SCHEMA        = 'http://www.w3.org/2001/XMLSchema';
-    public const WSDL_SOAP_SCHEMA = 'http://schemas.xmlsoap.org/wsdl/soap/';
-    public const WSDL_SCHEMA      = 'http://schemas.xmlsoap.org/wsdl/';
+    private const WSDL_SOAP_SCHEMA = 'http://schemas.xmlsoap.org/wsdl/soap/';
+    private const WSDL_SCHEMA      = 'http://schemas.xmlsoap.org/wsdl/';
 
     /**
      * @var DOMDocument
@@ -47,6 +46,14 @@ final class Wsdl
     {
         $this->document = new DOMDocument('1.0', 'utf-8');
         $this->valid    = $this->document->load($uri);
+    }
+
+    /**
+     * @return DOMDocument
+     */
+    public function getDocument(): DOMDocument
+    {
+        return $this->document;
     }
 
     /**
@@ -174,20 +181,10 @@ final class Wsdl
     }
 
     /**
-     * @return Xsd
+     * @return Schema
      */
-    public function getSchema(): Xsd
+    public function getSchema(): Schema
     {
-        $schema = $this->document->getElementsByTagNameNS(self::W3_SCHEMA, 'schema');
-        enforce($schema->length !== 0)->orThrow('There is no Schema');
-        enforce($schema->length === 1)->orThrow('There are multiple Schemas');
-
-        $include = $schema->item(0)->getElementsByTagName('include');
-        enforce($include->length !== 0)->orThrow('There is no include');
-        enforce($include->length === 1)->orThrow('There are multiple includes');
-
-        $location = $include->item(0)->getAttribute('schemaLocation');
-
-        return new Xsd($location);
+        return new Schema($this->document);
     }
 }

@@ -2,20 +2,18 @@
 
 namespace Dgame\Soap\Wsdl\Elements;
 
+use function Dgame\Ensurance\enforce;
 use DOMElement;
+use function Dgame\Ensurance\ensure;
 
 /**
  * Class ComplexType
  * @package Dgame\Soap\Wsdl\Elements
  */
-final class ComplexType
+final class ComplexType extends SimpleType
 {
     /**
-     * @var DOMElement
-     */
-    private $element;
-    /**
-     * @var array
+     * @var Extension[]
      */
     private $extensions = [];
 
@@ -26,7 +24,19 @@ final class ComplexType
      */
     public function __construct(DOMElement $element)
     {
-        $this->element = $element;
+        parent::__construct($element);
+    }
+
+    /**
+     * @param ComplexType|null $complex
+     *
+     * @return bool
+     */
+    public function isComplexType(ComplexType &$complex = null): bool
+    {
+        $complex = $this;
+
+        return true;
     }
 
     /**
@@ -34,32 +44,28 @@ final class ComplexType
      */
     public function isAbstract(): bool
     {
-        return $this->element->hasAttribute('abstract')
-               && filter_var($this->element->getAttribute('abstract'), FILTER_VALIDATE_BOOLEAN);
+        return $this->hasAttribute('abstract')
+               && filter_var($this->getAttribute('abstract'), FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function getName(): string
+    public function hasExtensions(): bool
     {
-        return $this->element->getAttribute('name');
-    }
+        $extensions = $this->getExtensions();
 
-    /**
-     * @return DOMElement
-     */
-    public function getElement(): DOMElement
-    {
-        return $this->element;
+        return !empty($extensions);
     }
 
     /**
      * @return Extension
      */
-    public function getExtension(): Extension
+    public function getFirstExtension(): Extension
     {
         $extensions = $this->getExtensions();
+        ensure($extensions)->isNotEmpty()->orThrow('No Extensions found');
+        ensure($extensions)->isArray()->hasLengthOf(1)->orThrow('Found multiple Extensions');
 
         return reset($extensions);
     }
@@ -85,23 +91,6 @@ final class ComplexType
     }
 
     /**
-     * @return Element[]
-     */
-    public function getElements(): array
-    {
-        $nodes = $this->getElement()->getElementsByTagName('element');
-
-        $elements = [];
-        for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
-            $node      = $nodes->item($i);
-
-            $elements[] = new Element($node);
-        }
-
-        return $elements;
-    }
-
-    /**
      * @return Extension[]
      */
     public function getExtensions(): array
@@ -110,8 +99,7 @@ final class ComplexType
             return $this->extensions;
         }
 
-        $nodes = $this->element->getElementsByTagName('extension');
-
+        $nodes = $this->getDomElement()->getElementsByTagName('extension');
         for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
             $node      = $nodes->item($i);
             $extension = new Extension($node, $node->getAttribute('base'));
@@ -120,5 +108,56 @@ final class ComplexType
         }
 
         return $this->extensions;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Element
+     */
+    public function getElementByName(string $name): Element
+    {
+        $elements = $this->getElementsByName($name);
+
+        enforce(count($elements) !== 0)->orThrow('There are no nodes with name %s', $name);
+        enforce(count($elements) === 1)->orThrow('There are multiple nodes with name %s', $name);
+
+        return array_pop($elements);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Element[]
+     */
+    public function getElementsByName(string $name): array
+    {
+        $elements = [];
+
+        $nodes = $this->getDomElement()->getElementsByTagName($name);
+        for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
+            $node = $nodes->item($i);
+
+            $elements[$node->getAttribute('name')] = new self($node);
+        }
+
+        return $elements;
+    }
+
+    /**
+     * @return Element[]
+     */
+    public function getElements(): array
+    {
+        $nodes = $this->getDomElement()->getElementsByTagName('element');
+
+        $elements = [];
+        for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
+            $node = $nodes->item($i);
+
+            $elements[] = new Element($node);
+        }
+
+        return $elements;
     }
 }

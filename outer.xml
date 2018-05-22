@@ -1,0 +1,12 @@
+<xsd:element name="ListShipments">
+    <xsd:complexType>
+      
+    <xsd:complexContent>
+        <xsd:extension base="bipro:CT_ProzessAnfrage">
+          <xsd:sequence>
+            <xsd:element name="KategorieDerLieferung" type="bipro:ST_SuchGevoArt" minOccurs="0"/>
+            <xsd:element name="BestaetigeLieferungen" type="bipro:ST_JaNein" minOccurs="0"/>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent></xsd:complexType>
+  </xsd:element>

@@ -9,7 +9,7 @@ use function Dgame\Ensurance\enforce;
  * Class Element
  * @package Dgame\Soap\Wsdl\Elements
  */
-final class Element
+class Element
 {
     /**
      * @var DOMElement
@@ -19,11 +19,35 @@ final class Element
     /**
      * Element constructor.
      *
-     * @param DOMElement $node
+     * @param DOMElement $element
      */
-    public function __construct(DOMElement $node)
+    public function __construct(DOMElement $element)
     {
-        $this->element = $node;
+        $this->element = $element;
+    }
+
+    /**
+     * @param SimpleType|null $simple
+     *
+     * @return bool
+     */
+    public function isSimpleType(SimpleType &$simple = null): bool
+    {
+        $simple = null;
+
+        return false;
+    }
+
+    /**
+     * @param ComplexType|null $complex
+     *
+     * @return bool
+     */
+    public function isComplexType(ComplexType &$complex = null): bool
+    {
+        $complex = null;
+
+        return false;
     }
 
     /**
@@ -31,7 +55,7 @@ final class Element
      *
      * @return bool
      */
-    public function hasAttribute(string $name): bool
+    final public function hasAttribute(string $name): bool
     {
         return $this->element->hasAttribute($name);
     }
@@ -41,7 +65,7 @@ final class Element
      *
      * @return string
      */
-    public function getAttribute(string $name): string
+    final public function getAttribute(string $name): string
     {
         return $this->element->getAttribute($name);
     }
@@ -49,42 +73,40 @@ final class Element
     /**
      * @return DOMElement
      */
-    public function getElement(): DOMElement
+    final public function getDomElement(): DOMElement
     {
         return $this->element;
     }
 
     /**
-     * @param string $name
-     *
-     * @return Element
+     * @return SimpleType
      */
-    public function getOneElementByName(string $name): self
+    final public function getSimpleType(): SimpleType
     {
-        $elements = $this->getAllElementsByName($name);
+        if ($this->isSimpleType($simple)) {
+            return $simple;
+        }
 
-        enforce(count($elements) !== 0)->orThrow('There are no nodes with name %s', $name);
-        enforce(count($elements) === 1)->orThrow('There are multiple nodes with name %s', $name);
+        $nodes = $this->getDomElement()->getElementsByTagName('simpleType');
+        enforce($nodes->length !== 0)->orThrow('There are no nodes with name Simple-Types');
+        enforce($nodes->length === 1)->orThrow('There are multiple nodes with name Simple-Types');
 
-        return array_pop($elements);
+        return new SimpleType($nodes->item(0));
     }
 
     /**
-     * @param string $name
-     *
-     * @return Element[]
+     * @return ComplexType
      */
-    public function getAllElementsByName(string $name): array
+    final public function getComplexType(): ComplexType
     {
-        $elements = [];
-
-        $nodes = $this->element->getElementsByTagName($name);
-        for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
-            $node = $nodes->item($i);
-
-            $elements[$node->getAttribute('name')] = new self($node);
+        if ($this->isComplexType($complex)) {
+            return $complex;
         }
 
-        return $elements;
+        $nodes = $this->getDomElement()->getElementsByTagName('complexType');
+        enforce($nodes->length !== 0)->orThrow('There are no nodes with name Complex-Types');
+        enforce($nodes->length === 1)->orThrow('There are multiple nodes with name Complex-Types');
+
+        return new ComplexType($nodes->item(0));
     }
 }

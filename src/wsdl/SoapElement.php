@@ -8,7 +8,7 @@ use Dgame\Soap\Wsdl\Elements\Restriction\RestrictionInterface;
  * Class SoapElement
  * @package Dgame\Soap\Wsdl
  */
-final class SoapElement
+class SoapElement
 {
     /**
      * @var string
@@ -48,9 +48,21 @@ final class SoapElement
     }
 
     /**
+     * @param SoapNode|null $node
+     *
+     * @return bool
+     */
+    public function isSoapNode(SoapNode &$node = null): bool
+    {
+        $node = null;
+
+        return false;
+    }
+
+    /**
      * @return string
      */
-    public function getName(): string
+    final public function getName(): string
     {
         return $this->name;
     }
@@ -58,7 +70,7 @@ final class SoapElement
     /**
      * @return string
      */
-    public function getUri(): string
+    final public function getUri(): string
     {
         return $this->uri ?? '';
     }
@@ -66,7 +78,7 @@ final class SoapElement
     /**
      * @return int
      */
-    public function getMin(): int
+    final public function getMin(): int
     {
         return $this->min;
     }
@@ -74,7 +86,7 @@ final class SoapElement
     /**
      * @return int
      */
-    public function getMax(): int
+    final public function getMax(): int
     {
         return $this->max;
     }
@@ -82,7 +94,7 @@ final class SoapElement
     /**
      * @return array
      */
-    public function getRestrictions(): array
+    final public function getRestrictions(): array
     {
         return $this->restrictions;
     }
@@ -90,7 +102,7 @@ final class SoapElement
     /**
      * @return bool
      */
-    public function isRequired(): bool
+    final public function isRequired(): bool
     {
         return !$this->isVoluntary();
     }
@@ -98,7 +110,7 @@ final class SoapElement
     /**
      * @return bool
      */
-    public function isVoluntary(): bool
+    final public function isVoluntary(): bool
     {
         return $this->min === 0;
     }
@@ -106,7 +118,7 @@ final class SoapElement
     /**
      * @param string $uri
      */
-    public function setUri(string $uri): void
+    final public function setUri(string $uri): void
     {
         $this->uri = $uri;
     }
