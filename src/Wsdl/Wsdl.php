@@ -36,6 +36,10 @@ final class Wsdl
      * @var array
      */
     private $actions = [];
+    /**
+     * @var Schema
+     */
+    private $schema;
 
     /**
      * Wsdl constructor.
@@ -185,6 +189,10 @@ final class Wsdl
      */
     public function getSchema(): Schema
     {
-        return new Schema($this->document);
+        if ($this->schema === null) {
+            $this->schema = new Schema($this->document);
+        }
+
+        return $this->schema;
     }
 }

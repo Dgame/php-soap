@@ -223,7 +223,9 @@ class Xsd
      */
     public function getXsdByUri(string $uri): self
     {
-        return new self($this->getImportLocationByUri($uri));
+        $location = $this->getImportLocationByUri($uri);
+
+        return new self($location);
     }
 
     /**
@@ -296,7 +298,7 @@ class Xsd
     {
         $elements = $this->getAllElementsByName($name);
 
-        ensure($elements)->isArray()->isLongerThan(0)->orThrow('There is no element with name %s', $name);
+        ensure($elements)->isNotEmpty()->orThrow('There is no element with name %s', $name);
         ensure($elements)->isArray()->hasLengthOf(1)->orThrow('There are multiple elements with name %s', $name);
 
         return array_pop($elements);
