@@ -109,12 +109,11 @@ final class Wsdl
     {
         $operations = $this->getOperationsByPattern($pattern);
 
-        ensure($operations)->isArray()
-                           ->isLongerThan(0)
+        ensure($operations)->isNotEmpty()
                            ->orThrow('No operation found by pattern %s', $pattern);
         ensure($operations)->isArray()
                            ->hasLengthOf(1)
-                           ->orThrow('Ambiguous operation pattern %xs. Found multiple occurrences', $pattern);
+                           ->orThrow('Ambiguous operation pattern %s. Found multiple occurrences', $pattern);
 
         return array_pop($operations);
     }
