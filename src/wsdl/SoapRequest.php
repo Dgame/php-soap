@@ -1,13 +1,25 @@
 <?php
 
-namespace Dgame\Soap\Components;
+namespace Dgame\Soap\Wsdl;
+
+use Dgame\Soap\Components\Body;
+use Dgame\Soap\Components\Envelope;
+use Dgame\Soap\Components\Header;
 
 /**
  * Class SoapRequest
- * @package Dgame\Soap\Components
+ * @package Dgame\Soap\Wsdl
  */
 final class SoapRequest
 {
+    /**
+     * @var string
+     */
+    private $operation;
+    /**
+     * @var string
+     */
+    private $action;
     /**
      * @var Body
      */
@@ -16,6 +28,34 @@ final class SoapRequest
      * @var Header
      */
     private $header;
+
+    /**
+     * SoapRequest constructor.
+     *
+     * @param Wsdl   $wsdl
+     * @param string $operation
+     */
+    public function __construct(Wsdl $wsdl, string $operation)
+    {
+        $this->operation = $operation;
+        $this->action    = $wsdl->getSoapActionOfOperation($operation);
+    }
+
+    /**
+     * @return string
+     */
+    public function getOperation(): string
+    {
+        return $this->operation;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSoapAction(): string
+    {
+        return $this->action;
+    }
 
     /**
      * @return Body

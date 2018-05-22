@@ -75,6 +75,22 @@ final class Wsdl
     }
 
     /**
+     * @param string $operation
+     *
+     * @return string
+     */
+    public function getSoapActionOfOperation(string $operation): string
+    {
+        $actions = $this->getOperationsWithSoapActions();
+        ensure($actions)->isArray()
+                        ->hasKey($operation)
+                        ->hasKey($operation)
+                        ->orThrow('No action for operation "%s"', $operation);
+
+        return $actions[$operation];
+    }
+
+    /**
      * @param string $pattern
      *
      * @return string
