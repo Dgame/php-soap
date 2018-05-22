@@ -18,7 +18,7 @@ final class SoapNode extends SoapElement
      *
      * @return bool
      */
-    public function isSoapNode(SoapNode &$node = null): bool
+    public function isSoapNode(self &$node = null): bool
     {
         $node = $this;
 

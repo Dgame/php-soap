@@ -34,7 +34,7 @@ class SimpleType extends Element
      *
      * @return bool
      */
-    public function isSimpleType(SimpleType &$simple = null): bool
+    public function isSimpleType(self &$simple = null): bool
     {
         $simple = $this;
 

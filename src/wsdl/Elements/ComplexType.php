@@ -2,8 +2,8 @@
 
 namespace Dgame\Soap\Wsdl\Elements;
 
-use function Dgame\Ensurance\enforce;
 use DOMElement;
+use function Dgame\Ensurance\enforce;
 use function Dgame\Ensurance\ensure;
 
 /**
@@ -32,7 +32,7 @@ final class ComplexType extends SimpleType
      *
      * @return bool
      */
-    public function isComplexType(ComplexType &$complex = null): bool
+    public function isComplexType(self &$complex = null): bool
     {
         $complex = $this;
 
