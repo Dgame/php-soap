@@ -211,6 +211,11 @@ final class Xsd
         return $elements;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return SimpleType
+     */
     public function getSimpleTypeByName(string $name): SimpleType
     {
         $nodes = $this->getXPath()->query(sprintf('//xsd:simpleType[@name="%s"]', $name));

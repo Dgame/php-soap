@@ -10,7 +10,7 @@ use Dgame\Soap\Components\Header;
  * Class SoapRequest
  * @package Dgame\Soap\Wsdl
  */
-final class SoapRequest
+class SoapRequest
 {
     /**
      * @var string
