@@ -95,7 +95,6 @@ final class Wsdl
         $actions = $this->getOperationsWithSoapActions();
         ensure($actions)->isArray()
                         ->hasKey($operation)
-                        ->hasKey($operation)
                         ->orThrow('No action for operation "%s"', $operation);
 
         return $actions[$operation];
