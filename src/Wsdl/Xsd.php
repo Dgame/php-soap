@@ -7,9 +7,11 @@ use Dgame\Soap\Wsdl\Elements\Element;
 use Dgame\Soap\Wsdl\Elements\SimpleType;
 use DOMDocument;
 use DOMElement;
+use DOMNodeList;
 use DOMXPath;
 use function Dgame\Ensurance\enforce;
 use function Dgame\Ensurance\ensure;
+use Enrise\Uri;
 
 /**
  * Class Xsd
@@ -17,43 +19,95 @@ use function Dgame\Ensurance\ensure;
  */
 class Xsd
 {
-    protected const W3_SCHEMA = 'http://www.w3.org/2001/XMLSchema';
+    protected const W3_SCHEMA       = 'http://www.w3.org/2001/XMLSchema';
+    private const   SCHEMA_LOCATION = 'schemaLocation';
 
     /**
-     * @var string
+     * @var DOMElement
      */
-    private $location;
-    /**
-     * @var DOMDocument
-     */
-    private $document;
+    private $element;
     /**
      * @var DOMXPath
      */
     private $xpath;
     /**
-     * @var bool|mixed
-     */
-    private $valid = false;
-    /**
      * @var array
      */
     private $imports = [];
+    /**
+     * @var string
+     */
+    private $location;
+    /**
+     * @var string
+     */
+    private $namespace;
+    /**
+     * @var self[]
+     */
+    private $schemas = [];
 
     /**
      * Xsd constructor.
      *
-     * @param string $uri
+     * @param DOMElement  $element
+     * @param string|null $location
      */
-    public function __construct(string $uri)
+    public function __construct(DOMElement $element, string $location = null)
     {
-        $this->location = $uri;
-        $this->document = new DOMDocument('1.0', 'utf-8');
-        $this->valid    = $this->document->load($uri);
+        $this->namespace = $element->getAttribute('targetNamespace');
+        $this->location  = $location;
+        $this->element   = $element;
 
-        if ($this->valid) {
-            $this->resolveIncludes();
+        $this->resolveIncludes();
+    }
+
+    /**
+     * @param DOMDocument $document
+     *
+     * @return self[]
+     */
+    public static function load(DOMDocument $document): array
+    {
+        $nodes = $document->getElementsByTagNameNS(self::W3_SCHEMA, 'schema');
+        enforce($nodes->length !== 0)->orThrow('There is no Schema');
+
+        $schemas = [];
+        for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
+            $node     = $nodes->item($i);
+            $location = self::getSchemaLocation($node);
+            $schema   = new self($node, $location);
+
+            $schemas[$schema->getNamespace()] = $schema;
         }
+
+        return $schemas;
+    }
+
+    private static function getSchemaLocation(DOMElement $element): ?string
+    {
+        $includes = $element->getElementsByTagNameNS(self::W3_SCHEMA, 'include');
+        $location = self::findSchemaLocationIn($includes);
+        if (!empty($location)) {
+            return $location;
+        }
+
+        $imports  = $element->getElementsByTagNameNS(self::W3_SCHEMA, 'import');
+        $location = self::findSchemaLocationIn($imports);
+
+        return $location;
+    }
+
+    private static function findSchemaLocationIn(DOMNodeList $nodes): ?string
+    {
+        for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
+            $node = $nodes->item($i);
+            if ($node->hasAttribute(self::SCHEMA_LOCATION)) {
+                return $node->getAttribute(self::SCHEMA_LOCATION);
+            }
+        }
+
+        return null;
     }
 
     /**
@@ -61,23 +115,24 @@ class Xsd
      */
     private function resolveIncludes(): void
     {
-        $nodes = $this->document->getElementsByTagNameNS(self::W3_SCHEMA, 'include');
+        $nodes = $this->element->getElementsByTagNameNS(self::W3_SCHEMA, 'include');
         for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
             $include = $nodes->item($i);
-            if ($include === null) {
-                continue;
-            }
 
             $location = $include->getAttribute('schemaLocation');
-            $location = pathinfo($this->location, PATHINFO_DIRNAME) . '/' . $location;
-
-            $xsd = new self($location);
-            if ($xsd->isValid()) {
-                foreach ($xsd->getDocument()->documentElement->childNodes as $child) {
-                    $node = $this->document->importNode($child, true);
-                    $include->parentNode->appendChild($node);
-                }
+            $uri      = new Uri($location);
+            if ($uri->isRelative() && $this->hasLocation()) {
+                $location = pathinfo($this->getLocation(), PATHINFO_DIRNAME) . '/' . $location;
             }
+
+            $xsd = $this->loadXsdByUri($location);
+            foreach ($xsd->getChildNodes() as $child) {
+                $node = $this->getDocument()->importNode($child, true);
+                $include->parentNode->appendChild($node);
+            }
+        }
+
+        foreach ($nodes as $include) {
             $include->parentNode->removeChild($include);
         }
     }
@@ -87,7 +142,15 @@ class Xsd
      */
     public function getDocument(): DOMDocument
     {
-        return $this->document;
+        return $this->element->ownerDocument;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasLocation(): bool
+    {
+        return !empty($this->location);
     }
 
     /**
@@ -95,15 +158,15 @@ class Xsd
      */
     public function getLocation(): string
     {
-        return $this->location;
+        return $this->location ?? '';
     }
 
     /**
-     * @return DOMElement
+     * @return string
      */
-    public function getDomElement(): DOMElement
+    public function getNamespace(): string
     {
-        return $this->document->documentElement;
+        return $this->namespace;
     }
 
     /**
@@ -112,18 +175,18 @@ class Xsd
     public function getXPath(): DOMXPath
     {
         if ($this->xpath === null) {
-            $this->xpath = new DOMXPath($this->document);
+            $this->xpath = new DOMXPath($this->element->ownerDocument);
         }
 
         return $this->xpath;
     }
 
     /**
-     * @return bool
+     * @return DOMNodeList
      */
-    public function isValid(): bool
+    public function getChildNodes(): DOMNodeList
     {
-        return $this->valid;
+        return $this->element->childNodes;
     }
 
     /**
@@ -131,12 +194,13 @@ class Xsd
      */
     private function loadImports(): void
     {
-        $nodes = $this->document->getElementsByTagName('import');
+        $nodes = $this->element->getElementsByTagName('import');
         for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
-            $uri      = $nodes->item($i)->getAttribute('namespace');
-            $location = $nodes->item($i)->getAttribute('schemaLocation');
-
-            $this->imports[$uri] = $location;
+            $node = $nodes->item($i);
+            $uri  = $node->getAttribute('namespace');
+            if ($node->hasAttribute('schemaLocation')) {
+                $this->imports[$uri] = $node->getAttribute('schemaLocation');
+            }
         }
     }
 
@@ -157,9 +221,9 @@ class Xsd
      *
      * @return bool
      */
-    public function hasImportWithNamespace(string $uri): bool
+    public function hasImportLocation(string $uri): bool
     {
-        return array_key_exists($uri, $this->imports);
+        return array_key_exists($uri, $this->getImports());
     }
 
     /**
@@ -169,11 +233,7 @@ class Xsd
      */
     public function getLocalImportLocationByUri(string $uri): string
     {
-        if (empty($this->imports)) {
-            $this->loadImports();
-        }
-
-        enforce($this->hasImportWithNamespace($uri))->orThrow('No import with name %s', $uri);
+        enforce($this->hasImportLocation($uri))->orThrow('No Import found with URI %s', $uri);
 
         return $this->imports[$uri];
     }
@@ -186,6 +246,9 @@ class Xsd
     public function getImportLocationByUri(string $uri): string
     {
         $location = $this->getLocalImportLocationByUri($uri);
+        if (!$this->hasLocation()) {
+            return $location;
+        }
 
         return pathinfo($this->location, PATHINFO_DIRNAME) . '/' . $location;
     }
@@ -200,7 +263,7 @@ class Xsd
     {
         $attr = sprintf('%s:%s', $namespace, $prefix);
 
-        return $this->getDomElement()->hasAttribute($attr);
+        return $this->element->hasAttribute($attr);
     }
 
     /**
@@ -213,7 +276,7 @@ class Xsd
     {
         $attr = sprintf('%s:%s', $namespace, $prefix);
 
-        return $this->getDomElement()->hasAttribute($attr) ? $this->getDomElement()->getAttribute($attr) : '';
+        return $this->element->hasAttribute($attr) ? $this->element->getAttribute($attr) : '';
     }
 
     /**
@@ -221,11 +284,31 @@ class Xsd
      *
      * @return Xsd
      */
-    public function getXsdByUri(string $uri): self
+    public function loadXsdByUri(string $uri): self
     {
-        $location = $this->getImportLocationByUri($uri);
+        $xsd = $this->tryLoadXsdByUri($uri);
+        enforce($xsd !== null)->orThrow('Could not load XSD by Uri %s', $uri);
 
-        return new self($location);
+        return $xsd;
+    }
+
+    /**
+     * @param string $location
+     *
+     * @return Xsd|null
+     */
+    public function tryLoadXsdByUri(string $location): ?self
+    {
+        if ($this->hasImportLocation($location)) {
+            $location = $this->getImportLocationByUri($location);
+        }
+
+        $document = new DOMDocument('1.0', 'utf-8');
+        if (@$document->load($location)) {
+            return new self($document->documentElement, $location);
+        }
+
+        return null;
     }
 
     /**
@@ -233,12 +316,40 @@ class Xsd
      *
      * @return Xsd
      */
-    public function getXsdByPrefix(string $prefix): self
+    public function loadXsdByPrefix(string $prefix): self
     {
         $uri = $this->getUriByPrefix($prefix);
         ensure($uri)->isNotEmpty()->orThrow('Empty Xsd-Uri');
 
-        return $this->getXsdByUri($uri);
+        if (!array_key_exists($uri, $this->schemas)) {
+            $xsd = $this->tryLoadXsdByUri($uri);
+            if ($xsd !== null) {
+                $this->schemas[$uri] = $xsd;
+            }
+        }
+
+        enforce(array_key_exists($uri, $this->schemas))->orThrow('No XSD with Uri %s was found', $uri);
+
+        return $this->schemas[$uri];
+    }
+
+    /**
+     * @return self[]
+     */
+    public function loadImportedSchemas(): array
+    {
+        foreach ($this->getImports() as $uri => $location) {
+            if (array_key_exists($uri, $this->schemas)) {
+                continue;
+            }
+
+            $xsd = $this->tryLoadXsdByUri($location);
+            if ($xsd !== null) {
+                $this->schemas[$uri] = $xsd;
+            }
+        }
+
+        return $this->schemas;
     }
 
     /**
@@ -249,6 +360,10 @@ class Xsd
     public function getAllElementsByName(string $name): array
     {
         $elements = [];
+
+        if (!$this->element->hasAttributeNS('http://www.w3.org/2001/XMLSchema', 'xsd')) {
+            $this->getXPath()->registerNamespace('xsd', 'http://www.w3.org/2001/XMLSchema');
+        }
 
         $nodes = $this->getXPath()->query(sprintf('//xsd:element[@name="%s"]', $name));
         for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
@@ -280,28 +395,13 @@ class Xsd
     /**
      * @param string $name
      *
-     * @return bool
+     * @return Element|null
      */
-    public function hasOneElementWithName(string $name): bool
+    public function getOneElementByName(string $name): ?Element
     {
         $elements = $this->getAllElementsByName($name);
 
-        return count($elements) === 1;
-    }
-
-    /**
-     * @param string $name
-     *
-     * @return Element
-     */
-    public function getOneElementByName(string $name): Element
-    {
-        $elements = $this->getAllElementsByName($name);
-
-        ensure($elements)->isNotEmpty()->orThrow('There is no element with name %s', $name);
-        ensure($elements)->isArray()->hasLengthOf(1)->orThrow('There are multiple elements with name %s', $name);
-
-        return array_pop($elements);
+        return empty($elements) ? null : reset($elements);
     }
 
     /**
@@ -312,21 +412,22 @@ class Xsd
     public function findElementByNameInDeep(string $name): ?Element
     {
         if (strpos($name, ':') === false) {
-            return $this->hasOneElementWithName($name) ? $this->getOneElementByName($name) : null;
+            return $this->getOneElementByName($name);
         }
 
         [$prefix, $name] = explode(':', $name);
 
-        if ($this->hasOneElementWithName($name)) {
-            return $this->getOneElementByName($name);
+        $element = $this->getOneElementByName($name);;
+        if ($element !== null) {
+            return $element;
         }
 
         if (!$this->hasUriWithPrefix($prefix)) {
             return null;
         }
 
-        $xsd = $this->getXsdByPrefix($prefix);
+        $xsd = $this->loadXsdByPrefix($prefix);
 
-        return $xsd->hasOneElementWithName($name) ? $xsd->getOneElementByName($name) : null;
+        return $xsd->getOneElementByName($name);
     }
 }

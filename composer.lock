@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "3103de3cc25160753d66299dcd6a8959",
+    "content-hash": "e0e2b79043145973c5dbecf37ec40f61",
     "packages": [
         {
             "name": "dgame/php-ensurance",
@@ -106,6 +106,49 @@
             "description": "php type",
             "homepage": "https://github.com/php-type",
             "time": "2018-05-08T13:06:59+00:00"
+        },
+        {
+            "name": "enrise/urihelper",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Enrise/UriHelper.git",
+                "reference": "b43b1ba2d12775339a14359c9b1c7d35cb88bba4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Enrise/UriHelper/zipball/b43b1ba2d12775339a14359c9b1c7d35cb88bba4",
+                "reference": "b43b1ba2d12775339a14359c9b1c7d35cb88bba4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Enrise\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache 2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Quist"
+                }
+            ],
+            "description": "A general URI helper class for PHP",
+            "homepage": "https://github.com/Enrise/UriHelper",
+            "keywords": [
+                "collections",
+                "types"
+            ],
+            "time": "2015-04-21T08:40:25+00:00"
         },
         {
             "name": "monolog/monolog",

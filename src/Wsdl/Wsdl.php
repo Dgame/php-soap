@@ -2,6 +2,7 @@
 
 namespace Dgame\Soap\Wsdl;
 
+use Dgame\Soap\Wsdl\Elements\Element;
 use DOMDocument;
 use DOMElement;
 use function Dgame\Ensurance\enforce;
@@ -37,9 +38,9 @@ final class Wsdl
      */
     private $actions = [];
     /**
-     * @var Schema
+     * @var Xsd[]
      */
-    private $schema;
+    private $schemas = [];
 
     /**
      * Wsdl constructor.
@@ -183,14 +184,122 @@ final class Wsdl
     }
 
     /**
-     * @return Schema
+     * @return Xsd[]
      */
-    public function getSchema(): Schema
+    public function getSchemas(): array
     {
-        if ($this->schema === null) {
-            $this->schema = new Schema($this->document);
+        if (!empty($this->schemas)) {
+            return $this->schemas;
         }
 
-        return $this->schema;
+        $this->schemas = Xsd::load($this->document);
+
+        return $this->schemas;
+    }
+
+    /**
+     * @return Xsd
+     */
+    public function getFirstSchema(): Xsd
+    {
+        $schemas = $this->getSchemas();
+        ensure($schemas)->isNotEmpty()->orThrow('No Schemas found');
+
+        return reset($schemas);
+    }
+
+    /**
+     * @param string $uri
+     *
+     * @return bool
+     */
+    public function hasSchemaWithUri(string $uri): bool
+    {
+        $schemas = $this->getSchemas();
+        if (array_key_exists($uri, $schemas)) {
+            return true;
+        }
+
+        foreach ($schemas as $schema) {
+            if ($schema->hasImportLocation($uri)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $uri
+     *
+     * @return Xsd
+     * @throws \Exception
+     */
+    public function getSchemaByUri(string $uri): Xsd
+    {
+        $schemas = $this->getSchemas();
+        if (array_key_exists($uri, $schemas)) {
+            return $schemas[$uri];
+        }
+
+        /** @var Xsd $schema */
+        foreach ($schemas as $schema) {
+            if ($schema->hasImportLocation($uri)) {
+                return $schema->loadXsdByUri($uri);
+            }
+        }
+
+        print_r(array_keys($schemas));
+
+        throw new \Exception('No Schema found with location ' . $uri);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Element[]
+     */
+    public function findAllElementInSchemas(string $name): array
+    {
+        $elements = [];
+        foreach ($this->getSchemas() as $schema) {
+            $elements = array_merge($elements, self::findElementsByNameInDeep($schema, $name));
+        }
+
+        return $elements;
+    }
+
+    /**
+     * @param Xsd    $schema
+     * @param string $name
+     *
+     * @return array
+     */
+    private static function findElementsByNameInDeep(Xsd $schema, string $name): array
+    {
+        $elements = [];
+
+        $element = $schema->getOneElementByName($name);
+        if ($element !== null) {
+            $elements[] = $element;
+        }
+
+        foreach ($schema->loadImportedSchemas() as $schema) {
+            $elements = array_merge($elements, self::findElementsByNameInDeep($schema, $name));
+        }
+
+        return $elements;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return Element|null
+     */
+    public function findOneElementInSchemas(string $name): ?Element
+    {
+        $elements = $this->findAllElementInSchemas($name);
+
+        return empty($elements) ? null : reset($elements);
     }
 }
