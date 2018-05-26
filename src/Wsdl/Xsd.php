@@ -9,9 +9,9 @@ use DOMDocument;
 use DOMElement;
 use DOMNodeList;
 use DOMXPath;
+use Enrise\Uri;
 use function Dgame\Ensurance\enforce;
 use function Dgame\Ensurance\ensure;
-use Enrise\Uri;
 
 /**
  * Class Xsd
@@ -417,7 +417,7 @@ class Xsd
 
         [$prefix, $name] = explode(':', $name);
 
-        $element = $this->getOneElementByName($name);;
+        $element = $this->getOneElementByName($name);
         if ($element !== null) {
             return $element;
         }
