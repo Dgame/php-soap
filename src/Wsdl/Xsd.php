@@ -63,20 +63,26 @@ class Xsd
     }
 
     /**
-     * @param DOMDocument $document
+     * @param Wsdl $wsdl
      *
      * @return self[]
      */
-    public static function load(DOMDocument $document): array
+    public static function load(Wsdl $wsdl): array
     {
-        $nodes = $document->getElementsByTagNameNS(self::W3_SCHEMA, 'schema');
+        $nodes = $wsdl->getDocument()->getElementsByTagNameNS(self::W3_SCHEMA, 'schema');
         enforce($nodes->length !== 0)->orThrow('There is no Schema');
 
         $schemas = [];
         for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
             $node     = $nodes->item($i);
             $location = self::getSchemaLocation($node);
-            $schema   = new self($node, $location);
+
+            $uri = new Uri($location);
+            if ($uri->isRelative()) {
+                $location = pathinfo($wsdl->getLocation(), PATHINFO_DIRNAME) . '/' . $location;
+            }
+
+            $schema = new self($node, $location);
 
             $schemas[$schema->getNamespace()] = $schema;
         }
@@ -246,11 +252,8 @@ class Xsd
     public function getImportLocationByUri(string $uri): string
     {
         $location = $this->getLocalImportLocationByUri($uri);
-        if (!$this->hasLocation()) {
-            return $location;
-        }
 
-        return pathinfo($this->location, PATHINFO_DIRNAME) . '/' . $location;
+        return $this->completeLocation($location);
     }
 
     /**
@@ -302,13 +305,29 @@ class Xsd
         if ($this->hasImportLocation($location)) {
             $location = $this->getImportLocationByUri($location);
         }
+        $location = $this->completeLocation($location);
 
         $document = new DOMDocument('1.0', 'utf-8');
-        if (@$document->load($location)) {
+        if ($document->load($location)) {
             return new self($document->documentElement, $location);
         }
 
         return null;
+    }
+
+    /**
+     * @param string $location
+     *
+     * @return string
+     */
+    private function completeLocation(string $location): string
+    {
+        $uri = new Uri($location);
+        if (!$this->hasLocation() || $uri->isAbsolute()) {
+            return $location;
+        }
+
+        return pathinfo($this->location, PATHINFO_DIRNAME) . '/' . $location;
     }
 
     /**
@@ -431,3 +450,4 @@ class Xsd
         return $xsd->getOneElementByName($name);
     }
 }
+

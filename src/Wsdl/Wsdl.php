@@ -18,6 +18,10 @@ final class Wsdl
     private const WSDL_SCHEMA      = 'http://schemas.xmlsoap.org/wsdl/';
 
     /**
+     * @var string
+     */
+    private $location;
+    /**
      * @var DOMDocument
      */
     private $document;
@@ -49,8 +53,17 @@ final class Wsdl
      */
     public function __construct(string $uri)
     {
+        $this->location = $uri;
         $this->document = new DOMDocument('1.0', 'utf-8');
         $this->valid    = $this->document->load($uri);
+    }
+
+    /**
+     * @return string
+     */
+    public function getLocation(): string
+    {
+        return $this->location;
     }
 
     /**
@@ -192,7 +205,7 @@ final class Wsdl
             return $this->schemas;
         }
 
-        $this->schemas = Xsd::load($this->document);
+        $this->schemas = Xsd::load($this);
 
         return $this->schemas;
     }
@@ -249,7 +262,7 @@ final class Wsdl
             }
         }
 
-        print_r(array_keys($schemas));
+        //        print_r(array_keys($schemas));
 
         throw new \Exception('No Schema found with location ' . $uri);
     }
