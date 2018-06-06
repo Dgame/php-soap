@@ -3,6 +3,7 @@
 namespace Dgame\Soap\Wsdl;
 
 use Dgame\Soap\Wsdl\Elements\Element;
+use Dgame\Soap\Wsdl\Http\HttpClient;
 use DOMDocument;
 use DOMElement;
 use function Dgame\Ensurance\enforce;
@@ -25,10 +26,6 @@ final class Wsdl
      * @var DOMDocument
      */
     private $document;
-    /**
-     * @var bool
-     */
-    private $valid = false;
     /**
      * @var DOMElement
      */
@@ -54,8 +51,7 @@ final class Wsdl
     public function __construct(string $uri)
     {
         $this->location = $uri;
-        $this->document = new DOMDocument('1.0', 'utf-8');
-        $this->valid    = $this->document->load($uri);
+        $this->document = HttpClient::instance()->loadDocument($uri);
     }
 
     /**
@@ -79,7 +75,7 @@ final class Wsdl
      */
     public function isValid(): bool
     {
-        return $this->valid;
+        return $this->document !== null;
     }
 
     /**
@@ -148,7 +144,7 @@ final class Wsdl
         if ($this->binding === null) {
             $bindings = $this->document->getElementsByTagNameNS(self::WSDL_SCHEMA, 'binding');
             enforce($bindings->length !== 0)->orThrow('There are no bindings');
-            enforce($bindings->length === 1)->orThrow('There are multiple bindings');
+            //            enforce($bindings->length === 1)->orThrow('There are %d bindings', $bindings->length);
 
             $this->binding = $bindings->item(0);
         }
@@ -262,8 +258,6 @@ final class Wsdl
             }
         }
 
-        //        print_r(array_keys($schemas));
-
         throw new \Exception('No Schema found with location ' . $uri);
     }
 
@@ -292,7 +286,7 @@ final class Wsdl
     {
         $elements = [];
 
-        $element = $schema->getOneElementByName($name);
+        $element = $schema->findElementByNameInDeep($name);
         if ($element !== null) {
             $elements[] = $element;
         }

@@ -16,13 +16,13 @@ use function Dgame\Ensurance\enforce;
 final class SoapOperation
 {
     /**
-     * @var Xsd
+     * @var XsdAdapterInterface
      */
     private $xsd;
     /**
-     * @var string
+     * @var Element
      */
-    private $operation;
+    private $element;
     /**
      * @var SoapElement[]
      */
@@ -31,35 +31,35 @@ final class SoapOperation
     /**
      * SoapOperation constructor.
      *
-     * @param Xsd    $xsd
-     * @param string $operation
+     * @param XsdAdapterInterface $xsd
+     * @param string              $operation
      */
-    public function __construct(Xsd $xsd, string $operation)
+    public function __construct(XsdAdapterInterface $xsd, string $operation)
     {
-        $this->xsd       = $xsd;
-        $this->operation = $operation;
+        $this->xsd     = $xsd;
+        $this->element = $xsd->findElementByNameInDeep($operation);
     }
 
     /**
-     * @return Xsd
+     * @return XsdAdapterInterface
      */
-    public function getXsd(): Xsd
+    public function getXsd(): XsdAdapterInterface
     {
         return $this->xsd;
     }
 
     /**
-     * @return string
+     * @return Element
      */
-    public function getOperation(): string
+    public function getElement(): Element
     {
-        return $this->operation;
+        return $this->element;
     }
 
     /**
      * @return SoapElement[]
      */
-    public function getElements(): array
+    public function getSoapElements(): array
     {
         if (!empty($this->elements)) {
             return $this->elements;
@@ -67,9 +67,7 @@ final class SoapOperation
 
         $this->elements = [];
 
-        $element = $this->xsd->getOneElementByName($this->operation);
-        $complex = $element->getComplexType();
-
+        $complex = $this->getElement()->getComplexType();
         enforce($complex !== null)->orThrow('Can only collect elements from a ComplexType');
 
         if ($complex->hasExtensions()) {
@@ -90,9 +88,12 @@ final class SoapOperation
     private function loadParentElements(Extension $extension): array
     {
         $name    = $extension->getPrefixedName();
-        $parent  = $this->xsd->findElementByNameInDeep($name);
-        $complex = $parent->getComplexType();
+        $parent  = $this->getXsd()->findElementByNameInDeep($name);
+        if ($parent === null) {
+            return [];
+        }
 
+        $complex = $parent->getComplexType();
         enforce($complex !== null)->orThrow('Can only collect elements from a ComplexType');
 
         $elements = array_merge(
@@ -101,7 +102,7 @@ final class SoapOperation
         );
 
         $prefix = $extension->getPrefix();
-        $uri    = $this->xsd->getUriByPrefix($prefix);
+        $uri    = $this->getXsd()->getUriByPrefix($prefix);
 
         array_walk($elements, function (SoapElement $element) use ($uri): void {
             $element->setUri($uri);
@@ -168,7 +169,7 @@ final class SoapOperation
         $type = $child->getAttribute('type');
 
         $restrictions = $this->loadRestrictions($type);
-        $element      = $this->xsd->findElementByNameInDeep($type);
+        $element      = $this->getXsd()->findElementByNameInDeep($type);
         if ($element !== null && $element->isComplexType($complex)) {
             $node = new SoapNode($name, (int) $min, (int) $max, $restrictions);
             $node->setChildElements($this->collectElementsFrom($complex));
@@ -190,7 +191,7 @@ final class SoapOperation
             return [];
         }
 
-        $element = $this->xsd->findElementByNameInDeep($type);
+        $element = $this->getXsd()->findElementByNameInDeep($type);
         /** @var SimpleType $simple */
         if ($element !== null && $element->isSimpleType($simple)) {
             return $simple->getRestrictions();

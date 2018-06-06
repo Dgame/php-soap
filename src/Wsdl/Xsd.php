@@ -5,6 +5,7 @@ namespace Dgame\Soap\Wsdl;
 use Dgame\Soap\Wsdl\Elements\ComplexType;
 use Dgame\Soap\Wsdl\Elements\Element;
 use Dgame\Soap\Wsdl\Elements\SimpleType;
+use Dgame\Soap\Wsdl\Http\HttpClient;
 use DOMDocument;
 use DOMElement;
 use DOMNodeList;
@@ -17,10 +18,10 @@ use function Dgame\Ensurance\ensure;
  * Class Xsd
  * @package Dgame\Soap\Wsdl
  */
-class Xsd
+final class Xsd implements XsdAdapterInterface
 {
-    protected const W3_SCHEMA       = 'http://www.w3.org/2001/XMLSchema';
-    private const   SCHEMA_LOCATION = 'schemaLocation';
+    private const W3_SCHEMA       = 'http://www.w3.org/2001/XMLSchema';
+    private const SCHEMA_LOCATION = 'schemaLocation';
 
     /**
      * @var DOMElement
@@ -90,6 +91,11 @@ class Xsd
         return $schemas;
     }
 
+    /**
+     * @param DOMElement $element
+     *
+     * @return null|string
+     */
     private static function getSchemaLocation(DOMElement $element): ?string
     {
         $includes = $element->getElementsByTagNameNS(self::W3_SCHEMA, 'include');
@@ -104,6 +110,11 @@ class Xsd
         return $location;
     }
 
+    /**
+     * @param DOMNodeList $nodes
+     *
+     * @return null|string
+     */
     private static function findSchemaLocationIn(DOMNodeList $nodes): ?string
     {
         for ($i = 0, $c = $nodes->length; $i < $c; $i++) {
@@ -251,9 +262,7 @@ class Xsd
      */
     public function getImportLocationByUri(string $uri): string
     {
-        $location = $this->getLocalImportLocationByUri($uri);
-
-        return $this->completeLocation($location);
+        return $this->getLocalImportLocationByUri($uri);
     }
 
     /**
@@ -305,11 +314,12 @@ class Xsd
         if ($this->hasImportLocation($location)) {
             $location = $this->getImportLocationByUri($location);
         }
-        $location = $this->completeLocation($location);
 
-        $document = new DOMDocument('1.0', 'utf-8');
-        if ($document->load($location)) {
-            return new self($document->documentElement, $location);
+        foreach ($this->getPossibleLocations($location) as $location) {
+            $document = HttpClient::instance()->loadDocument($location);
+            if ($document !== null) {
+                return new self($document->documentElement, $location);
+            }
         }
 
         return null;
@@ -318,16 +328,31 @@ class Xsd
     /**
      * @param string $location
      *
-     * @return string
+     * @return string[]
      */
-    private function completeLocation(string $location): string
+    private function getPossibleLocations(string $location): array
     {
         $uri = new Uri($location);
-        if (!$this->hasLocation() || $uri->isAbsolute()) {
-            return $location;
+        if ($uri->isAbsolute()) {
+            return [$location];
         }
 
-        return pathinfo($this->location, PATHINFO_DIRNAME) . '/' . $location;
+        $location     = ltrim($location, '/');
+        $baseLocation = sprintf(
+            '%s://%s/%s',
+            parse_url($this->location, PHP_URL_SCHEME),
+            parse_url($this->location, PHP_URL_HOST),
+            $location
+        );
+
+        if (!$this->hasLocation()) {
+            return [$baseLocation];
+        }
+
+        return [
+            sprintf('%s/%s', pathinfo($this->location, PATHINFO_DIRNAME), $location),
+            $baseLocation
+        ];
     }
 
     /**

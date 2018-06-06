@@ -33,7 +33,11 @@ final class Extension
     {
         $this->element = $element;
 
-        [$this->prefix, $this->base] = explode(':', $extension);
+        if (strpos($extension, ':') !== false) {
+            [$this->prefix, $this->base] = explode(':', $extension);
+        } else {
+            $this->base = $extension;
+        }
     }
 
     /**
