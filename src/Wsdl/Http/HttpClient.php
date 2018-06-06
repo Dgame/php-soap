@@ -85,8 +85,6 @@ final class HttpClient
         if ($document->loadXML($content)) {
             return $document;
         }
-        print 'Content: ' . $content . PHP_EOL;
-        
 
         return null;
     }
