@@ -70,7 +70,7 @@ final class HttpClient
     public function loadDocument(string $uri): ?DOMDocument
     {
         $response  = $this->get($uri);
-        $code = $response->getStatusCode();
+        $code      = $response->getStatusCode();
         if ($code < 200 || $code >= 300) {
             return null;
         }
@@ -84,9 +84,9 @@ final class HttpClient
         $document = new DOMDocument('1.0', 'utf-8');
         if ($document->loadXML($content)) {
             return $document;
-        } else {
-            print 'Content: ' . $content . PHP_EOL;
         }
+        print 'Content: ' . $content . PHP_EOL;
+        
 
         return null;
     }
