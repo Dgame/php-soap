@@ -92,7 +92,7 @@ class SoapElement
     }
 
     /**
-     * @return array
+     * @return RestrictionInterface[]
      */
     final public function getRestrictions(): array
     {
