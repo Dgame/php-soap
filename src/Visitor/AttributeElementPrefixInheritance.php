@@ -32,9 +32,13 @@ final class AttributeElementPrefixInheritance implements ElementVisitorInterface
             return;
         }
 
-        $attributes = $element->getAttributes();
-        $attribute  = array_shift($attributes);
-        $element->setPrefix($attribute->getName());
+        $visitor = new AttributePrefixVisitor($element);
+        foreach ($element->getAttributes() as $attribute) {
+            $attribute->accept($visitor);
+            if ($element->hasPrefix()) {
+                break;
+            }
+        }
     }
 
     /**
