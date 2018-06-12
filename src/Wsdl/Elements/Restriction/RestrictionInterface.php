@@ -14,4 +14,9 @@ interface RestrictionInterface
      * @return bool
      */
     public function isValid($value): bool;
+
+    /**
+     * @return string
+     */
+    public function getRejectionFormat(): string;
 }

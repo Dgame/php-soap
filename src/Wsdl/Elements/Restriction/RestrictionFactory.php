@@ -18,10 +18,10 @@ final class RestrictionFactory
      */
     public static function createFrom(DOMElement $element): RestrictionInterface
     {
-        $restriction = self::createValueRestriction($element)
-                       ?? self::createEnumRestriction($element)
-                          ?? self::createLengthRestriction($element)
-                             ?? self::createPatternRestriction($element);
+        $restriction = self::createValueRestriction($element) ??
+                       self::createEnumRestriction($element) ??
+                       self::createLengthRestriction($element) ??
+                       self::createPatternRestriction($element);
 
         enforce($restriction !== null)->orThrow('Could not detect Restriction');
 

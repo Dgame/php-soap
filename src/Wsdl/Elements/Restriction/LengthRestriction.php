@@ -84,4 +84,9 @@ final class LengthRestriction implements RestrictionInterface
 
         return $value >= $this->min && $value <= $this->max;
     }
+
+    public function getRejectionFormat(): string
+    {
+        return '"%d" is not between ' . sprintf('%d and %d', $this->min, $this->max);
+    }
 }

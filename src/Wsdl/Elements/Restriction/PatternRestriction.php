@@ -40,4 +40,12 @@ final class PatternRestriction implements RestrictionInterface
     {
         return preg_match(sprintf('/%s/', $this->pattern), $value) === 1;
     }
+
+    /**
+     * @return string
+     */
+    public function getRejectionFormat(): string
+    {
+        return '"%s" does not match ' . $this->pattern;
+    }
 }

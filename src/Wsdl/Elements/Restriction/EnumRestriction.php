@@ -40,4 +40,12 @@ final class EnumRestriction implements RestrictionInterface
     {
         return in_array($value, $this->values);
     }
+
+    /**
+     * @return string
+     */
+    public function getRejectionFormat(): string
+    {
+        return '"%s" is not in range of ' . print_r($this->values, true);
+    }
 }
