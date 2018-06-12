@@ -19,6 +19,11 @@ interface XmlNodeInterface extends XmlElementInterface
     public function appendElement(ElementInterface $element): void;
 
     /**
+     * @param ElementInterface $element
+     */
+    public function appendElementOnce(ElementInterface $element): void;
+
+    /**
      * @return ElementInterface[]
      */
     public function getElements(): array;
