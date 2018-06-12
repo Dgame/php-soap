@@ -41,14 +41,18 @@ final class ElementPrefixInheritance implements ElementVisitorInterface
      */
     public function visitXmlNode(XmlNodeInterface $node): void
     {
-        if ($node->hasPrefix()) {
-            $this->prefix = $node->getPrefix();
-        } else {
-            $this->visitXmlElement($node);
-        }
+        try {
+            if ($node->hasPrefix()) {
+                $this->prefix = $node->getPrefix();
+            } else {
+                $this->visitXmlElement($node);
+            }
 
-        foreach ($node->getElements() as $element) {
-            $element->accept($this);
+            foreach ($node->getElements() as $element) {
+                $element->accept($this);
+            }
+        } finally {
+            $this->prefix = null;
         }
     }
 }
