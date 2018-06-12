@@ -133,7 +133,7 @@ final class Wsdl
      */
     public function getOperationsWithSoapActions(): array
     {
-        return array_combine($this->getSoapActions(), $this->getOperations());
+        return array_combine($this->getOperations(), $this->getSoapActions());
     }
 
     /**
