@@ -32,6 +32,16 @@ class XmlNode extends XmlElement implements XmlNodeInterface
     }
 
     /**
+     * @param ElementInterface $element
+     */
+    final public function appendElementOnce(ElementInterface $element): void
+    {
+        $name = $element->getName();
+        $this->removeElementsByName($name);
+        $this->appendElement($element);
+    }
+
+    /**
      * @return ElementInterface[]
      */
     final public function getElements(): array
@@ -78,5 +88,23 @@ class XmlNode extends XmlElement implements XmlNodeInterface
         }
 
         return $elements;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return int
+     */
+    public function removeElementsByName(string $name): int
+    {
+        $count = 0;
+        foreach ($this->elements as $index => $element) {
+            if ($element->getName() === $name) {
+                $count++;
+                unset($this->elements[$index]);
+            }
+        }
+
+        return $count;
     }
 }
