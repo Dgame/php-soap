@@ -40,7 +40,7 @@ final class AttributePrefixVisitor implements AttributeVisitorInterface
      */
     public function visitXmlAttribute(XmlAttributeInterface $attribute): void
     {
-        $this->element->setPrefix($attribute->getPrefix());
+        $this->element->setPrefix($attribute->getName());
     }
 
     /**
