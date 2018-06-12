@@ -31,8 +31,8 @@ class XmlnsAttribute extends XmlAttribute
     public static function fromUri(string $uri): self
     {
         $name = basename($uri);
-        $len = strlen($name);
-        $len = min($len, 4);
+        $len  = strlen($name);
+        $len  = min($len, 4);
 
         return new self(substr($name, 0, $len), $uri);
     }
