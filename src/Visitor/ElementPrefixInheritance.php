@@ -43,9 +43,9 @@ final class ElementPrefixInheritance implements ElementVisitorInterface
     {
         if ($node->hasPrefix()) {
             $this->prefix = $node->getPrefix();
-        } else {
-            $this->visitXmlElement($node);
         }
+
+        $this->visitXmlElement($node);
 
         $self         = new self();
         $self->prefix = $this->prefix;
