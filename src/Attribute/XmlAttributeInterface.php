@@ -10,4 +10,18 @@ use Dgame\Soap\PrefixedInterface;
  */
 interface XmlAttributeInterface extends PrefixedInterface, AttributeInterface
 {
+    /**
+     * @return int
+     */
+    public function getPrefixUsage(): int;
+
+    /**
+     * @return bool
+     */
+    public function isPrefixUsed(): bool;
+
+    /**
+     *
+     */
+    public function incrementPrefixUsage(): void;
 }

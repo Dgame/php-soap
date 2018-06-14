@@ -41,6 +41,22 @@ class Element implements ElementInterface
     }
 
     /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    final public function hasAttributeWithName(string $name): bool
+    {
+        foreach ($this->attributes as $attribute) {
+            if ($attribute->getName() === $name) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @return AttributeInterface[]
      */
     final public function getAttributes(): array
@@ -49,11 +65,46 @@ class Element implements ElementInterface
     }
 
     /**
+     * @param string $name
+     *
+     * @return AttributeInterface
+     * @throws \Exception
+     */
+    final public function getAttributeByName(string $name): AttributeInterface
+    {
+        foreach ($this->attributes as $attribute) {
+            if ($attribute->getName() === $name) {
+                return $attribute;
+            }
+        }
+
+        throw new \Exception('Could not find Attribute ' . $name);
+    }
+
+    /**
      * @param AttributeInterface $attribute
      */
     final public function setAttribute(AttributeInterface $attribute): void
     {
         $this->attributes[] = $attribute;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return AttributeInterface|null
+     */
+    final public function removeAttributeByName(string $name): ?AttributeInterface
+    {
+        foreach ($this->attributes as $key => $attribute) {
+            if ($attribute->getName() === $name) {
+                unset($this->attributes[$key]);
+
+                return $attribute;
+            }
+        }
+
+        return null;
     }
 
     /**

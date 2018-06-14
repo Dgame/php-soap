@@ -5,6 +5,7 @@ namespace Dgame\Soap\Hydrator;
 use Closure;
 use Dgame\Soap\Attribute\AttributeInterface;
 use Dgame\Soap\Element\ElementInterface;
+use Dgame\Soap\Element\XmlNodeInterface;
 use stdClass;
 use Throwable;
 use function Dgame\Ensurance\ensure;
@@ -73,7 +74,7 @@ final class BindingHydratorStrategy implements HydratorStrategyInterface
      */
     private function getPattern(string $pattern): string
     {
-        return sprintf('/%s/%s', $pattern, $this->isCaseSensitivev() ? 'i' : null);
+        return sprintf('/^%s$/%s', $pattern, $this->isCaseSensitivev() ? 'i' : null);
     }
 
     /**
@@ -131,6 +132,12 @@ final class BindingHydratorStrategy implements HydratorStrategyInterface
         }
 
         try {
+            if (!($element instanceof XmlNodeInterface)) {
+                var_dump($footprints);
+                var_dump($element);
+
+                exit;
+            }
             $closure($element);
 
             return true;

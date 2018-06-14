@@ -24,7 +24,28 @@ interface ElementInterface extends NamedInterface, ValuedInterface, ElementVisit
     public function getAttributes(): array;
 
     /**
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function hasAttributeWithName(string $name): bool;
+
+    /**
+     * @param string $name
+     *
+     * @return AttributeInterface
+     */
+    public function getAttributeByName(string $name): AttributeInterface;
+
+    /**
      * @param AttributeInterface $attribute
      */
     public function setAttribute(AttributeInterface $attribute): void;
+
+    /**
+     * @param string $name
+     *
+     * @return AttributeInterface|null
+     */
+    public function removeAttributeByName(string $name): ?AttributeInterface;
 }

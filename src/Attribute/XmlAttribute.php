@@ -14,6 +14,11 @@ class XmlAttribute extends Attribute implements XmlAttributeInterface
     use PrefixTrait;
 
     /**
+     * @var int
+     */
+    private $prefixUsage = 0;
+
+    /**
      * XmlAttribute constructor.
      *
      * @param string $name
@@ -22,6 +27,30 @@ class XmlAttribute extends Attribute implements XmlAttributeInterface
     public function __construct(string $name, $value)
     {
         parent::__construct($name, $value);
+    }
+
+    /**
+     * @return int
+     */
+    public function getPrefixUsage(): int
+    {
+        return $this->prefixUsage;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPrefixUsed(): bool
+    {
+        return $this->prefixUsage > 0;
+    }
+
+    /**
+     *
+     */
+    public function incrementPRefixUsage(): void
+    {
+        $this->prefixUsage += 1;
     }
 
     /**

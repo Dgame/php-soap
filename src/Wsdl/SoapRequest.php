@@ -84,7 +84,7 @@ class SoapRequest
     /**
      * @return Envelope
      */
-    public function getEnvelope(): Envelope
+    public function createEnvelope(): Envelope
     {
         $envelope = new Envelope();
         $envelope->appendElement($this->getHeader());
