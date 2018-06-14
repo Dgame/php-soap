@@ -70,6 +70,8 @@ final class Xsd implements XsdAdapterInterface
      */
     public static function load(Wsdl $wsdl): array
     {
+        enforce($wsdl->isValid())->orThrow('Invalid WSDL "%s" given', $wsdl->getLocation());
+
         $nodes = $wsdl->getDocument()->getElementsByTagNameNS(self::W3_SCHEMA, 'schema');
         enforce($nodes->length !== 0)->orThrow('There is no Schema');
 

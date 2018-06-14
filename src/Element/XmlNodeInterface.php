@@ -34,4 +34,12 @@ interface XmlNodeInterface extends XmlElementInterface
      * @return array
      */
     public function getElementsByName(string $name): array;
+
+    /**
+     * @param string   $name
+     * @param callable $closure
+     *
+     * @return int
+     */
+    public function applyTo(string $name, callable $closure): int;
 }

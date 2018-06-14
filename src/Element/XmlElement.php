@@ -18,7 +18,7 @@ class XmlElement extends Element implements XmlElementInterface
      * XmlElement constructor.
      *
      * @param string      $name
-     * @param null        $value
+     * @param mixed|null        $value
      * @param string|null $prefix
      */
     public function __construct(string $name, $value = null, string $prefix = null)
