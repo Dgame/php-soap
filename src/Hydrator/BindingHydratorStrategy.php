@@ -5,7 +5,6 @@ namespace Dgame\Soap\Hydrator;
 use Closure;
 use Dgame\Soap\Attribute\AttributeInterface;
 use Dgame\Soap\Element\ElementInterface;
-use Dgame\Soap\Element\XmlNodeInterface;
 use stdClass;
 use Throwable;
 use function Dgame\Ensurance\ensure;
