@@ -132,12 +132,6 @@ final class BindingHydratorStrategy implements HydratorStrategyInterface
         }
 
         try {
-            if (!($element instanceof XmlNodeInterface)) {
-                var_dump($footprints);
-                var_dump($element);
-
-                exit;
-            }
             $closure($element);
 
             return true;
