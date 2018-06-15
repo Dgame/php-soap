@@ -80,12 +80,10 @@ final class Xsd implements XsdAdapterInterface
             $node     = $nodes->item($i);
             $location = self::getSchemaLocation($node);
 
-            $uri = new Uri($location);
-            if ($uri->isRelative()) {
-                $location = pathinfo($wsdl->getLocation(), PATHINFO_DIRNAME) . '/' . $location;
-            }
+            $schema = new self($node, $wsdl->getLocation());
+            $schema = $schema->tryLoadXsdByUri($location);
 
-            $schema = new self($node, $location);
+            ensure($schema)->isNotNull()->orThrow('Could not load "%s"', $location);
 
             $schemas[$schema->getNamespace()] = $schema;
         }
@@ -139,11 +137,7 @@ final class Xsd implements XsdAdapterInterface
             $include = $nodes->item($i);
 
             $location = $include->getAttribute('schemaLocation');
-            $uri      = new Uri($location);
-            if ($uri->isRelative() && $this->hasLocation()) {
-                $location = pathinfo($this->getLocation(), PATHINFO_DIRNAME) . '/' . $location;
-            }
-
+            
             $xsd = $this->loadXsdByUri($location);
             foreach ($xsd->getChildNodes() as $child) {
                 $node = $this->getDocument()->importNode($child, true);
