@@ -135,7 +135,7 @@ final class BindingImporter implements ElementVisitorInterface
      * @param string  $location
      * @param Closure $closure
      */
-    public function bind(string $location, Closure $closure)
+    public function bind(string $location, Closure $closure): void
     {
         $location = preg_quote($location, '/');
         foreach (self::REPLACEMENTS as $key => $value) {
