@@ -137,7 +137,7 @@ final class Xsd implements XsdAdapterInterface
             $include = $nodes->item($i);
 
             $location = $include->getAttribute('schemaLocation');
-            
+
             $xsd = $this->loadXsdByUri($location);
             foreach ($xsd->getChildNodes() as $child) {
                 $node = $this->getDocument()->importNode($child, true);

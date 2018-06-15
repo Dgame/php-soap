@@ -166,7 +166,7 @@ final class BuiltinToPackageTranslator
 
         $element = new XmlElement($name, $node->nodeValue);
         $element->setPrefix($prefix);
-        $this->createElementFrom($node, $element);
+        $this->importAttributes($node, $element);
 
         return $element;
     }
@@ -182,7 +182,7 @@ final class BuiltinToPackageTranslator
 
         $element = new XmlNode($name, null);
         $element->setPrefix($prefix);
-        $this->createElementFrom($node, $element);
+        $this->importAttributes($node, $element);
 
         return $element;
     }
@@ -191,30 +191,54 @@ final class BuiltinToPackageTranslator
      * @param DOMNode             $node
      * @param XmlElementInterface $element
      */
-    private function createElementFrom(DOMNode $node, XmlElementInterface $element): void
+    private function importAttributes(DOMNode $node, XmlElementInterface $element): void
     {
-        $this->setAttributes($node->attributes, $element);
-
-        if ($element->hasPrefix() && !empty($node->namespaceURI) && !$this->hasParentSameNamespace($node)) {
-            $element->setAttribute(new XmlnsAttribute($element->getPrefix(), $node->namespaceURI));
+        foreach ($this->getXmlnsAttributes($node) as $attribute => $value) {
+            $element->setAttribute(new XmlnsAttribute($attribute, $value));
         }
+
+        $this->setAttributes($node->attributes, $element);
     }
 
     /**
      * @param DOMNode $node
+     * @param string  $attribute
      *
      * @return bool
      */
-    private function hasParentSameNamespace(DOMNode $node): bool
+    private function hasParentAttributeDefinition(DOMNode $node, string $attribute): bool
     {
         $parent = $node->parentNode;
         while ($parent !== null) {
-            if ($parent->namespaceURI === $node->namespaceURI) {
+            if (array_key_exists($attribute, $this->getXmlnsAttributes($parent))) {
                 return true;
             }
             $parent = $parent->parentNode;
         }
 
         return false;
+    }
+
+    /**
+     * @param DOMNode $node
+     *
+     * @return array
+     */
+    private function getXmlnsAttributes(DOMNode $node): array
+    {
+        if ($node->ownerDocument === null) {
+            return [];
+        }
+
+        $attributes = [];
+
+        $xpath = new \DOMXPath($node->ownerDocument);
+        foreach ($xpath->query('namespace::*', $node) as $attr) {
+            if (!$this->hasParentAttributeDefinition($node, $attr->prefix)) {
+                $attributes[$attr->prefix] = $attr->namespaceURI;
+            }
+        }
+
+        return $attributes;
     }
 }
