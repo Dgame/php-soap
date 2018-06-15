@@ -9,6 +9,7 @@ use Dgame\Soap\Element\ElementInterface;
 use Dgame\Soap\Element\XmlElementInterface;
 use Dgame\Soap\Element\XmlNodeInterface;
 use Dgame\Soap\PrefixedInterface;
+use Dgame\Soap\ValuedInterface;
 use Dgame\Soap\Visitor\AttributeVisitorInterface;
 use Dgame\Soap\Visitor\ElementVisitorInterface;
 use Dgame\Soap\Visitor\XmlNamespaceFinder;
@@ -86,7 +87,7 @@ final class PackageToBuiltinTranslator implements ElementVisitorInterface, Attri
      */
     public function visitElement(ElementInterface $element): void
     {
-        $node = new DOMElement($element->getName(), $element->getValue());
+        $node = new DOMElement($element->getName(), $this->getValueExport($element));
         $this->assemble($element, $node);
     }
 
@@ -116,7 +117,7 @@ final class PackageToBuiltinTranslator implements ElementVisitorInterface, Attri
      */
     public function visitAttribute(AttributeInterface $attribute): void
     {
-        $attr = $this->node->setAttribute($attribute->getName(), $attribute->getValue()); // TODO: Fehlerhandling
+        $attr = $this->node->setAttribute($attribute->getName(), $this->getValueExport($attribute)); // TODO: Fehlerhandling
         assert($attr !== false);
     }
 
@@ -125,7 +126,7 @@ final class PackageToBuiltinTranslator implements ElementVisitorInterface, Attri
      */
     public function visitXmlAttribute(XmlAttributeInterface $attribute): void
     {
-        $attr = $this->node->setAttribute(self::getPrefixedName($attribute), $attribute->getValue()); // TODO: Fehlerhandling
+        $attr = $this->node->setAttribute(self::getPrefixedName($attribute), $this->getValueExport($attribute)); // TODO: Fehlerhandling
         assert($attr !== false);
     }
 
@@ -161,10 +162,10 @@ final class PackageToBuiltinTranslator implements ElementVisitorInterface, Attri
         $name   = self::getPrefixedName($element);
         $finder = new XmlNamespaceFinder($element);
         if ($finder->hasNamespace()) {
-            return $this->document->createElementNS($finder->getNamespace()->getValue(), $name, $element->getValue());
+            return $this->document->createElementNS($finder->getNamespace()->getValue(), $name, $this->getValueExport($element));
         }
 
-        return $this->document->createElement($name, $element->getValue());
+        return $this->document->createElement($name, $this->getValueExport($element));
     }
 
     /**
@@ -175,5 +176,17 @@ final class PackageToBuiltinTranslator implements ElementVisitorInterface, Attri
         foreach ($this->preprocessors as $preprocessor) {
             $element->accept($preprocessor);
         }
+    }
+
+    /**
+     * @param ValuedInterface $valued
+     *
+     * @return mixed
+     */
+    private function getValueExport(ValuedInterface $valued)
+    {
+        $value = $valued->getValue();
+
+        return is_string($value) ? $value : var_export($value, true);
     }
 }

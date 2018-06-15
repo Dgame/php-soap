@@ -53,7 +53,7 @@ final class BindingHydratorStrategy implements HydratorStrategyInterface
     /**
      * @return bool
      */
-    public function isCaseSensitivev(): bool
+    public function isCaseSensitive(): bool
     {
         return $this->caseSensitivev;
     }
@@ -61,7 +61,7 @@ final class BindingHydratorStrategy implements HydratorStrategyInterface
     /**
      * @param bool $caseSensitivev
      */
-    public function setCaseSensitivev(bool $caseSensitivev): void
+    public function setCaseSensitive(bool $caseSensitivev): void
     {
         $this->caseSensitivev = $caseSensitivev;
     }
@@ -73,7 +73,7 @@ final class BindingHydratorStrategy implements HydratorStrategyInterface
      */
     private function getPattern(string $pattern): string
     {
-        return sprintf('/^%s$/%s', $pattern, $this->isCaseSensitivev() ? 'i' : null);
+        return sprintf('/^%s$/%s', $pattern, $this->isCaseSensitive() ? 'i' : null);
     }
 
     /**

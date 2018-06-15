@@ -108,7 +108,7 @@ final class BindingImporter implements ElementVisitorInterface
     /**
      * @return bool
      */
-    public function isCaseSensitivev(): bool
+    public function isCaseSensitive(): bool
     {
         return $this->caseSensitivev;
     }
@@ -116,7 +116,7 @@ final class BindingImporter implements ElementVisitorInterface
     /**
      * @param bool $caseSensitivev
      */
-    public function setCaseSensitivev(bool $caseSensitivev): void
+    public function setCaseSensitive(bool $caseSensitivev): void
     {
         $this->caseSensitivev = $caseSensitivev;
     }
@@ -128,21 +128,27 @@ final class BindingImporter implements ElementVisitorInterface
      */
     private function getPattern(string $pattern): string
     {
-        return sprintf('/^%s$/%s', $pattern, $this->isCaseSensitivev() ? 'i' : null);
+        return sprintf('/^%s$/%s', $pattern, $this->isCaseSensitive() ? 'i' : null);
     }
 
     /**
      * @param string  $location
      * @param Closure $closure
+     *
+     * @return BindingInterface
      */
-    public function bind(string $location, Closure $closure): void
+    public function bind(string $location, Closure $closure): BindingInterface
     {
         $location = preg_quote($location, '/');
         foreach (self::REPLACEMENTS as $key => $value) {
             $location = str_replace(preg_quote($key), $value, $location);
         }
 
-        $this->closures[$location] = $closure;
+        $delegate = new ImportBindingDelegate($closure);
+
+        $this->closures[$location] = $delegate;
+
+        return $delegate;
     }
 
     /**
