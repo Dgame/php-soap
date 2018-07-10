@@ -2,8 +2,8 @@
 
 namespace Dgame\Soap\Element;
 
-use function Dgame\Ensurance\enforce;
 use Dgame\Soap\Visitor\ElementVisitorInterface;
+use function Dgame\Ensurance\enforce;
 
 /**
  * Class XmlNode

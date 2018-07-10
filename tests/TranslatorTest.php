@@ -85,7 +85,7 @@ final class TranslatorTest extends TestCase
     {
         $doc        = new DOMDocument('1.0');
         $translator = new BuiltinToPackageTranslator();
-        $element = $doc->createElementNs('http://www.example.com/abc', 'abc:test');
+        $element    = $doc->createElementNs('http://www.example.com/abc', 'abc:test');
         $element->setAttribute('id', 23);
         $element->appendChild($doc->createElement('name', 'Franz'));
         $element->appendChild($doc->createElement('age', '42'));
