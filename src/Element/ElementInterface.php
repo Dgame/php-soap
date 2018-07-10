@@ -24,6 +24,13 @@ interface ElementInterface extends NamedInterface, ValuedInterface, ElementVisit
     public function getAttributes(): array;
 
     /**
+     * @param int $index
+     *
+     * @return AttributeInterface
+     */
+    public function getAttributeByIndex(int $index): AttributeInterface;
+
+    /**
      * @param string $name
      *
      * @return bool

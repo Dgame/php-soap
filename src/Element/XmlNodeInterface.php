@@ -29,6 +29,13 @@ interface XmlNodeInterface extends XmlElementInterface
     public function getElements(): array;
 
     /**
+     * @param int $index
+     *
+     * @return ElementInterface
+     */
+    public function getElementByIndex(int $index): ElementInterface;
+
+    /**
      * @param string $name
      *
      * @return array

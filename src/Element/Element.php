@@ -2,6 +2,8 @@
 
 namespace Dgame\Soap\Element;
 
+use function Dgame\Ensurance\enforce;
+use function Dgame\Ensurance\ensure;
 use Dgame\Soap\Attribute\AttributeInterface;
 use Dgame\Soap\NameTrait;
 use Dgame\Soap\ValueTrait;
@@ -62,6 +64,18 @@ class Element implements ElementInterface
     final public function getAttributes(): array
     {
         return $this->attributes;
+    }
+
+    /**
+     * @param int $index
+     *
+     * @return AttributeInterface
+     */
+    final public function getAttributeByIndex(int $index): AttributeInterface
+    {
+        enforce(array_key_exists($index, $this->attributes))->orThrow('No Attribute at index %d', $index);
+
+        return $this->attributes[$index];
     }
 
     /**

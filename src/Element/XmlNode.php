@@ -2,6 +2,7 @@
 
 namespace Dgame\Soap\Element;
 
+use function Dgame\Ensurance\enforce;
 use Dgame\Soap\Visitor\ElementVisitorInterface;
 
 /**
@@ -71,6 +72,18 @@ class XmlNode extends XmlElement implements XmlNodeInterface
         }
 
         return count($elements);
+    }
+
+    /**
+     * @param int $index
+     *
+     * @return ElementInterface
+     */
+    final public function getElementByIndex(int $index): ElementInterface
+    {
+        enforce(array_key_exists($index, $this->elements))->orThrow('No Element at index %d', $index);
+
+        return $this->elements[$index];
     }
 
     /**

@@ -214,6 +214,10 @@ final class BuiltinToPackageTranslator
      */
     private function hasParentAttributeDefinition(DOMNode $node, string $attribute): bool
     {
+        if ($node->parentNode === null) {
+            return false;
+        }
+
         return array_key_exists($attribute, $this->getXmlnsAttributes($node->parentNode));
     }
 

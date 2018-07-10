@@ -18,7 +18,7 @@ final class HydrationTest extends TestCase
     public function testSingleHydration(): void
     {
         $doc = new DOMDocument('1.0', 'utf-8');
-        $this->assertTrue($doc->load(__DIR__ . '/resources/test.xml'));
+        $this->assertTrue($doc->load(__DIR__ . '/resources/fault.xml'));
 
         $strategy = new DefaultHydratorStrategy();
         $strategy->setCallback('Envelope.Body.Fault.faultstring', function (ElementInterface $element) {
@@ -35,7 +35,7 @@ final class HydrationTest extends TestCase
     public function testMultiHydration(): void
     {
         $doc = new DOMDocument('1.0', 'utf-8');
-        $this->assertTrue($doc->load(__DIR__ . '/resources/test.xml'));
+        $this->assertTrue($doc->load(__DIR__ . '/resources/fault.xml'));
 
         $strategy = new DefaultHydratorStrategy();
         $strategy->setCallback('Envelope', function () {
