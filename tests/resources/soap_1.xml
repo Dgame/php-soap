@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns="http://www.w3.org/1999/xhtml">
+    <soapenv:Header/>
+    <soapenv:Body>
+        <xsi:Person xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Alter="42">
+            <xsi:Name>Foo</xsi:Name>
+            <xsi:Nachname>Bar</xsi:Nachname>
+        </xsi:Person>
+    </soapenv:Body>
+</soapenv:Envelope>
