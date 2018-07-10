@@ -75,7 +75,7 @@ final class HydrationTest extends TestCase
         $doc->load(__DIR__ . '/resources/test1.xml');
 
         $strategy = new BindingHydratorStrategy();
-        $root     = $strategy->bind('*person', function (XmlElementInterface $person) {
+        $root     = $strategy->bind('*person', function (XmlElementInterface $person): void {
             $this->names[] = $person->getAttributeByName('name')->getValue();
         });
         $hydator  = new Hydrator($strategy);
@@ -127,7 +127,7 @@ final class HydrationTest extends TestCase
 
             return $phone;
         });
-        $strategy->setCallback('root.person.birth-place', function (ElementInterface $element, stdClass $person) {
+        $strategy->setCallback('root.person.birth-place', function (ElementInterface $element, stdClass $person): void {
             $person->birthplace = $element->getValue();
         });
         $strategy->setCallback('root.person.address', function (XmlNodeInterface $node, stdClass $person) {
@@ -136,10 +136,10 @@ final class HydrationTest extends TestCase
 
             return $address;
         });
-        $strategy->setCallback('root.person.address.street', function (ElementInterface $element, stdClass $address) {
+        $strategy->setCallback('root.person.address.street', function (ElementInterface $element, stdClass $address): void {
             $address->street = $element->getValue();
         });
-        $strategy->setCallback('root.person.address.plz', function (ElementInterface $element, stdClass $address) {
+        $strategy->setCallback('root.person.address.plz', function (ElementInterface $element, stdClass $address): void {
             $address->plz = $element->getValue();
         });
 
