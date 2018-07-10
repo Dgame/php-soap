@@ -19,6 +19,14 @@ final class XmlToJsonConverter implements ElementVisitorInterface
     private $output = [];
 
     /**
+     *
+     */
+    public function clear(): void
+    {
+        $this->output = [];
+    }
+
+    /**
      * @return array
      */
     public function getOutput(): array

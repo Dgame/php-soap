@@ -12,6 +12,7 @@ use DOMAttr;
 use DOMDocument;
 use DOMNamedNodeMap;
 use DOMNode;
+use DOMXPath;
 
 /**
  * Class BuiltinToPackageTranslator
@@ -19,6 +20,11 @@ use DOMNode;
  */
 final class BuiltinToPackageTranslator
 {
+    /**
+     * @var array
+     */
+    private $attributes = [];
+
     /**
      * @param DOMNode $node
      *
@@ -193,7 +199,7 @@ final class BuiltinToPackageTranslator
      */
     private function importAttributes(DOMNode $node, XmlElementInterface $element): void
     {
-        foreach ($this->getXmlnsAttributes($node) as $attribute => $value) {
+        foreach ($this->getOwnXmlnsAttributes($node) as $attribute => $value) {
             $element->setAttribute(new XmlnsAttribute($attribute, $value));
         }
 
@@ -208,15 +214,19 @@ final class BuiltinToPackageTranslator
      */
     private function hasParentAttributeDefinition(DOMNode $node, string $attribute): bool
     {
-        $parent = $node->parentNode;
-        while ($parent !== null) {
-            if (array_key_exists($attribute, $this->getXmlnsAttributes($parent))) {
-                return true;
-            }
-            $parent = $parent->parentNode;
-        }
+        return array_key_exists($attribute, $this->getXmlnsAttributes($node->parentNode));
+    }
 
-        return false;
+    /**
+     * @param DOMNode $node
+     *
+     * @return array
+     */
+    private function getOwnXmlnsAttributes(DOMNode $node): array
+    {
+        return array_filter($this->getXmlnsAttributes($node), function(string $attr) use($node): bool {
+            return !$this->hasParentAttributeDefinition($node, $attr);
+        }, ARRAY_FILTER_USE_KEY);
     }
 
     /**
@@ -230,15 +240,18 @@ final class BuiltinToPackageTranslator
             return [];
         }
 
-        $attributes = [];
+        $name = $node->localName;
+        if (!array_key_exists($name, $this->attributes)) {
+            $attributes = [];
 
-        $xpath = new \DOMXPath($node->ownerDocument);
-        foreach ($xpath->query('namespace::*', $node) as $attr) {
-            if (!$this->hasParentAttributeDefinition($node, $attr->prefix)) {
+            $xpath = new DOMXPath($node->ownerDocument);
+            foreach ($xpath->query('namespace::*', $node) as $attr) {
                 $attributes[$attr->prefix] = $attr->namespaceURI;
             }
+
+            $this->attributes[$name] = $attributes;
         }
 
-        return $attributes;
+        return $this->attributes[$name];
     }
 }

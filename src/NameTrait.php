@@ -20,4 +20,12 @@ trait NameTrait
     {
         return $this->name;
     }
+
+    /**
+     * @return bool
+     */
+    final public function hasName(): bool
+    {
+        return !empty($this->name);
+    }
 }

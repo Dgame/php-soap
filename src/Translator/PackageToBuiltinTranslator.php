@@ -149,7 +149,11 @@ final class PackageToBuiltinTranslator implements ElementVisitorInterface, Attri
      */
     private static function getPrefixedName(PrefixedInterface $prefixed): string
     {
-        return $prefixed->hasPrefix() ? sprintf('%s:%s', $prefixed->getPrefix(), $prefixed->getName()) : $prefixed->getName();
+        if ($prefixed->hasPrefix() && $prefixed->hasName()) {
+            return sprintf('%s:%s', $prefixed->getPrefix(), $prefixed->getName());
+        }
+
+        return $prefixed->hasPrefix() ? $prefixed->getPrefix() : $prefixed->getName();
     }
 
     /**
