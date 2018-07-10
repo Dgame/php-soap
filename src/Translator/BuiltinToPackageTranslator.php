@@ -224,7 +224,7 @@ final class BuiltinToPackageTranslator
      */
     private function getOwnXmlnsAttributes(DOMNode $node): array
     {
-        return array_filter($this->getXmlnsAttributes($node), function(string $attr) use($node): bool {
+        return array_filter($this->getXmlnsAttributes($node), function (string $attr) use ($node): bool {
             return !$this->hasParentAttributeDefinition($node, $attr);
         }, ARRAY_FILTER_USE_KEY);
     }
