@@ -2,6 +2,7 @@
 
 namespace Dgame\Soap\Hydrator;
 
+use function Dgame\Ensurance\ensure;
 use Dgame\Soap\Attribute\AttributeInterface;
 use Dgame\Soap\Element\ElementInterface;
 use SplStack;
@@ -53,6 +54,7 @@ final class DefaultHydratorStrategy implements HydratorStrategyInterface
      */
     public function setCallback(string $footprints, callable $callback): self
     {
+        ensure($this->hasFootprintsCallback($footprints))->isFalse()->orThrow('Footprint-Callback "%s" is already defined', $footprints);
         $this->callbacks[$footprints] = $callback;
 
         return $this;
@@ -64,7 +66,7 @@ final class DefaultHydratorStrategy implements HydratorStrategyInterface
      *
      * @return DefaultHydratorStrategy
      */
-    public function setFootprintPattern(string $pattern, callable $callback): self
+    public function setRewriteRule(string $pattern, callable $callback): self
     {
         $this->pattern[$pattern] = $callback;
 
@@ -82,7 +84,7 @@ final class DefaultHydratorStrategy implements HydratorStrategyInterface
     /**
      * @return object|null
      */
-    public function top()
+    public function getHydrated()
     {
         return $this->top ?? $this->peek();
     }
@@ -140,8 +142,8 @@ final class DefaultHydratorStrategy implements HydratorStrategyInterface
     public function processFootprint(string $footprint): string
     {
         foreach ($this->pattern as $pattern => $callback) {
-            if (preg_match($pattern, $footprint) === 1) {
-                return $callback($footprint);
+            if (preg_match($pattern, $footprint, $matches) === 1) {
+                return $callback($footprint, $matches);
             }
         }
 
