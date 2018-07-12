@@ -2,6 +2,7 @@
 
 namespace Dgame\Soap\Components;
 
+use Dgame\Soap\Attribute\XmlnsAttribute;
 use Dgame\Soap\Element\XmlNode;
 
 /**
@@ -18,5 +19,6 @@ final class Envelope extends XmlNode
     public function __construct(string $name = 'Envelope')
     {
         parent::__construct($name);
+        $this->setAttribute(new XmlnsAttribute('soap', 'http://schemas.xmlsoap.org/soap/envelope/'));
     }
 }
