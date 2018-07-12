@@ -9,16 +9,14 @@ use Dgame\Soap\Element\XmlNode;
  * Class Envelope
  * @package Dgame\Soap\Components
  */
-final class Envelope extends XmlNode
+class Envelope extends XmlNode
 {
     /**
      * Envelope constructor.
-     *
-     * @param string $name
      */
-    public function __construct(string $name = 'Envelope')
+    public function __construct()
     {
-        parent::__construct($name);
+        parent::__construct('Envelope');
         $this->setAttribute(new XmlnsAttribute('soap', 'http://schemas.xmlsoap.org/soap/envelope/'));
     }
 }

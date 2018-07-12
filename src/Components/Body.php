@@ -8,7 +8,7 @@ use Dgame\Soap\Element\XmlNode;
  * Class Body
  * @package Dgame\Soap\Components
  */
-final class Body extends XmlNode
+class Body extends XmlNode
 {
     /**
      * Body constructor.

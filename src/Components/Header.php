@@ -8,7 +8,7 @@ use Dgame\Soap\Element\XmlNode;
  * Class Header
  * @package Dgame\Soap\Components
  */
-final class Header extends XmlNode
+class Header extends XmlNode
 {
     /**
      * Header constructor.

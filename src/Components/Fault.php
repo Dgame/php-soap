@@ -6,7 +6,7 @@ namespace Dgame\Soap\Components;
  * Class Fault
  * @package Dgame\Soap\Components
  */
-final class Fault
+class Fault
 {
     /**
      * @var string
