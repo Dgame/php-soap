@@ -69,19 +69,19 @@ final class RebuildTest extends TestCase
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/resources/ns-rebuild-2-result.xml', $doc2->saveXML());
     }
 
-        public function testRebuildWithPreprocessor()
+    public function testRebuildWithPreprocessor(): void
     {
         $builtin = new PackageToBuiltinTranslator();
         $builtin->appendPreprocessor(new AttributeElementPrefixInheritance());
         $builtin->appendPreprocessor(new ElementPrefixInheritance());
 
-       $envelope = new Envelope();
-       $envelope->appendElement(new Header());
-       $envelope->appendElement(new Body());
+        $envelope = new Envelope();
+        $envelope->appendElement(new Header());
+        $envelope->appendElement(new Body());
 
-       $node = $builtin->translate($envelope);
+        $node = $builtin->translate($envelope);
 
-       $this->assertXmlStringEqualsXmlString('<?xml version="1.0" encoding="utf-8"?>
+        $this->assertXmlStringEqualsXmlString('<?xml version="1.0" encoding="utf-8"?>
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Header/><soap:Body/></soap:Envelope>', $node->saveXML());
     }
 }
