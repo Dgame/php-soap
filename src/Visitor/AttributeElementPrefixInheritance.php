@@ -24,11 +24,12 @@ final class AttributeElementPrefixInheritance implements ElementVisitorInterface
      */
     public function visitXmlElement(XmlElementInterface $element): void
     {
-        if ($element->hasPrefix()) {
+        if ($element->hasPrefix() || !$element->hasAttributes()) {
             return;
         }
 
-        if (!$element->hasAttributes()) {
+        $visitor = new XmlnsAttributeFilterVisitor($element);
+        if ($visitor->canSkipPrefix()) {
             return;
         }
 

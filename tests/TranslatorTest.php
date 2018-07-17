@@ -5,7 +5,6 @@ namespace Dgame\Soap\Test;
 use Dgame\Soap\Element\XmlElementInterface;
 use Dgame\Soap\Element\XmlNodeInterface;
 use Dgame\Soap\Translator\BuiltinToPackageTranslator;
-use Dgame\Soap\Translator\PackageToBuiltinTranslator;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 
@@ -15,25 +14,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class TranslatorTest extends TestCase
 {
-    public function testReBuild(): void
-    {
-        $package = new BuiltinToPackageTranslator();
-        $builtin = new PackageToBuiltinTranslator();
-
-        $doc1 = new DOMDocument();
-        $this->assertTrue($doc1->load(__DIR__ . '/resources/soap_1.xml'));
-
-        $start = time();
-        $node  = $package->translate($doc1);
-        $end   = time();
-
-        $this->assertTrue(($end - $start) < 2);
-
-        $doc2 = $builtin->translate($node);
-
-        $this->assertXmlStringEqualsXmlString($doc1->saveXML(), $doc2->saveXML());
-    }
-
     public function testXmlElementTranslation(): void
     {
         $doc        = new DOMDocument('1.0');

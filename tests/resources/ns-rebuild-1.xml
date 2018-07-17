@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+    <soapenv:Body>
+        <Kfz Marke="Audi" xmlns="http://www.w3.org/TR/REC-html-40">
+            <Hubraum>3400</Hubraum>
+        </Kfz>
+    </soapenv:Body>
+</soapenv:Envelope>

@@ -33,6 +33,11 @@ final class ElementPrefixInheritance implements ElementVisitorInterface
             return;
         }
 
+        $visitor = new XmlnsAttributeFilterVisitor($element);
+        if ($visitor->canSkipPrefix()) {
+            return;
+        }
+
         $element->setPrefix($this->prefix);
     }
 
@@ -43,6 +48,11 @@ final class ElementPrefixInheritance implements ElementVisitorInterface
     {
         if ($node->hasPrefix()) {
             $this->prefix = $node->getPrefix();
+        }
+
+        $visitor = new XmlnsAttributeFilterVisitor($node);
+        if ($visitor->canSkipPrefix()) {
+            return;
         }
 
         $this->visitXmlElement($node);

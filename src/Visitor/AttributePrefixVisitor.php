@@ -40,7 +40,6 @@ final class AttributePrefixVisitor implements AttributeVisitorInterface
      */
     public function visitXmlAttribute(XmlAttributeInterface $attribute): void
     {
-        $this->element->setPrefix($attribute->getName());
         $attribute->incrementPrefixUsage();
     }
 
@@ -49,6 +48,7 @@ final class AttributePrefixVisitor implements AttributeVisitorInterface
      */
     public function visitXmlnsAttribute(XmlnsAttribute $attribute): void
     {
-        $this->visitXmlAttribute($attribute);
+        $this->element->setPrefix($attribute->getName());
+        $attribute->incrementPrefixUsage();
     }
 }
