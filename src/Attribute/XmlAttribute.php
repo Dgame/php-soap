@@ -48,7 +48,7 @@ class XmlAttribute extends Attribute implements XmlAttributeInterface
     /**
      *
      */
-    public function incrementPRefixUsage(): void
+    public function incrementPrefixUsage(): void
     {
         $this->prefixUsage += 1;
     }

@@ -42,7 +42,7 @@ final class XmlToJsonConverter implements ElementVisitorInterface
     private static function convertValue($value)
     {
         if (is_numeric($value)) {
-            if (strpos($value, '.') !== false || strpos($value, ',') !== false) {
+            if (strpos($value, '.') !== false) {
                 return filter_var($value, FILTER_VALIDATE_FLOAT);
             }
 
