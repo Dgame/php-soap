@@ -34,7 +34,7 @@ final class RebuildTest extends TestCase
         $this->assertXmlStringEqualsXmlString($doc1->saveXML(), $doc2->saveXML());
     }
 
-    public function testCorrectNamespaceRebuildWithPreprocessor()
+    public function testCorrectNamespaceRebuildWithPreprocessor(): void
     {
         $package = new BuiltinToPackageTranslator();
         $builtin = new PackageToBuiltinTranslator();
@@ -45,12 +45,12 @@ final class RebuildTest extends TestCase
         $this->assertTrue($doc1->load(__DIR__ . '/resources/ns-rebuild-1.xml'));
 
         $node  = $package->translate($doc1);
-        $doc2 = $builtin->translate($node);
+        $doc2  = $builtin->translate($node);
 
         $this->assertXmlStringEqualsXmlString($doc1->saveXML(), $doc2->saveXML());
     }
 
-    public function testNamespaceRebuildWithPreprocessor()
+    public function testNamespaceRebuildWithPreprocessor(): void
     {
         $package = new BuiltinToPackageTranslator();
         $builtin = new PackageToBuiltinTranslator();
@@ -61,7 +61,7 @@ final class RebuildTest extends TestCase
         $this->assertTrue($doc1->load(__DIR__ . '/resources/ns-rebuild-2.xml'));
 
         $node  = $package->translate($doc1);
-        $doc2 = $builtin->translate($node);
+        $doc2  = $builtin->translate($node);
 
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/resources/ns-rebuild-2-result.xml', $doc2->saveXML());
     }
