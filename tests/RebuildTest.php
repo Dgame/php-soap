@@ -2,6 +2,9 @@
 
 namespace Dgame\Soap\Test;
 
+use Dgame\Soap\Components\Body;
+use Dgame\Soap\Components\Envelope;
+use Dgame\Soap\Components\Header;
 use Dgame\Soap\Translator\BuiltinToPackageTranslator;
 use Dgame\Soap\Translator\PackageToBuiltinTranslator;
 use Dgame\Soap\Visitor\AttributeElementPrefixInheritance;
@@ -64,5 +67,21 @@ final class RebuildTest extends TestCase
         $doc2  = $builtin->translate($node);
 
         $this->assertXmlStringEqualsXmlFile(__DIR__ . '/resources/ns-rebuild-2-result.xml', $doc2->saveXML());
+    }
+
+        public function testRebuildWithPreprocessor()
+    {
+        $builtin = new PackageToBuiltinTranslator();
+        $builtin->appendPreprocessor(new AttributeElementPrefixInheritance());
+        $builtin->appendPreprocessor(new ElementPrefixInheritance());
+
+       $envelope = new Envelope();
+       $envelope->appendElement(new Header());
+       $envelope->appendElement(new Body());
+
+       $node = $builtin->translate($envelope);
+
+       $this->assertXmlStringEqualsXmlString('<?xml version="1.0" encoding="utf-8"?>
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Header/><soap:Body/></soap:Envelope>', $node->saveXML());
     }
 }

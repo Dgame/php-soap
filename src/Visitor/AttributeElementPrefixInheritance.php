@@ -28,11 +28,6 @@ final class AttributeElementPrefixInheritance implements ElementVisitorInterface
             return;
         }
 
-        $visitor = new XmlnsAttributeFilterVisitor($element);
-        if ($visitor->canSkipPrefix()) {
-            return;
-        }
-
         $visitor = new AttributePrefixVisitor($element);
         foreach ($element->getAttributes() as $attribute) {
             $attribute->accept($visitor);
