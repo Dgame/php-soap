@@ -29,9 +29,19 @@ final class XmlToJsonConverter implements ElementVisitorInterface
     /**
      * @return array
      */
-    public function getOutput(): array
+    public function getAsArray(): array
     {
         return $this->output;
+    }
+
+    /**
+     * @param int $options
+     *
+     * @return string
+     */
+    public function getJson(int $options = JSON_PRETTY_PRINT): string
+    {
+        return json_encode($this->output, $options);
     }
 
     /**
@@ -97,9 +107,9 @@ final class XmlToJsonConverter implements ElementVisitorInterface
         if (array_key_exists($name, $this->output)) {
             $this->makeMultiArray($name);
 
-            $this->output[$name][] = $self->getOutput();
+            $this->output[$name][] = $self->getAsArray();
         } else {
-            $this->output[$name] = $self->getOutput();
+            $this->output[$name] = $self->getAsArray();
         }
     }
 
