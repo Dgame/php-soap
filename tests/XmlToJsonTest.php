@@ -8,5 +8,4 @@ namespace Dgame\Soap\Test;
  */
 final class XmlToJsonTest
 {
-
 }
