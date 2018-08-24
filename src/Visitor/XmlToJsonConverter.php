@@ -51,13 +51,13 @@ final class XmlToJsonConverter implements ElementVisitorInterface
      */
     private static function convertValue($value)
     {
-        if (is_numeric($value)) {
-            if (strpos($value, '.') !== false) {
-                return self::filter($value, FILTER_VALIDATE_FLOAT);
-            }
-
-            return self::filter($value, FILTER_VALIDATE_INT);
-        }
+//        if (is_numeric($value)) {
+//            if (strpos($value, '.') !== false) {
+//                return self::filter($value, FILTER_VALIDATE_FLOAT);
+//            }
+//
+//            return self::filter($value, FILTER_VALIDATE_INT);
+//        }
 
         if (in_array($value, ['true', 'false'])) {
             return self::filter($value, FILTER_VALIDATE_BOOLEAN);

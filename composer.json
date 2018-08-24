@@ -16,6 +16,7 @@
         }
     ],
     "require": {
+        "ext-json": "*",
         "php": "^7.1",
         "dgame/php-ensurance": "^1.0 || ^2.0"
     },
