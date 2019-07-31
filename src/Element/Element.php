@@ -25,7 +25,7 @@ class Element implements ElementInterface
      * Element constructor.
      *
      * @param string $name
-     * @param null   $value
+     * @param mixed  $value
      */
     public function __construct(string $name, $value = null)
     {

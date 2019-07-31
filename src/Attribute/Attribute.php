@@ -18,7 +18,7 @@ class Attribute implements AttributeInterface
      * Attribute constructor.
      *
      * @param string $name
-     * @param null   $value
+     * @param mixed  $value
      */
     public function __construct(string $name, $value = null)
     {

@@ -45,7 +45,7 @@ final class XmlToJsonConverter implements ElementVisitorInterface
     }
 
     /**
-     * @param $value
+     * @param mixed $value
      *
      * @return mixed
      */
@@ -67,7 +67,7 @@ final class XmlToJsonConverter implements ElementVisitorInterface
     }
 
     /**
-     * @param     $value
+     * @param mixed $value
      * @param int $filter
      *
      * @return mixed

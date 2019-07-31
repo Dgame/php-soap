@@ -14,7 +14,7 @@ interface ValuedInterface
     public function hasValue(): bool;
 
     /**
-     * @param $value
+     * @param mixed $value
      */
     public function setValue($value): void;
 

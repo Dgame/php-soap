@@ -22,7 +22,7 @@ class XmlAttribute extends Attribute implements XmlAttributeInterface
      * XmlAttribute constructor.
      *
      * @param string $name
-     * @param        $value
+     * @param mixed $value
      */
     public function __construct(string $name, $value)
     {

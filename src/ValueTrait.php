@@ -30,7 +30,7 @@ trait ValueTrait
     }
 
     /**
-     * @param $value
+     * @param mixed $value
      */
     final public function setValue($value): void
     {
