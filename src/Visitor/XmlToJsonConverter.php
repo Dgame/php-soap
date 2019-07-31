@@ -2,10 +2,10 @@
 
 namespace Dgame\Soap\Visitor;
 
+use function Dgame\Ensurance\ensure;
 use Dgame\Soap\Element\ElementInterface;
 use Dgame\Soap\Element\XmlElementInterface;
 use Dgame\Soap\Element\XmlNodeInterface;
-use function Dgame\Ensurance\ensure;
 
 /**
  * Class XmlToJsonConverter

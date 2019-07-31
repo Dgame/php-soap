@@ -2,11 +2,11 @@
 
 namespace Dgame\Soap\Element;
 
+use function Dgame\Ensurance\enforce;
 use Dgame\Soap\Attribute\AttributeInterface;
 use Dgame\Soap\NameTrait;
 use Dgame\Soap\ValueTrait;
 use Dgame\Soap\Visitor\ElementVisitorInterface;
-use function Dgame\Ensurance\enforce;
 
 /**
  * Class Element

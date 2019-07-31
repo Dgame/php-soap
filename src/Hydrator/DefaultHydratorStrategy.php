@@ -2,10 +2,10 @@
 
 namespace Dgame\Soap\Hydrator;
 
+use function Dgame\Ensurance\ensure;
 use Dgame\Soap\Attribute\AttributeInterface;
 use Dgame\Soap\Element\ElementInterface;
 use SplStack;
-use function Dgame\Ensurance\ensure;
 
 /**
  * Class DefaultHydratorStrategy

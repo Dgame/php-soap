@@ -3,11 +3,11 @@
 namespace Dgame\Soap\Hydrator;
 
 use Closure;
+use function Dgame\Ensurance\ensure;
 use Dgame\Soap\Attribute\AttributeInterface;
 use Dgame\Soap\Element\ElementInterface;
 use stdClass;
 use Throwable;
-use function Dgame\Ensurance\ensure;
 
 /**
  * Class BindingHydratorStrategy
