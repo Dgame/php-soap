@@ -195,6 +195,6 @@ final class PackageToBuiltinTranslator implements ElementVisitorInterface, Attri
 
         $value = $valued->getValue();
 
-        return is_string($value) ? $value : var_export($value, true);
+        return is_string($value) ? htmlspecialchars($value) : var_export($value, true);
     }
 }
